@@ -11,3 +11,10 @@ this is a conflicting edit! muah
 
 
 qwerty
+
+<<<<<<< HEAD
+
+new stuff
+=======
+github app test yo
+>>>>>>> ccweaver
