@@ -1,18 +1,19 @@
 var map;
-myLatlng=new google.maps.LatLng(43.65644,-79.380686);
+myLatlng=new google.maps.LatLng(39.828127,-98.579404);
 
 function initialize()
 {
 	var markers = [];
-	var mapOptions={center:myLatlng,zoom:14,mapTypeControl:true,center:myLatlng,panControl:false,rotateControl:false,
+	var mapOptions={center:myLatlng,zoom:4,mapTypeControl:true,center:myLatlng,panControl:false,rotateControl:false,
 					streetViewControl:false,mapTypeId:google.maps.MapTypeId.ROADMAP};
 
 	map=new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 
-	var defaultBounds = new google.maps.LatLngBounds(
-     	new google.maps.LatLng(-33.8902, 151.1759),
-      	new google.maps.LatLng(-33.8474, 151.2631));
-  		map.fitBounds(defaultBounds);
+	//var defaultBounds = new google.maps.LatLngBounds();
+	//defaultBounds.extend(myLatlng);
+      	
+  	//map.fitBounds(defaultBounds);
+  	//map.setZoom(14);
 
 	// Create the search box and link it to the UI element.
 	var input = /** @type {HTMLInputElement} */(
@@ -61,7 +62,7 @@ function initialize()
 	  	}
 
   		map.fitBounds(bounds);
-  		map.setZoom( 14 );
+  		map.setZoom(14);
 	});
 
 }

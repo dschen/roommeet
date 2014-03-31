@@ -10,5 +10,6 @@ urlpatterns = patterns('',
     #parentheset around parts of regex pass as string arguments
     url(r'^time/plus/(\d{1,2})/$', hours_ahead),
     url(r'^boot/$', boot_home),
+    url(r'^$', boot_home),
     url(r'^admin/', include(admin.site.urls)),
 )
