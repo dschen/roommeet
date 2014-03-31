@@ -8,7 +8,7 @@
     <meta name="author" content="">
     
 
-    <title>{% block titlebar %} Hello {% endblock %}</title>
+    <title>{% block titlebar %} RoomMeet {% endblock %}</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{STATIC_URL}}/css/bootstrap.min.css" rel="stylesheet">
@@ -26,7 +26,58 @@
     <![endif]-->
 
     {% block headext %}
-    {% endblock %}
+    <style>
+    html, body, #map-canvas {
+      height: 100%;
+      margin: 0px;
+      padding: 0px
+    }
+    .controls {
+      margin-top: 16px;
+      border: 1px solid transparent;
+      border-radius: 2px 0 0 2px;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      height: 32px;
+      outline: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    #pac-input {
+      background-color: #fff;
+      padding: 0 11px 0 13px;
+      width: 400px;
+      font-family: Roboto;
+      font-size: 15px;
+      font-weight: 300;
+      text-overflow: ellipsis;
+    }
+
+    #pac-input:focus {
+      border-color: #4d90fe;
+      margin-left: -1px;
+      padding-left: 14px;  /* Regular padding-left + 1. */
+      width: 401px;
+    }
+
+    .pac-container {
+      font-family: Roboto;
+    }
+
+    #type-selector {
+      color: #fff;
+      background-color: #4d90fe;
+      padding: 5px 11px 0px 11px;
+    }
+
+    #type-selector label {
+      font-family: Roboto;
+      font-size: 13px;
+      font-weight: 300;
+    }
+  }
+  </style>
+  {% endblock %}
   </head>
 
   <body>
@@ -43,28 +94,36 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">{% block navtitle %} title {% endblock %}</a>
+            <a class="navbar-brand" href="#">{% block navtitle %} RoomMeet {% endblock %}</a>
           </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               {% block lnavitems %} 
-              <li class="active"><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
+              {# active is initial, href = url, >title</a = title #}
+              <li class="active"><a href="#">Meet</a></li>
+              <li><a href="#">Talk</a></li>
               {% endblock %}
+
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Options <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   {% block rnavdropdown %}
-                  <li><a href="#">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
+                  <li><a href="#">Profile</a></li>
+                  <li><a href="#">Settings</a></li>
+                  <li><a href="#">Logout</a></li>
+                  <li><a href="#">First you get a swimming</a></li>
+                  <li><a href="#">pool full of liquor and</a></li>
+                  <li><a href="#">you dive in it</a></li>
+
                   <li class="divider"></li>
-                  <li class="dropdown-header">Nav header</li>
-                  <li><a href="#">Separated link</a></li>
-                  <li><a href="#">One more separated link</a></li>
+                  <li class="dropdown-header">Pool full of</li>
+
+                  <li><a href="#">liquor and you</a></li>
+                  <li><a href="#">dive in it</a></li>
                   {% endblock %}
+
                 </ul>
               </li>
             </ul>
