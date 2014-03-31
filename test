@@ -13,6 +13,12 @@ this is a conflicting edit! muah
 qwerty
 
 <<<<<<< HEAD
+github app test yo
+
+
+adding things to test
+=======
+<<<<<<< HEAD
 
 new stuff
 =======
@@ -24,3 +30,4 @@ new leo
 
 
 asdfghjkl;’;lkjgfdsa
+>>>>>>> master
