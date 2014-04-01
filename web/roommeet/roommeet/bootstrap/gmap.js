@@ -5,9 +5,6 @@ var markers = [];
 
 function initialize()
 {
-
-
-
 	var markers = [];
 	var mapOptions={center:myLatlng,zoom:4,mapTypeControl:true,center:myLatlng,panControl:false,rotateControl:false,
 					streetViewControl:false,mapTypeId:google.maps.MapTypeId.ROADMAP};
