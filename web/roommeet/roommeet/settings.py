@@ -64,9 +64,16 @@ WSGI_APPLICATION = 'roommeet.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
-
-DATABASES['default'] =  dj_database_url.config()
-
+DATABASES = {
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': 'd2tqtjb7qkq5gn',
+    'HOST': 'ec2-54-204-42-178.compute-1.amazonaws.com',
+    'PORT': 5432,
+    'USER': 'vizgavggbfbwea',
+    'PASSWORD': 'YcBmk5n0vLw5Y60ezCoqAlY5_B'
+  }
+}
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
