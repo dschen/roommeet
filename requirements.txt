@@ -1,7 +1,6 @@
 Django==1.6.2
 Jinja2==2.7.1
 MarkupSafe==0.18
-PyRSS2Gen==1.0.0
 Twisted==12.2.0
 altgraph==0.10.1
 argparse==1.2.1
@@ -12,12 +11,7 @@ dj-static==0.0.5
 django-toolbelt==0.0.1
 gunicorn==18.0
 ino==0.3.6
-macholib==1.5
-numpy==1.6.2
-modulegraph==0.10.1
-ordereddict==1.1
 psycopg2==2.5.2
-py2app==0.7.1
 pyOpenSSL==0.13
 static==1.0.2
 virtualenv==1.11.4
