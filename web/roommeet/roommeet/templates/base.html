@@ -14,7 +14,7 @@
     <link href="{{STATIC_URL}}/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="navbar.css" rel="stylesheet">
+
 
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -100,8 +100,8 @@
             <ul class="nav navbar-nav">
               {% block lnavitems %} 
               {# active is initial, href = url, >title</a = title #}
-              <li class="active"><a href="#">Meet</a></li>
-              <li><a href="#">Talk</a></li>
+              <li class="active"><a href="/meet/">Meet</a></li>
+              <li><a href="/talk/">Talk</a></li>
               {% endblock %}
 
             </ul>
@@ -110,7 +110,7 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Options <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   {% block rnavdropdown %}
-                  <li><a href="#">Profile</a></li>
+                  <li><a href="/profile/">Profile</a></li>
                   <li><a href="#">Settings</a></li>
                   <li><a href="#">Logout</a></li>
                   <li><a href="#">First you get a swimming</a></li>
