@@ -1,61 +1,24 @@
 var map;
 myLatlng=new google.maps.LatLng(39.828127,-98.579404);
-var markers = [];
-
+var marker = null;
 
 function initialize()
 {
-
-
-
-	var markers = [];
+	
 	var mapOptions={center:myLatlng,zoom:4,mapTypeControl:true,center:myLatlng,panControl:false,rotateControl:false,
 					streetViewControl:false,mapTypeId:google.maps.MapTypeId.ROADMAP};
 
 	map=new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 
-	$.post('/get_marks/',{}, function(data){
-		var response = data
-		var count = response.length;
-		var bounds = new google.maps.LatLngBounds();
-		for(var i = 0; i < count; i++) 
-		{
-
-    		var item = response[i];
-    		loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-    		var infowindow = new google.maps.InfoWindow({
-			      content: 'hello',
-			      maxWidth: 200
-			 });
-    		addMarker(loc, 'sss');
-    		bounds.extend(loc);
-
-		}
-    	map.fitBounds(bounds);
-	});
-
+	google.maps.event.addListener(map, 'click', function(event) {
+    addMarker(event.latLng);
+    });
 	//var defaultBounds = new google.maps.LatLngBounds();
 	//defaultBounds.extend(myLatlng);
       	
   	//map.fitBounds(defaultBounds);
   	//map.setZoom(14);
 
-  	var r10 = document.getElementById('10-radius');
-  	r10.radius = '10';
-  	r10.addEventListener('click', setRadius, false);
-  	var r25 = document.getElementById('25-radius');
-  	r25.radius = '25';
-  	r25.addEventListener('click', setRadius, false);
-  	var r50 = document.getElementById('50-radius');
-  	r50.radius = '50';
-  	r50.addEventListener('click', setRadius, false);
-  	var r100 = document.getElementById('100-radius');
-  	r100.radius = '100';
-  	r100.addEventListener('click', setRadius, false);
-
-  	
-
-  	
 	// Create the search box and link it to the UI element.
 	var input = /** @type {HTMLInputElement} */(
 		document.getElementById('pac-input'));
@@ -71,12 +34,9 @@ function initialize()
   	{
   		var places = searchBox.getPlaces();
 
-  		for (var i = 0, marker; marker = markers[i]; i++) {
-  			marker.setMap(null);
-  		}
 
 	    // For each place, get the icon, place name, and location.
-	    markers = [];
+	    
 	    var bounds = new google.maps.LatLngBounds();
 	    for (var i = 0, place; place = places[i]; i++) 
 	    {
@@ -97,7 +57,7 @@ function initialize()
 	      		position: place.geometry.location
 	      	});
 
-	      	markers.push(marker);
+	      	
 
 	      	bounds.extend(place.geometry.location);
 	  	}
@@ -108,55 +68,22 @@ function initialize()
 
 }
 
+// Add a marker to the map and push to the array.
+function addMarker(location) {
+  if (marker == null)
+  {
+  	marker = new google.maps.Marker({
+		position: location,
+	  	map: map
+		});
+  }
+  marker.setPosition(location);
 
+  //post send of position must go here
+  document.getElementById('lat-s').value = location.lat().toFixed(5);
+  document.getElementById('lon-s').value = location.lng().toFixed(5);
 
-function addEventHandler(elem,eventType,handler) {
- if (elem.addEventListener)
-     elem.addEventListener (eventType,handler,false);
- else if (elem.attachEvent)
-     elem.attachEvent ('on'+eventType,handler); 
 }
-
-function setRadius(evt) 
-	{
-
-	deleteMarkers();
-	$.post('/get_marks/', {radius:evt.target.radius}, function(data)
-	{
-		var response = data
-		var count = response.length;
-		var bounds = new google.maps.LatLngBounds();
-		for(var i = 0; i < count; i++) 
-		{
-			var item = response[i];
-			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-
-			addMarker(loc);
-			bounds.extend(loc);
-
-		}
-		map.fitBounds(bounds);
-	});
-	}
-
-
-
-function addMarker(location, title) {
-  var marker = new google.maps.Marker({
-    position: location,
-    map: map,
-    title:title
-  });
-  markers.push(marker);
-  google.maps.event.addListener(marker, 'click', function() {
-    infowindow.open(map,marker);
-  	});
-}
-
-var infowindow = new google.maps.InfoWindow({
-      content: 'stuff',
-      maxWidth: 200
-  });
 
 // Sets the map on all markers in the array.
 function setAllMap(map) {

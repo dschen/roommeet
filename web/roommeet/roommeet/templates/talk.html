@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block lnavitems %} 
+{# active is initial, href = url, >title</a = title #}
+<li><a href="/meet/">Meet</a></li>
+<li class="active"><a href="/talk/">Talk</a></li>
+{% endblock %}
+
+
+
+{% block mainpage %}
+<div class="row-fluid">
+    <div class="col-md-8">
+    	<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+        <div id="map_canvas"></div>
+    </div>
+    <div class="col-md-4">
+        <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+                <li class="nav-header">Sidebar</li>
+                <li class="active"><a href="#">Find people near me</a></li>
+                <li><a href="#">talk to people near me</a></li>
+                <li><a href="#">buthole</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block scriptext %}
+
+<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+<script src="{{STATIC_URL}}/gmap.js"></script>
+
+
+{% endblock %}
