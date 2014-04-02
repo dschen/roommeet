@@ -112,7 +112,7 @@ function addEventHandler(elem,eventType,handler) {
 
 function setRadius(evt) 
 {
-	2deleteMarkers();
+	deleteMarkers();
 	$.post('/get_marks/', {radius:evt.target.radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value}, function(data)
 	{
 		var response = data
