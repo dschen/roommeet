@@ -21,8 +21,6 @@ from people.models import Person
 #function to generate html and return
 
 def meet(request):
-	
-
 	return render(request, 'meet.html')
 
 
@@ -31,7 +29,11 @@ def profile(request):
 
 
 def talk(request):
-    return render(request, 'talk.html')
+	currentNetid = 'ltolias'
+	me = Person.objects.get(netid=currentNetid)
+	friends = me.friends.all()
+	print friends[0].first_name
+	return render(request, 'talk.html', {'friend_list':friends})
 
 
 def get_marks(request):
