@@ -3,7 +3,7 @@ hello
 i'm so confused
 
 
-branch test 1
+branch test 1 leggo
 
 
 this is a conflicting edit! muah
@@ -13,6 +13,12 @@ this is a conflicting edit! muah
 qwerty
 
 <<<<<<< HEAD
+github app test yo
+
+
+adding things to test
+=======
+<<<<<<< HEAD
 
 new stuff
 =======
@@ -21,3 +27,7 @@ github app test yo
 
 
 new leo
+
+
+asdfghjkl;’;lkjgfdsa
+>>>>>>> master
