@@ -2,7 +2,6 @@
 
 
 {% block lnavitems %} 
-{# active is initial, href = url, >title</a = title #}
 <li class="active"><a href="/meet/">Meet</a></li>
 <li><a href="/talk/">Talk</a></li>
 {% endblock %}
@@ -10,7 +9,8 @@
 
 {% block mainpage %}
 <div class="row-fluid">
-    <div class="col-md-10">
+    <div class="well col-md-10">
+        {% csrf_token %} 
     	<input id="pac-input" class="controls" type="text" placeholder="Search Box">
         <div id="map_canvas"></div>
     </div>

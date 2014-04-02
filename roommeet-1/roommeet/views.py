@@ -34,8 +34,6 @@ def talk(request):
     return render(request, 'talk.html')
 
 
-
-@csrf_exempt
 def get_marks(request):
 	currentNetid = 'ltolias'
 	radius = 200*69.172;
@@ -50,8 +48,8 @@ def get_marks(request):
 	p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad)
 	locs = []
 	for p1 in p:
-		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon)})
-	locs.append({'lat':str(me.lat), 'lon':str(me.lon)})
+		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'fname':p1.first_name, 'lname':p1.last_name, 'netid':p1.netid})
+	#locs.append({'lat':str(me.lat), 'lon':str(me.lon)})
 	return HttpResponse(json.dumps(locs), mimetype='application/json; charset=UTF-8')
 	#form = LatLonForm(request.POST)
 	#if form.is_valid():

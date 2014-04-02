@@ -1,3 +1,4 @@
+
 """
 Django settings for roommeet project.
 
@@ -64,17 +65,19 @@ WSGI_APPLICATION = 'roommeet.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-
 DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'd2tqtjb7qkq5gn',
-    'HOST': 'ec2-54-204-42-178.compute-1.amazonaws.com',
-    'PORT': 5432,
-    'USER': 'vizgavggbfbwea',
-    'PASSWORD': 'YcBmk5n0vLw5Y60ezCoqAlY5_B'
-  }
+    'default': 
+    {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'postgres',                      # Or path to database file if using sqlite3.
+        'USER': 'postgres',                      # Not used with sqlite3.
+        'PASSWORD': 'howard',                  # Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '5433',                      # Set to empty string for default. Not used with sqlite3.
+    }
+    
 }
+
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 

@@ -11,7 +11,7 @@ function initialize()
 
 	map=new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 
-	$.post('/get_marks/',{}, function(data){
+	$.post('/get_marks/',{csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value}, function(data){
 		var response = data
 		var count = response.length;
 		var bounds = new google.maps.LatLngBounds();
@@ -20,11 +20,7 @@ function initialize()
 
     		var item = response[i];
     		loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-    		var infowindow = new google.maps.InfoWindow({
-			      content: 'hello',
-			      maxWidth: 200
-			 });
-    		addMarker(loc, 'sss');
+    		addMarker(loc, item.fname, item.lname, item.netid);
     		bounds.extend(loc);
 
 		}
@@ -118,7 +114,7 @@ function setRadius(evt)
 	{
 
 	deleteMarkers();
-	$.post('/get_marks/', {radius:evt.target.radius}, function(data)
+	$.post('/get_marks/', {radius:evt.target.radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value}, function(data)
 	{
 		var response = data
 		var count = response.length;
@@ -127,8 +123,7 @@ function setRadius(evt)
 		{
 			var item = response[i];
 			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-
-			addMarker(loc);
+			addMarker(loc, item.fname, item.lname, item.netid);
 			bounds.extend(loc);
 
 		}
@@ -138,14 +133,19 @@ function setRadius(evt)
 
 
 
-function addMarker(location, title) {
+function addMarker(location, fname, lname, netid) {
   var marker = new google.maps.Marker({
     position: location,
     map: map,
-    title:title
+    title:'Name: ' + fname + ' ' + lname + '<br>Company: example<br>netid: ' + 
+    		netid + '<div align="right"> <button class="btn btn-xs" id="' + 
+    		netid + '_add"> meet </button></div>'
   });
   markers.push(marker);
+  
   google.maps.event.addListener(marker, 'click', function() {
+  	infowindow.close();
+  	infowindow.setContent(marker.title);
     infowindow.open(map,marker);
   	});
 }
