@@ -111,9 +111,8 @@ function addEventHandler(elem,eventType,handler) {
 }
 
 function setRadius(evt) 
-	{
-
-	deleteMarkers();
+{
+	2deleteMarkers();
 	$.post('/get_marks/', {radius:evt.target.radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value}, function(data)
 	{
 		var response = data
@@ -129,16 +128,14 @@ function setRadius(evt)
 		}
 		map.fitBounds(bounds);
 	});
-	}
-
-
+}
 
 function addMarker(location, fname, lname, netid) {
   var marker = new google.maps.Marker({
     position: location,
     map: map,
     title:'Name: ' + fname + ' ' + lname + '<br>Company: example<br>netid: ' + 
-    		netid + '<div align="right"> <button class="btn btn-xs" id="' + 
+    		netid + '<div align="right"> <button class="btn btn-xs active btn-success" id="' + 
     		netid + '_add"> meet </button></div>'
   });
   markers.push(marker);
