@@ -43,10 +43,10 @@
                                 example
                             </td>
                             <td>
-                                {{ person.netid }}@princeton.edu
+                                <a href="mailto:{{ person.netid }}@princeton.edu?Subject=RoomMeet%20Hello"> {{ person.netid }}@princeton.edu </a>
                             </td>
                             <td>
-                                <button type="submit" class="btn btn-sm" id="{{ person.netid }}-remove"> remove </button> <br><br>
+                                <button type="submit" class="btn btn-sm btn-danger" id="{{ person.netid }}-remove"> remove </button> <br><br>
                             </td>
                         </tr>
                         {% endfor %}
