@@ -9,4 +9,4 @@ class Person(models.Model):
     friends = models.ManyToManyField("self", blank=True, symmetrical=False)
 
     def __unicode__(self):
-   		return u'%s %s' % (self.first_name, self.last_name)
+   		return u'%s %s' % (self.first_name,self.last_name)
