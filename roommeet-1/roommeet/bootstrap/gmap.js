@@ -32,19 +32,21 @@ function initialize()
       	
   	//map.fitBounds(defaultBounds);
   	//map.setZoom(14);
-
+  	var r5 = document.getElementById('5-radius');
+  	r5.radius = '5';
+  	r5.addEventListener('click', setRadius, false); 	
   	var r10 = document.getElementById('10-radius');
   	r10.radius = '10';
   	r10.addEventListener('click', setRadius, false);
-  	var r25 = document.getElementById('25-radius');
-  	r25.radius = '25';
-  	r25.addEventListener('click', setRadius, false);
+  	var r20 = document.getElementById('20-radius');
+  	r20.radius = '20';
+  	r20.addEventListener('click', setRadius, false);
   	var r50 = document.getElementById('50-radius');
   	r50.radius = '50';
   	r50.addEventListener('click', setRadius, false);
-  	var r100 = document.getElementById('100-radius');
-  	r100.radius = '100';
-  	r100.addEventListener('click', setRadius, false);
+  	var rno = document.getElementById('no-radius');
+  	rno.radius = '0';
+  	rno.addEventListener('click', setRadius, false);
 
   	
 
@@ -112,9 +114,12 @@ function addEventHandler(elem,eventType,handler) {
 
 function setRadius(evt) 
 {
-
+	if (evt.target.radius == '0')
+		dict = {csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	else
+		dict = {radius:evt.target.radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
-	$.post('/get_marks/', {radius:evt.target.radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value}, function(data)
+	$.post('/get_marks/', dict, function(data)
 	{
 		var response = data
 		var count = response.length;
