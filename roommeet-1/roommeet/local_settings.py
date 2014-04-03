@@ -1,3 +1,4 @@
+
 """
 Django settings for roommeet project.
 
@@ -7,9 +8,10 @@ https://docs.djangoproject.com/en/1.6/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
-
+from os import environ
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 TEMPLATE_DIRS = (
@@ -31,7 +33,7 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -43,7 +45,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap3'
+    'psycopg2',
+    'people',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -62,9 +65,9 @@ WSGI_APPLICATION = 'roommeet.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-
 DATABASES = {
-    'default': {
+    'default': 
+    {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'postgres',                      # Or path to database file if using sqlite3.
         'USER': 'postgres',                      # Not used with sqlite3.
@@ -72,7 +75,11 @@ DATABASES = {
         'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '5433',                      # Set to empty string for default. Not used with sqlite3.
     }
+    
 }
+
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -92,3 +99,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'staticfiles'
+
+
+

@@ -1,18 +1,23 @@
 var map;
-myLatlng=new google.maps.LatLng(43.65644,-79.380686);
+myLatlng=new google.maps.LatLng(39.828127,-98.579404);
+var marker = null;
 
 function initialize()
 {
-	var markers = [];
-	var mapOptions={center:myLatlng,zoom:14,mapTypeControl:true,center:myLatlng,panControl:false,rotateControl:false,
-					streetViewControl:false,mapTypeId:google.maps.MapTypeId.ROADMAP};
+	
+	var mapOptions={center:myLatlng,zoom:4,mapTypeControl:true,center:myLatlng,panControl:false,rotateControl:false,
+					streetViewControl:false,mapTypeId:google.maps.MapTypeId.ROADMAP,scrollwheel:false};
 
 	map=new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 
-	var defaultBounds = new google.maps.LatLngBounds(
-     	new google.maps.LatLng(-33.8902, 151.1759),
-      	new google.maps.LatLng(-33.8474, 151.2631));
-  		map.fitBounds(defaultBounds);
+	google.maps.event.addListener(map, 'click', function(event) {
+    addMarker(event.latLng);
+    });
+	//var defaultBounds = new google.maps.LatLngBounds();
+	//defaultBounds.extend(myLatlng);
+      	
+  	//map.fitBounds(defaultBounds);
+  	//map.setZoom(14);
 
 	// Create the search box and link it to the UI element.
 	var input = /** @type {HTMLInputElement} */(
@@ -29,12 +34,9 @@ function initialize()
   	{
   		var places = searchBox.getPlaces();
 
-  		for (var i = 0, marker; marker = markers[i]; i++) {
-  			marker.setMap(null);
-  		}
 
 	    // For each place, get the icon, place name, and location.
-	    markers = [];
+	    
 	    var bounds = new google.maps.LatLngBounds();
 	    for (var i = 0, place; place = places[i]; i++) 
 	    {
@@ -55,16 +57,57 @@ function initialize()
 	      		position: place.geometry.location
 	      	});
 
-	      	markers.push(marker);
+	      	
 
 	      	bounds.extend(place.geometry.location);
 	  	}
 
   		map.fitBounds(bounds);
-  		map.setZoom( 14 );
+  		map.setZoom(14);
 	});
 
 }
+
+// Add a marker to the map and push to the array.
+function addMarker(location) {
+  if (marker == null)
+  {
+  	marker = new google.maps.Marker({
+		position: location,
+	  	map: map
+		});
+  }
+  marker.setPosition(location);
+
+  //post send of position must go here
+  document.getElementById('lat-s').value = location.lat().toFixed(5);
+  document.getElementById('lon-s').value = location.lng().toFixed(5);
+
+}
+
+// Sets the map on all markers in the array.
+function setAllMap(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setAllMap(null);
+}
+
+// Shows any markers currently in the array.
+function showMarkers() {
+  setAllMap(map);
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+  clearMarkers();
+  markers = [];
+}
+
 
 google.maps.event.addDomListener(window,'load',initialize);
 $('#mapmodals').on('shown.bs.modal',function(){google.maps.event.trigger(map,"resize");map.setCenter(myLatlng);});
