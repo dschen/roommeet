@@ -32,7 +32,6 @@ def talk(request):
 	currentNetid = 'ltolias'
 	me = Person.objects.get(netid=currentNetid)
 	friends = me.friends.all()
-	print friends[0].first_name
 	return render(request, 'talk.html', {'friend_list':friends})
 
 
@@ -50,7 +49,11 @@ def get_marks(request):
 	p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad)
 	locs = []
 	for p1 in p:
-		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'fname':p1.first_name, 'lname':p1.last_name, 'netid':p1.netid})
+		friend = "no"
+		if (me.friends.filter(netid=p1.netid)):
+			friend = "yes"
+	
+		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'fname':p1.first_name, 'lname':p1.last_name, 'netid':p1.netid, 'friend':friend})
 	#locs.append({'lat':str(me.lat), 'lon':str(me.lon)})
 	return HttpResponse(json.dumps(locs), mimetype='application/json; charset=UTF-8')
 	#form = LatLonForm(request.POST)
@@ -60,6 +63,33 @@ def get_marks(request):
 	#	lon = cd['lon']
 
 	#return HttpResponse('OK', mimetype='text/plain; charset=UTF-8')
+
+def meet_person(request):
+	currentNetid = 'ltolias'
+	addNetid = ''
+	if request.POST:
+		if 'netid' in request.POST:
+			addNetid = request.POST['netid']
+	me = Person.objects.get(netid=currentNetid)
+	r = {'result':'success'}
+	if (me.friends.filter(netid=addNetid)):
+		r['result'] = 'already there'
+	else:
+		me.friends.add(Person.objects.get(netid=addNetid))
+
+	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
+
+def remove_person(request):
+	currentNetid = 'ltolias'
+	remNetid = ''
+	if request.POST:
+		if 'netid' in request.POST:
+			remNetid = request.POST['netid']
+	me = Person.objects.get(netid=currentNetid)
+	r = {'result':'success'}
+	me.friends.remove(Person.objects.get(netid=remNetid))
+
+	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
 def user(request):
 	if request.POST:
