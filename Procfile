@@ -1,1 +1,1 @@
-web: gunicorn_django -b 0.0.0.0:\$PORT -w 9 -k gevent --max-requests 500 --preload roommeet-1/roommeet/settings.py
+web: python roommeet-1/manage.py runserver "0.0.0.0:$PORT" 
