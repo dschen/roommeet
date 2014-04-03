@@ -140,15 +140,16 @@ function addMarker(location, fname, lname, netid) {
   var marker = new google.maps.Marker({
     position: location,
     map: map,
-    title:'Name: ' + fname + ' ' + lname + '<br>Company: example<br>netid: ' + 
+    title:netid
+  });
+  marker.html = 'Name: ' + fname + ' ' + lname + '<br>Company: example<br>netid: ' + 
     		netid + '<div align="right"> <button class="btn btn-xs active btn-success" id="' + 
     		netid + '_add"> meet </button></div>'
-  });
   markers.push(marker);
   
   google.maps.event.addListener(marker, 'click', function() {
   	infowindow.close();
-  	infowindow.setContent(marker.title);
+  	infowindow.setContent(marker.html);
     infowindow.open(map,marker);
   	});
 }
