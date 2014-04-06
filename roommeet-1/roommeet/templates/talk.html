@@ -11,11 +11,12 @@
 {% block mainpage %}
 <div class="row-fluid">
     <div class="col-md-2">
+        {% csrf_token %} 
         <div id="map_canvas"></div>
     </div>
     <div class="well col-md-10">
         <div class="row-fluid">
-            <div class="well col-md-6">
+            <div class="well col-md-8">
                 <table class="table">
                     <thead>
                         <tr>
@@ -33,7 +34,7 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="friendList">
                     {% for person in friend_list %}
                         <tr>
                             <td class="col-md-8">
@@ -46,11 +47,12 @@
                                 <a href="mailto:{{ person.netid }}@princeton.edu?Subject=RoomMeet%20Hello"> {{ person.netid }}@princeton.edu </a>
                             </td>
                             <td>
-                                <button type="submit" class="btn btn-sm btn-danger" id="{{ person.netid }}-remove"> remove </button> <br><br>
+                                <button type="submit" class="btn btn-sm btn-danger" id="{{ person.netid }}-remove" onclick="removeList('{{ person.netid }}')"> remove </button> <br><br>
                             </td>
                         </tr>
-                        {% endfor %}
+                    {% endfor %}
                     </tbody>
+                    
                 </table>
             </div>
         </div> 
@@ -64,7 +66,7 @@
 
 <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
-<script src="{{STATIC_URL}}/gmap.js"></script>
+<script src="{{STATIC_URL}}/gmap_t.js"></script>
 
 
 {% endblock %}

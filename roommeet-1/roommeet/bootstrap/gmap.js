@@ -7,7 +7,7 @@ function initialize()
 {
 	var markers = [];
 	var mapOptions={center:myLatlng,zoom:4,mapTypeControl:true,center:myLatlng,panControl:false,rotateControl:false,
-					streetViewControl:false,mapTypeId:google.maps.MapTypeId.ROADMAP};
+					streetViewControl:false,mapTypeId:google.maps.MapTypeId.ROADMAP,scrollwheel:false};
 
 	map=new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 
@@ -20,13 +20,12 @@ function initialize()
 
     		var item = response[i];
     		loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-    		addMarker(loc, item.fname, item.lname, item.netid);
+    		addMarker(loc, item.fname, item.lname, item.netid, item.friend);
     		bounds.extend(loc);
 
 		}
     	map.fitBounds(bounds);
 	});
-
 	//var defaultBounds = new google.maps.LatLngBounds();
 	//defaultBounds.extend(myLatlng);
       	
@@ -47,8 +46,6 @@ function initialize()
   	var rno = document.getElementById('no-radius');
   	rno.radius = '0';
   	rno.addEventListener('click', setRadius, false);
-
-  	
 
   	
 	// Create the search box and link it to the UI element.
@@ -136,21 +133,70 @@ function setRadius(evt)
 	});
 }
 
-function addMarker(location, fname, lname, netid) {
+function addMarker(location, fname, lname, netid, friend) {
   var marker = new google.maps.Marker({
     position: location,
     map: map,
-    title:'Name: ' + fname + ' ' + lname + '<br>Company: example<br>netid: ' + 
-    		netid + '<div align="right"> <button class="btn btn-xs active btn-success" id="' + 
-    		netid + '_add"> meet </button></div>'
+    title:netid
   });
+
+  if (friend == 'yes')
+  	marker.html = 'Name: ' + fname + ' ' + lname + '<br>Company: example<br>netid: ' + netid + "<div align='right'> <button type='submit' id='person_remove' onclick='removePerson(\""+netid+"\")' class='btn btn-xs active btn-danger'> remove </button></div>";
+  else
+  	marker.html = 'Name: ' + fname + ' ' + lname + '<br>Company: example<br>netid: ' + netid + "<div align='right'> <button type='submit' id='person_add' onclick='meetPerson(\""+netid+"\")'  class='btn btn-xs active btn-success'> add </button></div>";
+
   markers.push(marker);
+  
   
   google.maps.event.addListener(marker, 'click', function() {
   	infowindow.close();
-  	infowindow.setContent(marker.title);
+  	infowindow.setContent(marker.html);
     infowindow.open(map,marker);
   	});
+}
+
+function meetPerson(nid) 
+{
+	dict = {'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	$.post('/meet_person/', dict, function(data)
+	{
+		var response = data
+		if (response.result == 'success')
+		{
+			for (var i = 0; i < markers.length; i++)
+			{
+				if (markers[i].title == nid)
+				{
+					markers[i].html = markers[i].html.substr(0,markers[i].html.length - 84 - nid.length) +  "onclick='removePerson(\""+nid+"\")' class='btn btn-xs active btn-danger'> remove </button></div>";
+					infowindow.setContent(markers[i].html);
+					break;
+				}
+			}
+		}
+
+
+
+	});
+}
+
+function removePerson(nid) 
+{
+	dict = {'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	$.post('/remove_person/', dict, function(data)
+	{
+		var response = data
+		for (var i = 0; i < markers.length; i++)
+		{
+			if (markers[i].title == nid)
+			{
+				markers[i].html = markers[i].html.substr(0,markers[i].html.length - 87 - nid.length) +  "onclick='meetPerson(\""+nid+"\")' class='btn btn-xs active btn-success'> add </button></div>";
+				console.log(markers[i].html);
+				infowindow.setContent(markers[i].html);
+				break;
+			}
+		}
+
+	});
 }
 
 var infowindow = new google.maps.InfoWindow({
