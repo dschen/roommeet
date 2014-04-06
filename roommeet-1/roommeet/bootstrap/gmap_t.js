@@ -91,7 +91,7 @@ function meetPerson(evt)
 }
 function removePerson(nid) 
 {
-  dict = {'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+  dict = {'type':'meet', 'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
   $.post('/remove_person/', dict, function(data)
   {
     var response = data
@@ -100,7 +100,6 @@ function removePerson(nid)
       if (markers[i].title == nid)
       {
         markers[i].html = markers[i].html.substr(0,markers[i].html.length - 87 - nid.length) +  "onclick='meetPerson(\""+nid+"\")' class='btn btn-xs active btn-success'> add </button></div>";
-        console.log(markers[i].html);
         infowindow.setContent(markers[i].html);
         break;
       }
@@ -111,13 +110,10 @@ function removePerson(nid)
 
 function removeList(nid)
 {
-  removePerson(nid);
-
-  dict = {csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
-  $.post('/get_list/', dict, function(data)
+  dict = {'type':'talk', 'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+  $.post('/remove_person/', dict, function(data)
   {
     document.getElementById("friendList").innerHTML=data.html;
-
   });
 
 }

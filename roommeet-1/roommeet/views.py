@@ -82,12 +82,27 @@ def meet_person(request):
 def remove_person(request):
 	currentNetid = 'ltolias'
 	remNetid = ''
+	rtype = 'meet'
 	if request.POST:
 		if 'netid' in request.POST:
 			remNetid = request.POST['netid']
+		if 'type' in request.POST:
+			rtype = request.POST['type']
 	me = Person.objects.get(netid=currentNetid)
-	r = {'result':'success'}
 	me.friends.remove(Person.objects.get(netid=remNetid))
+	friends = me.friends.all()
+	if (rtype == 'talk'):
+		html = ''
+		for person in friends:
+			html += "<tr>\n<td class='col-md-8'>" + person.first_name + "  " + person.last_name 
+			html +=	"\n</td>\n<td>\nexample\n</td>\n<td>\n<a href='mailto:"
+			html += person.netid + "@princeton.edu?Subject=RoomMeet%20Hello'>" + person.netid 
+			html += '@princeton.edu </a>\n</td>\n<td>\n<button type="submit" class="btn btn-sm btn-danger" id=\''
+			html += person.netid + '-remove\' onclick="removeList(\'' + person.netid + '\')"> remove </button> <br><br>\n</td>\n</tr>\n'
+	
+		r = {'html':html}
+	else:
+		r = {'result':'success'}
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
@@ -100,9 +115,8 @@ def get_list(request):
 		html += "<tr>\n<td class='col-md-8'>" + person.first_name + "  " + person.last_name 
 		html +=	"\n</td>\n<td>\nexample\n</td>\n<td>\n<a href='mailto:"
 		html += person.netid + "@princeton.edu?Subject=RoomMeet%20Hello'>" + person.netid 
-		html += '@princeton.edu </a>\n</td>\n<td>\n<button type="submit" class="btn btn-sm btn-danger" id="'
-		html += person.netid + '-remove" onclick="removeList("' + person.netid + '")"> remove </button> <br><br>\n</td>\n</tr>\n'
-	print "h"
+		html += '@princeton.edu </a>\n</td>\n<td>\n<button type="submit" class="btn btn-sm btn-danger" id=\''
+		html += person.netid + '-remove\' onclick="removeList(\'' + person.netid + '\')"> remove </button> <br><br>\n</td>\n</tr>\n'
 	r = {'html':html}
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
