@@ -91,6 +91,23 @@ def remove_person(request):
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
+def get_list(request):
+	currentNetid = 'ltolias'
+	me = Person.objects.get(netid=currentNetid)
+	friends = me.friends.all()
+	html = ''
+	for person in friends:
+		html += "<tr>\n<td class='col-md-8'>" + person.first_name + "  " + person.last_name 
+		html +=	"\n</td>\n<td>\nexample\n</td>\n<td>\n<a href='mailto:"
+		html += person.netid + "@princeton.edu?Subject=RoomMeet%20Hello'>" + person.netid 
+		html += '@princeton.edu </a>\n</td>\n<td>\n<button type="submit" class="btn btn-sm btn-danger" id="'
+		html += person.netid + '-remove" onclick="removeList("' + person.netid + '")"> remove </button> <br><br>\n</td>\n</tr>\n'
+	print "h"
+	r = {'html':html}
+
+	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
+
+
 def user(request):
 	if request.POST:
 		if '_save' in request.POST:
