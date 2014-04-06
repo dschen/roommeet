@@ -35,6 +35,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                    <div id="friendList">
                     {% for person in friend_list %}
                         <tr>
                             <td class="col-md-8">
@@ -47,11 +48,13 @@
                                 <a href="mailto:{{ person.netid }}@princeton.edu?Subject=RoomMeet%20Hello"> {{ person.netid }}@princeton.edu </a>
                             </td>
                             <td>
-                                <button type="submit" class="btn btn-sm btn-danger" id="{{ person.netid }}-remove"> remove </button> <br><br>
+                                <button type="submit" class="btn btn-sm btn-danger" id="{{ person.netid }}-remove" onclick="removeList('{{ person.netid }}')"> remove </button> <br><br>
                             </td>
                         </tr>
                         {% endfor %}
+                        </div>
                     </tbody>
+                    
                 </table>
             </div>
         </div> 
