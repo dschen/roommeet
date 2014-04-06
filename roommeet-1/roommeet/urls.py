@@ -15,6 +15,6 @@ urlpatterns = patterns('roommeet.views',
     url(r'^get_list/$', 'get_list'),
     url(r'^user/$', 'user'),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^accounts/login/$', 'django_cas.views.login'),
-    url(r'^accounts/logout/$', 'django.cas.views.logout'),
+    #url(r'^accounts/login/$', 'django_cas.views.login'),
+    #url(r'^accounts/logout/$', 'django.cas.views.logout'),
 )
