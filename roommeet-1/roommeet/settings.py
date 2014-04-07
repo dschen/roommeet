@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'psycopg2',
     'people',
+    'django.contrib.contenttypes',
 )
 
 MIDDLEWARE_CLASSES = (
