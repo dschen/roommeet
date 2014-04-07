@@ -1,5 +1,5 @@
 #render shortcut
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import time
 import json
 import math
@@ -16,25 +16,25 @@ from forms import LatLonForm
 
 from django.views.decorators.csrf import csrf_exempt
 from people.models import Person
-
+from django.contrib.auth.decorators import login_required
 
 #function to generate html and return
-
+@login_required
 def meet(request):
 	return render(request, 'meet.html')
 
-
+@login_required
 def profile(request):
     return render(request, 'profile.html')
 
-
+@login_required
 def talk(request):
 	currentNetid = 'ltolias'
 	me = Person.objects.get(netid=currentNetid)
 	friends = me.friends.all()
 	return render(request, 'talk.html', {'friend_list':friends})
 
-
+@login_required
 def get_marks(request):
 	currentNetid = 'ltolias'
 	radius = 200*69.172;
@@ -63,7 +63,7 @@ def get_marks(request):
 	#	lon = cd['lon']
 
 	#return HttpResponse('OK', mimetype='text/plain; charset=UTF-8')
-
+@login_required
 def meet_person(request):
 	currentNetid = 'ltolias'
 	addNetid = ''
@@ -79,6 +79,7 @@ def meet_person(request):
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
+@login_required
 def remove_person(request):
 	currentNetid = 'ltolias'
 	remNetid = ''
@@ -106,6 +107,7 @@ def remove_person(request):
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
+@login_required
 def get_list(request):
 	currentNetid = 'ltolias'
 	me = Person.objects.get(netid=currentNetid)
@@ -121,7 +123,7 @@ def get_list(request):
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
-
+@login_required
 def user(request):
 	if request.POST:
 		if '_save' in request.POST:
