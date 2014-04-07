@@ -1,5 +1,5 @@
 #render shortcut
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import time
 import json
 import math
@@ -16,27 +16,27 @@ from forms import LatLonForm
 
 from django.views.decorators.csrf import csrf_exempt
 from people.models import Person
-
+from django.contrib.auth.decorators import login_required
 
 #function to generate html and return
-
+@login_required
 def meet(request):
 	return render(request, 'meet.html')
 
-
+@login_required
 def profile(request):
     return render(request, 'profile.html')
 
-
+@login_required
 def talk(request):
-	currentNetid = 'ltolias'
+	currentNetid = request.user.username
 	me = Person.objects.get(netid=currentNetid)
 	friends = me.friends.all()
 	return render(request, 'talk.html', {'friend_list':friends})
 
-
+@login_required
 def get_marks(request):
-	currentNetid = 'ltolias'
+	currentNetid = request.user.username
 	radius = 200*69.172;
 	if request.POST:
 		if 'radius' in request.POST:
@@ -63,9 +63,9 @@ def get_marks(request):
 	#	lon = cd['lon']
 
 	#return HttpResponse('OK', mimetype='text/plain; charset=UTF-8')
-
+@login_required
 def meet_person(request):
-	currentNetid = 'ltolias'
+	currentNetid = request.user.username
 	addNetid = ''
 	if request.POST:
 		if 'netid' in request.POST:
@@ -79,8 +79,9 @@ def meet_person(request):
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
+@login_required
 def remove_person(request):
-	currentNetid = 'ltolias'
+	currentNetid = request.user.username
 	remNetid = ''
 	rtype = 'meet'
 	if request.POST:
@@ -106,8 +107,9 @@ def remove_person(request):
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
+@login_required
 def get_list(request):
-	currentNetid = 'ltolias'
+	currentNetid = request.user.username
 	me = Person.objects.get(netid=currentNetid)
 	friends = me.friends.all()
 	html = ''
@@ -121,21 +123,22 @@ def get_list(request):
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
-
+@login_required
 def user(request):
+	currentNetid = request.user.username
 	if request.POST:
 		if '_save' in request.POST:
-			p = Person.objects.filter(netid=request.POST['netid'])
+			p = Person.objects.filter(netid=currentNetid)
 			if (p):
 				p1 = p[0];
-				p1.netid = request.POST['netid']
+				p1.netid = currentNetid
 				p1.first_name = request.POST['firstname']
 				p1.last_name = request.POST['lastname']
 				p1.lat = request.POST['lat-s']
 				p1.lon = request.POST['lon-s']
 				p1.save();
 			else:
-				p1 = Person(netid=request.POST['netid'], first_name=request.POST['firstname'], 
+				p1 = Person(netid=currentNetid, first_name=request.POST['firstname'], 
 					last_name=request.POST['lastname'], lat=request.POST['lat-s'], lon=request.POST['lon-s'])
 				p1.save();
 			return HttpResponseRedirect('/')

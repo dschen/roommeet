@@ -64,7 +64,7 @@ AUTHENTICATION_BACKENDS = (
     'django_cas.backends.CASBackend',
 )
 
-CAS_SERVER_URL = 'https://fed.princeton.edu/cas'
+CAS_SERVER_URL = 'https://fed.princeton.edu/cas/'
 
 ROOT_URLCONF = 'roommeet.urls'
 
