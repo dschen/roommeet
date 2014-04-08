@@ -95,7 +95,7 @@ def remove_person(request):
 	if (rtype == 'talk'):
 		html = ''
 		for person in friends:
-			html += "<tr>\n<td class='col-md-8'>" + person.first_name + "  " + person.last_name 
+			html += "<tr>\n<td class='col-md-8'>" + person.first_name + "  " + person.last_name + " " + str(person.year)
 			html +=	"\n</td>\n<td>\nexample\n</td>\n<td>\n<a href='mailto:"
 			html += person.netid + "@princeton.edu?Subject=RoomMeet%20Hello'>" + person.netid 
 			html += '@princeton.edu </a>\n</td>\n<td>\n<button type="submit" class="btn btn-sm btn-danger" id=\''
@@ -107,21 +107,6 @@ def remove_person(request):
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
-@login_required
-def get_list(request):
-	currentNetid = request.user.username
-	me = Person.objects.get(netid=currentNetid)
-	friends = me.friends.all()
-	html = ''
-	for person in friends:
-		html += "<tr>\n<td class='col-md-8'>" + person.first_name + "  " + person.last_name 
-		html +=	"\n</td>\n<td>\nexample\n</td>\n<td>\n<a href='mailto:"
-		html += person.netid + "@princeton.edu?Subject=RoomMeet%20Hello'>" + person.netid 
-		html += '@princeton.edu </a>\n</td>\n<td>\n<button type="submit" class="btn btn-sm btn-danger" id=\''
-		html += person.netid + '-remove\' onclick="removeList(\'' + person.netid + '\')"> remove </button> <br><br>\n</td>\n</tr>\n'
-	r = {'html':html}
-
-	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
 @login_required
 def user(request):
@@ -136,10 +121,13 @@ def user(request):
 				p1.last_name = request.POST['lastname']
 				p1.lat = request.POST['lat-s']
 				p1.lon = request.POST['lon-s']
+				p1.company = request.POST['company']
+				p1.year = (int)(request.POST['cyear'])
 				p1.save();
 			else:
 				p1 = Person(netid=currentNetid, first_name=request.POST['firstname'], 
-					last_name=request.POST['lastname'], lat=request.POST['lat-s'], lon=request.POST['lon-s'])
+					last_name=request.POST['lastname'], lat=request.POST['lat-s'], 
+					lon=request.POST['lon-s'], company=request.POST['company'], year=request.POST['cyear'])
 				p1.save();
 			return HttpResponseRedirect('/')
 		elif '_cancel' in request.POST:

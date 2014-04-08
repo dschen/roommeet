@@ -77,36 +77,7 @@ function addMarker(location, fname, lname, netid) {
   	});
 }
 
-function meetPerson(evt) 
-{
 
-	dict = {netid:evt.target.netid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
-	deleteMarkers();
-	$.post('/meet_person/', dict, function(data)
-	{
-		var response = data
-		//if (response.result == 'success')
-
-	});
-}
-function removePerson(nid) 
-{
-  dict = {'type':'meet', 'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
-  $.post('/remove_person/', dict, function(data)
-  {
-    var response = data
-    for (var i = 0; i < markers.length; i++)
-    {
-      if (markers[i].title == nid)
-      {
-        markers[i].html = markers[i].html.substr(0,markers[i].html.length - 87 - nid.length) +  "onclick='meetPerson(\""+nid+"\")' class='btn btn-xs active btn-success'> add </button></div>";
-        infowindow.setContent(markers[i].html);
-        break;
-      }
-    }
-
-  });
-}
 
 function removeList(nid)
 {

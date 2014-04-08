@@ -38,10 +38,10 @@
                     {% for person in friend_list %}
                         <tr>
                             <td class="col-md-10">
-                                {{ person.first_name }}  {{ person.last_name }}
+                                {{ person.first_name }}  {{ person.last_name }} {{ person.year }}
                             </td>
                             <td>
-                                example
+                                {{ person.company }}
                             </td>
                             <td>
                                 <a href="mailto:{{ person.netid }}@princeton.edu?Subject=RoomMeet%20Hello"> {{ person.netid }}@princeton.edu </a>
