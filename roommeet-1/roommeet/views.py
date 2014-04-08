@@ -93,7 +93,8 @@ def remove_person(request):
 	me.friends.remove(Person.objects.get(netid=remNetid))
 	friends = me.friends.all()
 	if (rtype == 'talk'):
-		html = render(request, 'tablefill.html', {'friend_list':friends})
+		t = get_template('tablefill.html')
+		html = t.render(Context({'friend_list':friends}))
 		#for person in friends:
 		#	html += "<tr>\n<td class='col-md-8'>" + person.first_name + "  " + person.last_name + " " + str(person.year)
 		#	html +=	"\n</td>\n<td>\n" + person.company + "\n</td>\n<td>\n<a href='mailto:"
