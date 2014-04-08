@@ -141,9 +141,9 @@ function addMarker(location, fname, lname, netid, company, year, friend) {
   });
 
   if (friend == 'yes')
-  	marker.html = 'Name: ' + fname + ' ' + lname + ' ' + year + '<br>Company: ' + company + '<br>netid: ' + netid + "<div align='right'> <button type='submit' id='person_remove' onclick='removePerson(\""+netid+"\")' class='btn btn-xs active btn-danger'> remove </button></div>";
+  	marker.html = '<b>Name:</b> ' + fname + ' ' + lname + '<br><b>Company:</b> ' + company + '<br><b>Year:</b> ' + year + "<div align='right'> <button type='submit' id='person_remove' onclick='removePerson(\""+netid+"\")' class='btn btn-xs active btn-danger'> remove </button></div>";
   else
-  	marker.html = 'Name: ' + fname + ' ' + lname + '<br>Company: ' + company + '<br>netid: ' + netid + "<div align='right'> <button type='submit' id='person_add' onclick='meetPerson(\""+netid+"\")'  class='btn btn-xs active btn-success'> add </button></div>";
+  	marker.html = '<b>Name:</b> ' + fname + ' ' + lname + '<br><b>Company:</b> ' + company + '<br><b>Year:</b> ' + year + "<div align='right'> <button type='submit' id='person_add' onclick='meetPerson(\""+netid+"\")'  class='btn btn-xs active btn-success'> add </button></div>";
 
   markers.push(marker);
   
