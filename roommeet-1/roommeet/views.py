@@ -56,7 +56,7 @@ def get_marks(request):
 			f = False
 		t = get_template('buttonfill.html')
 		html = t.render(Context({'person':p1, 'add':f}))
-		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'fname':p1.first_name, 'lname':p1.last_name, 'netid':p1.netid, 'friend':friend, 'year':str(p1.year), 'company':p1.company, 'html':html})
+		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'netid':p1.netid, 'html':html})
 	#locs.append({'lat':str(me.lat), 'lon':str(me.lon)})
 	return HttpResponse(json.dumps(locs), mimetype='application/json; charset=UTF-8')
 	#form = LatLonForm(request.POST)

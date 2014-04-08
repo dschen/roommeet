@@ -20,7 +20,7 @@ function initialize()
 
     		var item = response[i];
     		loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-    		addMarker(loc, item.html);
+    		addMarker(loc, item.html, item.netid);
     		bounds.extend(loc);
 
 		}
@@ -125,7 +125,7 @@ function setRadius(evt)
 		{
 			var item = response[i];
 			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-			addMarker(loc, item.html);
+			addMarker(loc, item.html, item.netid);
 			bounds.extend(loc);
 
 		}
@@ -133,7 +133,7 @@ function setRadius(evt)
 	});
 }
 
-function addMarker(location, html) {
+function addMarker(location, html, netid) {
   var marker = new google.maps.Marker({
     position: location,
     map: map,
