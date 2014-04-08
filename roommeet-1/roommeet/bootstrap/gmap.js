@@ -20,7 +20,7 @@ function initialize()
 
     		var item = response[i];
     		loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-    		addMarker(loc, item.fname, item.lname, item.netid, item.company, item.year, item.friend);
+    		addMarker(loc, item.html);
     		bounds.extend(loc);
 
 		}
@@ -125,7 +125,7 @@ function setRadius(evt)
 		{
 			var item = response[i];
 			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-			addMarker(loc, item.fname, item.lname, item.netid, item.company, item.year, item.friend);
+			addMarker(loc, item.html);
 			bounds.extend(loc);
 
 		}
@@ -133,18 +133,13 @@ function setRadius(evt)
 	});
 }
 
-function addMarker(location, fname, lname, netid, company, year, friend) {
+function addMarker(location, html) {
   var marker = new google.maps.Marker({
     position: location,
     map: map,
     title:netid
   });
-
-  if (friend == 'yes')
-  	marker.html = '<b>Name:</b> ' + fname + ' ' + lname + '<br><b>Company:</b> ' + company + '<br><b>Year:</b> ' + year + "<div align='right'> <button type='submit' id='person_remove' onclick='removePerson(\""+netid+"\")' class='btn btn-xs active btn-danger'> remove </button></div>";
-  else
-  	marker.html = '<b>Name:</b> ' + fname + ' ' + lname + '<br><b>Company:</b> ' + company + '<br><b>Year:</b> ' + year + "<div align='right'> <button type='submit' id='person_add' onclick='meetPerson(\""+netid+"\")'  class='btn btn-xs active btn-success'> add </button></div>";
-
+  marker.html = html;
   markers.push(marker);
   
   
@@ -167,7 +162,7 @@ function meetPerson(nid)
 			{
 				if (markers[i].title == nid)
 				{
-					markers[i].html = markers[i].html.substr(0,markers[i].html.length - 84 - nid.length) +  "onclick='removePerson(\""+nid+"\")' class='btn btn-xs active btn-danger'> remove </button></div>";
+					markers[i].html = response.html;
 					infowindow.setContent(markers[i].html);
 					break;
 				}
@@ -189,8 +184,7 @@ function removePerson(nid)
 		{
 			if (markers[i].title == nid)
 			{
-				markers[i].html = markers[i].html.substr(0,markers[i].html.length - 87 - nid.length) +  "onclick='meetPerson(\""+nid+"\")' class='btn btn-xs active btn-success'> add </button></div>";
-				console.log(markers[i].html);
+				markers[i].html = response.html;
 				infowindow.setContent(markers[i].html);
 				break;
 			}

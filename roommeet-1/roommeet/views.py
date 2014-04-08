@@ -50,10 +50,13 @@ def get_marks(request):
 	locs = []
 	for p1 in p:
 		friend = "no"
+		f = True
 		if (me.friends.filter(netid=p1.netid)):
 			friend = "yes"
-	
-		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'fname':p1.first_name, 'lname':p1.last_name, 'netid':p1.netid, 'friend':friend, 'year':str(p1.year), 'company':p1.company})
+			f = False
+		t = get_template('buttonfill.html')
+		html = t.render(Context({'person':p1, 'add':f}))
+		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'fname':p1.first_name, 'lname':p1.last_name, 'netid':p1.netid, 'friend':friend, 'year':str(p1.year), 'company':p1.company, 'html':html})
 	#locs.append({'lat':str(me.lat), 'lon':str(me.lon)})
 	return HttpResponse(json.dumps(locs), mimetype='application/json; charset=UTF-8')
 	#form = LatLonForm(request.POST)
@@ -72,11 +75,16 @@ def meet_person(request):
 			addNetid = request.POST['netid']
 	me = Person.objects.get(netid=currentNetid)
 	r = {'result':'success'}
+	html = ''
 	if (me.friends.filter(netid=addNetid)):
 		r['result'] = 'already there'
 	else:
-		me.friends.add(Person.objects.get(netid=addNetid))
+		p1 = Person.objects.get(netid=addNetid)
+		me.friends.add(p1)
+		t = get_template('buttonfill.html')
+		html = t.render(Context({'person':p1, 'add':False}))
 
+	r['html'] = html
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
 @login_required
@@ -90,20 +98,17 @@ def remove_person(request):
 		if 'type' in request.POST:
 			rtype = request.POST['type']
 	me = Person.objects.get(netid=currentNetid)
-	me.friends.remove(Person.objects.get(netid=remNetid))
+	p1 = Person.objects.get(netid=remNetid)
+	me.friends.remove(p1)
 	friends = me.friends.all()
 	if (rtype == 'talk'):
-		html = ''
-		for person in friends:
-			html += "<tr>\n<td class='col-md-8'>" + person.first_name + "  " + person.last_name + " " + str(person.year)
-			html +=	"\n</td>\n<td>\n" + person.company + "\n</td>\n<td>\n<a href='mailto:"
-			html += person.netid + "@princeton.edu?Subject=RoomMeet%20Hello'>" + person.netid 
-			html += '@princeton.edu </a>\n</td>\n<td>\n<button type="submit" class="btn btn-sm btn-danger" id=\''
-			html += person.netid + '-remove\' onclick="removeList(\'' + person.netid + '\')"> remove </button> <br><br>\n</td>\n</tr>\n'
-	
+		t = get_template('tablefill.html')
+		html = t.render(Context({'friend_list':friends}))
 		r = {'html':html}
 	else:
-		r = {'result':'success'}
+		t = get_template('buttonfill.html')
+		html = t.render(Context({'person':p1, 'add':True}))
+		r = {'html':html}
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
