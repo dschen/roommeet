@@ -75,11 +75,16 @@ def meet_person(request):
 			addNetid = request.POST['netid']
 	me = Person.objects.get(netid=currentNetid)
 	r = {'result':'success'}
+	html = ''
 	if (me.friends.filter(netid=addNetid)):
 		r['result'] = 'already there'
 	else:
-		me.friends.add(Person.objects.get(netid=addNetid))
+		p1 = Person.objects.get(netid=addNetid)
+		me.friends.add(p1)
+		t = get_template('buttonfill.html')
+		html = t.render(Context({'person':p1, 'add':False}))
 
+	r['html'] = html
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
 @login_required
@@ -93,14 +98,17 @@ def remove_person(request):
 		if 'type' in request.POST:
 			rtype = request.POST['type']
 	me = Person.objects.get(netid=currentNetid)
-	me.friends.remove(Person.objects.get(netid=remNetid))
+	p1 = Person.objects.get(netid=remNetid)
+	me.friends.remove(p1)
 	friends = me.friends.all()
 	if (rtype == 'talk'):
 		t = get_template('tablefill.html')
 		html = t.render(Context({'friend_list':friends}))
 		r = {'html':html}
 	else:
-		r = {'result':'success'}
+		t = get_template('buttonfill.html')
+		html = t.render(Context({'person':p1, 'add':True}))
+		r = {'html':html}
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
