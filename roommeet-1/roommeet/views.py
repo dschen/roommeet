@@ -53,7 +53,7 @@ def get_marks(request):
 		if (me.friends.filter(netid=p1.netid)):
 			friend = "yes"
 	
-		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'fname':p1.first_name, 'lname':p1.last_name, 'netid':p1.netid, 'friend':friend})
+		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'fname':p1.first_name, 'lname':p1.last_name, 'netid':p1.netid, 'friend':friend, 'year':str(p1.year), 'company':p1.company})
 	#locs.append({'lat':str(me.lat), 'lon':str(me.lon)})
 	return HttpResponse(json.dumps(locs), mimetype='application/json; charset=UTF-8')
 	#form = LatLonForm(request.POST)
@@ -96,7 +96,7 @@ def remove_person(request):
 		html = ''
 		for person in friends:
 			html += "<tr>\n<td class='col-md-8'>" + person.first_name + "  " + person.last_name + " " + str(person.year)
-			html +=	"\n</td>\n<td>\nexample\n</td>\n<td>\n<a href='mailto:"
+			html +=	"\n</td>\n<td>\n" + person.company + "\n</td>\n<td>\n<a href='mailto:"
 			html += person.netid + "@princeton.edu?Subject=RoomMeet%20Hello'>" + person.netid 
 			html += '@princeton.edu </a>\n</td>\n<td>\n<button type="submit" class="btn btn-sm btn-danger" id=\''
 			html += person.netid + '-remove\' onclick="removeList(\'' + person.netid + '\')"> remove </button> <br><br>\n</td>\n</tr>\n'

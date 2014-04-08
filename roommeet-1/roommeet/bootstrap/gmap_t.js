@@ -34,49 +34,6 @@ function addEventHandler(elem,eventType,handler) {
      elem.attachEvent ('on'+eventType,handler); 
 }
 
-function setRadius(evt) 
-{
-	if (evt.target.radius == '0')
-		dict = {csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
-	else
-		dict = {radius:evt.target.radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
-	deleteMarkers();
-	$.post('/get_marks/', dict, function(data)
-	{
-		var response = data
-		var count = response.length;
-		var bounds = new google.maps.LatLngBounds();
-		for(var i = 0; i < count; i++) 
-		{
-			var item = response[i];
-			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-			addMarker(loc, item.fname, item.lname, item.netid);
-			bounds.extend(loc);
-
-		}
-		map.fitBounds(bounds);
-	});
-}
-
-function addMarker(location, fname, lname, netid) {
-  var marker = new google.maps.Marker({
-    position: location,
-    map: map,
-    title:netid
-  });
-  marker.html = 'Name: ' + fname + ' ' + lname + '<br>Company: example<br>netid: ' + 
-    		netid + '<div align="right"> <button class="btn btn-xs active btn-success" id="' + 
-    		netid + '_add"> meet </button></div>'
-  markers.push(marker);
-  
-  
-  google.maps.event.addListener(marker, 'click', function() {
-  	infowindow.close();
-  	infowindow.setContent(marker.html);
-    infowindow.open(map,marker);
-  	});
-}
-
 
 
 function removeList(nid)
