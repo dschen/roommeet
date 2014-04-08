@@ -20,7 +20,7 @@ function initialize()
 
     		var item = response[i];
     		loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-    		addMarker(loc, item.fname, item.lname, item.netid, item.friend);
+    		addMarker(loc, item.fname, item.lname, item.netid, item.company, item.year, item.friend);
     		bounds.extend(loc);
 
 		}
@@ -125,7 +125,7 @@ function setRadius(evt)
 		{
 			var item = response[i];
 			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-			addMarker(loc, item.fname, item.lname, item.netid);
+			addMarker(loc, item.fname, item.lname, item.netid, item.company, item.year, item.friend);
 			bounds.extend(loc);
 
 		}
@@ -133,7 +133,7 @@ function setRadius(evt)
 	});
 }
 
-function addMarker(location, fname, lname, netid, friend) {
+function addMarker(location, fname, lname, netid, company, year, friend) {
   var marker = new google.maps.Marker({
     position: location,
     map: map,
@@ -141,9 +141,9 @@ function addMarker(location, fname, lname, netid, friend) {
   });
 
   if (friend == 'yes')
-  	marker.html = 'Name: ' + fname + ' ' + lname + '<br>Company: example<br>netid: ' + netid + "<div align='right'> <button type='submit' id='person_remove' onclick='removePerson(\""+netid+"\")' class='btn btn-xs active btn-danger'> remove </button></div>";
+  	marker.html = '<b>Name:</b> ' + fname + ' ' + lname + '<br><b>Company:</b> ' + company + '<br><b>Year:</b> ' + year + "<div align='right'> <button type='submit' id='person_remove' onclick='removePerson(\""+netid+"\")' class='btn btn-xs active btn-danger'> remove </button></div>";
   else
-  	marker.html = 'Name: ' + fname + ' ' + lname + '<br>Company: example<br>netid: ' + netid + "<div align='right'> <button type='submit' id='person_add' onclick='meetPerson(\""+netid+"\")'  class='btn btn-xs active btn-success'> add </button></div>";
+  	marker.html = '<b>Name:</b> ' + fname + ' ' + lname + '<br><b>Company:</b> ' + company + '<br><b>Year:</b> ' + year + "<div align='right'> <button type='submit' id='person_add' onclick='meetPerson(\""+netid+"\")'  class='btn btn-xs active btn-success'> add </button></div>";
 
   markers.push(marker);
   
@@ -181,7 +181,7 @@ function meetPerson(nid)
 
 function removePerson(nid) 
 {
-	dict = {'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	dict = {'type':'meet', 'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	$.post('/remove_person/', dict, function(data)
 	{
 		var response = data
