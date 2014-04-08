@@ -125,7 +125,7 @@ function setRadius(evt)
 		{
 			var item = response[i];
 			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-			addMarker(loc, item.fname, item.lname, item.netid, item.company, item.year, item.friend);
+			addMarker(loc, item.fname, item.lname, item.netid, item.company, item.year, item.friend, item.html);
 			bounds.extend(loc);
 
 		}
@@ -133,17 +133,18 @@ function setRadius(evt)
 	});
 }
 
-function addMarker(location, fname, lname, netid, company, year, friend) {
+function addMarker(location, fname, lname, netid, company, year, friend, html) {
   var marker = new google.maps.Marker({
     position: location,
     map: map,
     title:netid
   });
+  marker.html = html;
 
-  if (friend == 'yes')
-  	marker.html = '<b>Name:</b> ' + fname + ' ' + lname + '<br><b>Company:</b> ' + company + '<br><b>Year:</b> ' + year + "<div align='right'> <button type='submit' id='person_remove' onclick='removePerson(\""+netid+"\")' class='btn btn-xs active btn-danger'> remove </button></div>";
-  else
-  	marker.html = '<b>Name:</b> ' + fname + ' ' + lname + '<br><b>Company:</b> ' + company + '<br><b>Year:</b> ' + year + "<div align='right'> <button type='submit' id='person_add' onclick='meetPerson(\""+netid+"\")'  class='btn btn-xs active btn-success'> add </button></div>";
+  //if (friend == 'yes')
+  	//marker.html = '<b>Name:</b> ' + fname + ' ' + lname + '<br><b>Company:</b> ' + company + '<br><b>Year:</b> ' + year + "<div align='right'> <button type='submit' id='person_remove' onclick='removePerson(\""+netid+"\")' class='btn btn-xs active btn-danger'> remove </button></div>";
+  //else
+  	//marker.html = '<b>Name:</b> ' + fname + ' ' + lname + '<br><b>Company:</b> ' + company + '<br><b>Year:</b> ' + year + "<div align='right'> <button type='submit' id='person_add' onclick='meetPerson(\""+netid+"\")'  class='btn btn-xs active btn-success'> add </button></div>";
 
   markers.push(marker);
   
