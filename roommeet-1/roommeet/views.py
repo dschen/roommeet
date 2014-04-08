@@ -93,13 +93,13 @@ def remove_person(request):
 	me.friends.remove(Person.objects.get(netid=remNetid))
 	friends = me.friends.all()
 	if (rtype == 'talk'):
-		html = ''
-		for person in friends:
-			html += "<tr>\n<td class='col-md-8'>" + person.first_name + "  " + person.last_name + " " + str(person.year)
-			html +=	"\n</td>\n<td>\n" + person.company + "\n</td>\n<td>\n<a href='mailto:"
-			html += person.netid + "@princeton.edu?Subject=RoomMeet%20Hello'>" + person.netid 
-			html += '@princeton.edu </a>\n</td>\n<td>\n<button type="submit" class="btn btn-sm btn-danger" id=\''
-			html += person.netid + '-remove\' onclick="removeList(\'' + person.netid + '\')"> remove </button> <br><br>\n</td>\n</tr>\n'
+		html = render(request, 'tablefill.html', {'friend_list':friends})
+		#for person in friends:
+		#	html += "<tr>\n<td class='col-md-8'>" + person.first_name + "  " + person.last_name + " " + str(person.year)
+		#	html +=	"\n</td>\n<td>\n" + person.company + "\n</td>\n<td>\n<a href='mailto:"
+		#	html += person.netid + "@princeton.edu?Subject=RoomMeet%20Hello'>" + person.netid 
+		#	html += '@princeton.edu </a>\n</td>\n<td>\n<button type="submit" class="btn btn-sm btn-danger" id=\''
+		#	html += person.netid + '-remove\' onclick="removeList(\'' + person.netid + '\')"> remove </button> <br><br>\n</td>\n</tr>\n'
 	
 		r = {'html':html}
 	else:
