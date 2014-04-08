@@ -20,7 +20,7 @@ function initialize()
 
     		var item = response[i];
     		loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-    		addMarker(loc, item.fname, item.lname, item.netid, item.company, item.year, item.friend);
+    		addMarker(loc, item.fname, item.lname, item.netid, item.company, item.year, item.friend, item.html);
     		bounds.extend(loc);
 
 		}
