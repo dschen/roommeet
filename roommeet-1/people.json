@@ -1,0 +1,122 @@
+[
+{
+    "pk": 1, 
+    "model": "people.person", 
+    "fields": {
+        "first_name": "Leonidas", 
+        "last_name": "Tolias", 
+        "netid": "ltolias", 
+        "company": "AFRL", 
+        "lon": "-74.2675800000", 
+        "year": 2016, 
+        "lat": "40.7805400000", 
+        "friends": []
+    }
+},
+{
+    "pk": 2, 
+    "model": "people.person", 
+    "fields": {
+        "first_name": "Campbell", 
+        "last_name": "Weaver", 
+        "netid": "ccweaver", 
+        "company": "Google", 
+        "lon": "-74.0076800000", 
+        "year": 2016, 
+        "lat": "40.7191600000", 
+        "friends": [
+            5, 
+            1
+        ]
+    }
+},
+{
+    "pk": 3, 
+    "model": "people.person", 
+    "fields": {
+        "first_name": "Brian", 
+        "last_name": "Chen", 
+        "netid": "btchen", 
+        "company": "RoomMeet", 
+        "lon": "-74.6687500000", 
+        "year": 2016, 
+        "lat": "40.3562900000", 
+        "friends": [
+            2, 
+            3
+        ]
+    }
+},
+{
+    "pk": 4, 
+    "model": "people.person", 
+    "fields": {
+        "first_name": "Taewook ", 
+        "last_name": "Oh", 
+        "netid": "twoh", 
+        "company": "Princeton University", 
+        "lon": "-74.6575100000", 
+        "year": 2015, 
+        "lat": "40.3330700000", 
+        "friends": []
+    }
+},
+{
+    "pk": 5, 
+    "model": "people.person", 
+    "fields": {
+        "first_name": "Dorothy", 
+        "last_name": "Chen", 
+        "netid": "dschen", 
+        "company": "", 
+        "lon": "-74.0047400000", 
+        "year": 2016, 
+        "lat": "40.7146100000", 
+        "friends": []
+    }
+},
+{
+    "pk": 6, 
+    "model": "people.person", 
+    "fields": {
+        "first_name": "Katherine", 
+        "last_name": "Perez", 
+        "netid": "klperez", 
+        "company": "Public Health Foundation of India", 
+        "lon": "77.2005800000", 
+        "year": 2016, 
+        "lat": "28.5489400000", 
+        "friends": []
+    }
+},
+{
+    "pk": 7, 
+    "model": "people.person", 
+    "fields": {
+        "first_name": "test", 
+        "last_name": "test", 
+        "netid": "asg4", 
+        "company": "Beta", 
+        "lon": "-111.1043400000", 
+        "year": 2000, 
+        "lat": "39.3198200000", 
+        "friends": []
+    }
+},
+{
+    "pk": 8, 
+    "model": "people.person", 
+    "fields": {
+        "first_name": "Xiaoyan", 
+        "last_name": "Han", 
+        "netid": "xiaoyanh", 
+        "company": "Columbia Univeristy", 
+        "lon": "-98.5800700000", 
+        "year": 2016, 
+        "lat": "44.7007400000", 
+        "friends": [
+            5
+        ]
+    }
+}
+]
