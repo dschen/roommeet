@@ -16,11 +16,11 @@
     </div>
     <div class="well col-md-10">
         <div class="row-fluid">
-            <div class="well col-md-8">
-                <table class="table">
+            <div class="well col-md-10">
+                <table class="table col-md-10">
                     <thead>
                         <tr>
-                            <th class="col-md-8">
+                            <th class="col-md-10">
                                 Name
                             </th>
                             <th>
@@ -35,22 +35,7 @@
                         </tr>
                     </thead>
                     <tbody id="friendList">
-                    {% for person in friend_list %}
-                        <tr>
-                            <td class="col-md-8">
-                                {{ person.first_name }}  {{ person.last_name }}
-                            </td>
-                            <td>
-                                example
-                            </td>
-                            <td>
-                                <a href="mailto:{{ person.netid }}@princeton.edu?Subject=RoomMeet%20Hello"> {{ person.netid }}@princeton.edu </a>
-                            </td>
-                            <td>
-                                <button type="submit" class="btn btn-sm btn-danger" id="{{ person.netid }}-remove" onclick="removeList('{{ person.netid }}')"> remove </button> <br><br>
-                            </td>
-                        </tr>
-                    {% endfor %}
+                    {% include "tablefill.html" %}    
                     </tbody>
                     
                 </table>
