@@ -25,32 +25,38 @@
 				<form action="" method="post">
 					<div class="field">
 						{{ form.first_name.errors }}
-						<input value="First Name:">
+						<label for="id_first_name">First Name:​</label>​
+						<input type="text" name="firstname">
 						{{ form.first_name }}
 					</div>
 					<div class="field">
 						{{ form.last_name.errors }}
-						<input value="Last Name:">
+						<label for="id_last_name">Last Name:​</label>​
+						<input type="text" name="lastname">
 						{{ form.last_name }}
 					</div>
 					<div class="field">
-						{{ form.year.errors }}
-						<input value="Year:">
-						{{ form.year }}
+						{{ form.cyear.errors }}
+						<label for="id_cyear">Class Year:​</label>​
+						<input type="text" name="cyear">
+						{{ form.cyear }}
 					</div>
 					<div class="field">
 						{{ form.company.errors }}
-						<input value="Company:">
+						<label for="id_company">Company:​</label>​
+						<input type="text" name="company">
 						{{ form.company }}
 					</div>
 					<div class="field">
 						{{ form.lat.errors }}
-						<input value="Latitude:">
+						<label for="id_lat">Latitude:​</label>​
+						<input type="text" name="lat">
 						{{ form.lat }}
 					</div>
 					<div class="field">
 						{{ form.lon.errors }}
-						<input value="Longitude:">
+						<label for="id_lon">Longitude:​</label>​
+						<input type="text" name="lon">
 						{{ form.lon }}
 					</div>
 					{% csrf_token %}
