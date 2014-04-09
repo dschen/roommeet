@@ -29,7 +29,7 @@ def meet(request):
 			break
 
 	if not q:
-		p = Person('netid':request.user.username)
+		p = Person(netid:request.user.username)
 		p.save()
 		return HttpResponseRedirect('profile/')
 	return render(request, 'meet.html')
