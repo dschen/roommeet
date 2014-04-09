@@ -24,14 +24,14 @@ def meet(request):
 	people = Person.objects.all()
 	q = False
 	for person in people:
-		if (request.user.netid == person.netid):
+		if (request.user.username == person.netid):
 			q = True
 			break
 
 	if not q:
-		p = Person('netid':request.user.netid)
+		p = Person('netid':request.user.username)
 		p.save()
-		return render(request, 'profile.html')
+		return HttpResponseRedirect('profile/')
 	return render(request, 'meet.html')
 
 @login_required
