@@ -25,35 +25,36 @@
 				<form action="" method="post">
 					<div class="field">
 						{{ form.first_name.errors }}
-						<label for="id_first_name">First Name:</label>
+						<input value="First Name:">
 						{{ form.first_name }}
 					</div>
 					<div class="field">
 						{{ form.last_name.errors }}
-						<label for="id_last_name">Last Name:</label>
+						<input value="Last Name:">
 						{{ form.last_name }}
 					</div>
 					<div class="field">
 						{{ form.year.errors }}
-						<label for="id_year">Year:</label>
+						<input value="Year:">
 						{{ form.year }}
 					</div>
 					<div class="field">
 						{{ form.company.errors }}
-						<label for="id_company">Company:</label>
+						<input value="Company:">
 						{{ form.company }}
 					</div>
 					<div class="field">
 						{{ form.lat.errors }}
-						<label for="id_lat">Latitude:</label>
+						<input value="Latitude:">
 						{{ form.lat }}
 					</div>
 					<div class="field">
 						{{ form.lon.errors }}
-						<label for="id_lon">Longitude:</label>
+						<input value="Longitude:">
 						{{ form.lon }}
-					</div>					
-					<input type="submit" class="btn btn-primary" value="Save" name="_save"> Save Changes >
+					</div>
+					{% csrf_token %}
+					<input type="submit" class="btn btn-primary" value="Save Changes" name="_save">
 				</form>
                 <button type="submit" class="btn btn-danger" value="Cancel" name="_cancel"> Cancel </button>
             </ul>
