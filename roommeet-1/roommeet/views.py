@@ -13,7 +13,6 @@ from django.utils.html import strip_tags
 
 import datetime
 from forms import ProfileForm
-from django.forms.widgets import HiddenInput
 
 from django.views.decorators.csrf import csrf_exempt
 from people.models import Person
@@ -63,8 +62,6 @@ def profile(request):
 			elif '_cancel' in request.POST:
 				return HttpResponseRedirect('/')
 		else:
-			form.fields['lat'].widget = forms.HiddenInput()
-			form.fields['lon'].widget = forms.HiddenInput()
 			return render(request, 'profile.html', {'forms': form})
 	else:
 		form = ProfileForm()
