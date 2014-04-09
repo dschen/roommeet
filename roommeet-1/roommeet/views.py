@@ -21,6 +21,17 @@ from django.contrib.auth.decorators import login_required
 #function to generate html and return
 @login_required
 def meet(request):
+	people = people.objects.all()
+	q = False
+	for person in people:
+		if (request.user.netid == person.netid):
+			q = True
+			break
+
+	if not q:
+		p = new Person('netid':request.user.netid)
+		people.add(p)
+		return render(request, 'profile.html')
 	return render(request, 'meet.html')
 
 @login_required
