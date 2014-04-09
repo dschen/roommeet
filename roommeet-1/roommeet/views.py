@@ -61,9 +61,11 @@ def profile(request):
 				return HttpResponseRedirect('/')
 			elif '_cancel' in request.POST:
 				return HttpResponseRedirect('/')
+		else:
+			return render(request, 'profile.html', {'forms': form})
 	else:
 		form = ProfileForm()
-		return render(request, 'profile.html', {'forms':form})
+	return render(request, 'profile.html')
 
 @login_required
 def talk(request):
