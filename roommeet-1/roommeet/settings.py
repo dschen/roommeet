@@ -48,10 +48,6 @@ INSTALLED_APPS = (
     'psycopg2',
     'people',
     'django.contrib.contenttypes',
-    'threaded_messages',
-    'avatar',
-    'pagination',
-    'uni_form',
     
 )
 
