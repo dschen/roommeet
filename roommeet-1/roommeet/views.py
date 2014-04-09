@@ -34,6 +34,7 @@ def meet(request):
 		return HttpResponseRedirect('profile/')
 	return render(request, 'meet.html')
 
+	#Commen!
 @login_required
 def profile(request):
 	currentNetid = request.user.username
