@@ -31,6 +31,7 @@ def meet(request):
 	if not q:
 		p = Person('netid':request.user.netid)
 		p.save()
+		return render(request, 'profile.html')
 	return render(request, 'meet.html')
 
 @login_required
