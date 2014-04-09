@@ -48,7 +48,7 @@ def talk(request):
 @login_required
 def get_marks(request):
 	currentNetid = request.user.username
-	radius = 200*69.172;
+	radius = 100000000000;
 	if request.POST:
 		if 'radius' in request.POST:
 			radius = int(request.POST['radius']);
