@@ -62,7 +62,7 @@ def profile(request):
 			elif '_cancel' in request.POST:
 				return HttpResponseRedirect('/')
 	else:
-		form = ContactForm()
+		form = ProfileForm()
 		return render(request, 'profile.html', {'forms':form})
 
 @login_required

@@ -23,10 +23,36 @@
 				{% endif %}
 
 				<form action="" method="post">
-					<table>
-					{{ form.as_table }}
-					</table>
-					{% csrf_token %}
+					<div class="field">
+						{{ form.first_name.errors }}
+						<label for="id_first_name">First Name:</label>
+						{{ form.first_name }}
+					</div>
+					<div class="field">
+						{{ form.last_name.errors }}
+						<label for="id_last_name">Last Name:</label>
+						{{ form.last_name }}
+					</div>
+					<div class="field">
+						{{ form.year.errors }}
+						<label for="id_year">Year:</label>
+						{{ form.year }}
+					</div>
+					<div class="field">
+						{{ form.company.errors }}
+						<label for="id_company">Company:</label>
+						{{ form.company }}
+					</div>
+					<div class="field">
+						{{ form.lat.errors }}
+						<label for="id_lat">Latitude:</label>
+						{{ form.lat }}
+					</div>
+					<div class="field">
+						{{ form.lon.errors }}
+						<label for="id_lon">Longitude:</label>
+						{{ form.lon }}
+					</div>					
 					<input type="submit" class="btn btn-primary" value="Save" name="_save"> Save Changes >
 				</form>
                 <button type="submit" class="btn btn-danger" value="Cancel" name="_cancel"> Cancel </button>
