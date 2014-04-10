@@ -38,9 +38,9 @@ def meet(request):
 def profile(request):
 	currentNetid = request.user.username
 	if request.method == 'POST':
-		form = ProfileForm(request.POST)
-		if form.is_valid():
-			cd = form.cleaned_data
+		pf = ProfileForm(request.POST)
+		if pf.is_valid():
+			cd = pf.cleaned_data
 			p = Person.objects.filter(netid=currentNetid)
 			if (p):
 				p1 = p[0];
@@ -59,8 +59,8 @@ def profile(request):
 				p1.save();
 			return HttpResponseRedirect('/meet/')
 	else:
-		form = ProfileForm()
-	return render(request, 'profile.html', {'forms': form})
+		pf = ProfileForm()
+	return render(request, 'profile.html', {'forms': pf})
 
 @login_required
 def talk(request):

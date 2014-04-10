@@ -16,14 +16,14 @@
             <ul class="nav nav-list">
                 <li class="nav-header">Please click on the map where you will be working</li> <br> <br>
                 
-				{% if form.errors %}
+				{% if pf.errors %}
 				<p style="color: red;">
-					Please correct the error{{ form.errors|pluralize }} below.
+					Please correct the error{{ pf.errors|pluralize }} below.
 				</p>
 				{% endif %}
 
 				<form action="" method="post">
-					{% for field in form.visible_fields %}
+					{% for field in pf.visible_fields %}
 						<div class="fieldWrapper">
 							{{ field.errors }}
 							{{ field.label_tag }} {{ field }}
@@ -36,7 +36,7 @@
 						<input type="hidden" value="" id="lon_s" name="lon">
 					</div>
 					{% csrf_token %}
-					<p><input type="submit" class="btn btn-primary" value="Save Changes"></p>
+					<input type="submit" class="btn btn-primary" value="Save Changes">
 					<input type="reset" class="btn btn-danger" value="Cancel">
 				</form>                
             </ul>
