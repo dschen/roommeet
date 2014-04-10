@@ -37,10 +37,17 @@ def meet(request):
 @login_required
 def profile(request):
 	currentNetid = request.user.username
+
+	if request.is_ajax():
+		template = 'pformfill.html'
+	else:
+		template = 'profile.html'
+
+
 	if request.method == 'POST':
-		pf = ProfileForm(request.POST)
-		if pf.is_valid():
-			cd = pf.cleaned_data
+		form = ProfileForm(request.POST)
+		if form.is_valid():
+			cd = form.cleaned_data
 			p = Person.objects.filter(netid=currentNetid)
 			if (p):
 				p1 = p[0];
@@ -57,17 +64,45 @@ def profile(request):
 					last_name=cd['last_name'], lat=cd['lat_s'], 
 					lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
 				p1.save();
-			return HttpResponseRedirect('/meet/')
-		else:
-			pf.errors['lat_s'] = pf.error_class()
-			t = get_template('pformfill.html')
-			html = t.render(Context({'form': pf}))
-			ret = {}
-			ret['html'] = html
-			return HttpResponse(json.dumps(ret), mimetype='application/json; charset=UTF-8')
+        	return redirect('/')
+        else:
+			form.errors['lat_s'] = pf.error_class()
 	else:
-		pf = ProfileForm()
-	return render(request, 'profile.html', {'form': pf})
+		form = ProfileForm()
+
+	return render(request, template, {'form': form})
+
+
+	# currentNetid = request.user.username
+	# if request.method == 'POST':
+	# 	pf = ProfileForm(request.POST)
+	# 	if pf.is_valid():
+	# 		cd = pf.cleaned_data
+	# 		p = Person.objects.filter(netid=currentNetid)
+	# 		if (p):
+	# 			p1 = p[0];
+	# 			p1.netid = currentNetid
+	# 			p1.first_name = cd['first_name']
+	# 			p1.last_name = cd['last_name']
+	# 			p1.lat = cd['lat_s']
+	# 			p1.lon = cd['lon_s']
+	# 			p1.company = cd['company']
+	# 			p1.year = (int)(cd['cyear'])
+	# 			p1.save();
+	# 		else:
+	# 			p1 = Person(netid=currentNetid, first_name=['first_name'], 
+	# 				last_name=cd['last_name'], lat=cd['lat_s'], 
+	# 				lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
+	# 			p1.save();
+	# 		return HttpResponseRedirect('/meet/')
+	# 	else:
+	# 		pf.errors['lat_s'] = pf.error_class()
+	# 		t = get_template('pformfill.html')
+	# 		html = t.render(Context({'form': pf}))
+	# 		return HttpResponse(json.dumps(html), mimetype='application/json; charset=UTF-8')
+	# else:
+	# 	pf = ProfileForm()
+	# return render(request, 'profile.html', {'form': pf})
 
 @login_required
 def talk(request):
