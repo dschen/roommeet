@@ -55,12 +55,12 @@ def profile(request):
 			else:
 				p1 = Person(netid=currentNetid, first_name=['first_name'], 
 					last_name=cd['last_name'], lat=cd['lat_s'], 
-					lon=cd['lon_s'], company=cd['company'], year=cd['year'])
+					lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
 				p1.save();
 			return HttpResponseRedirect('/meet/')
-	else:
-		pf = ProfileForm()
-		return render(request, 'profile.html', {'form': pf})
+
+	pf = ProfileForm()
+	return render(request, 'profile.html', {'form': pf})
 
 @login_required
 def talk(request):
