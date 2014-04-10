@@ -32,6 +32,7 @@
                     {% for hidden in form.hidden_fields %}
                         {% if hidden.errors %}
                             Please click on the map.
+                            <br>
                         {% endif %}
                         {{ hidden }}
                     {% endfor %}
