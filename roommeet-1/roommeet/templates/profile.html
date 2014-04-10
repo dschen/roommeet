@@ -24,12 +24,14 @@
                 {{ form.non_field_errors }}
                 <script type="text/javascript">
                     $(document).on('submit', 'form.dynamic-form', function(form) {
+                        console.log("caught");
                         var $form = $(form);
                         $.ajax({
                             type: form.method,
                             url: form.action,
                             data: $form.serialize(),
                             success: function(data) {
+                                console.log("success");
                                 $form.replace(data);
                             }
                         });
