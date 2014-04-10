@@ -29,12 +29,6 @@
 							{{ field.label_tag }} {{ field }}
 						</div> <br>
 					{% endfor %}
-					<div class="field">
-						<input type="hidden" value="" id="lat_s" name="lat"/>
-					</div>
-					<div class="field">
-						<input type="hidden" value="" id="lon_s" name="lon">
-					</div>
 					{% csrf_token %}
 					<input type="submit" class="btn btn-primary" value="Save Changes">
 					<input type="reset" class="btn btn-danger" value="Cancel">
