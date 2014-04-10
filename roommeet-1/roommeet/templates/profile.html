@@ -25,9 +25,7 @@
 				<form action="" method="post">
 					{% for field in form.visible_fields %}
 						<div class="fieldWrapper">
-                            <p style="color: red;">
                                 {{ field.errors }}
-                            </p>
 							{{ field.label_tag }} {{ field }}
 						</div> <br>
 					{% endfor %}
@@ -41,6 +39,7 @@
                     <br>
 					<input type="submit" class="btn btn-primary" value="Save Changes">
 				</form>  
+                <br>
                 <a class="btn btn-danger" href="/">Cancel</a>            
             </ul>
         </div>
