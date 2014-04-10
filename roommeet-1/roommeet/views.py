@@ -12,7 +12,7 @@ from django.template import Context
 from django.utils.html import strip_tags
 
 import datetime
-from forms import ProfileForm
+from roommeet.forms import ProfileForm
 
 from django.views.decorators.csrf import csrf_exempt
 from people.models import Person
@@ -38,34 +38,29 @@ def meet(request):
 def profile(request):
 	currentNetid = request.user.username
 	if request.method == 'POST':
-		form = ProfileForm(request.POST)
-		if form.is_valid():
-			cd = form.cleaned_data
-			if '_save' in request.POST:
-				p = Person.objects.filter(netid=currentNetid)
-				if (p):
-					p1 = p[0];
-					p1.netid = currentNetid
-					p1.first_name = cd['first_name']
-					p1.last_name = cd['last_name']
-					p1.lat = request.POST['lat-s']
-					p1.lon = request.POST['lon-s']
-					p1.company = cd['company']
-					p1.year = cd['cyear']
-					p1.save();
-				else:
-					p1 = Person(netid=currentNetid, first_name=['first_name'], 
-						last_name=cd['last_name'], lat=request.POST['lat-s'], 
-						lon=request.POST['lon-s'], company=cd['company'], year=cd['year'])
-					p1.save();
-				return HttpResponseRedirect('/')
-			elif '_cancel' in request.POST:
-				return HttpResponseRedirect('/')
-		else:
-			return render(request, 'profile.html', {'forms': form})
+		pf = ProfileForm(request.POST)
+		if pf.is_valid():
+			cd = pf.cleaned_data
+			p = Person.objects.filter(netid=currentNetid)
+			if (p):
+				p1 = p[0];
+				p1.netid = currentNetid
+				p1.first_name = cd['first_name']
+				p1.last_name = cd['last_name']
+				p1.lat = cd['lat_s']
+				p1.lon = cd['lon_s']
+				p1.company = cd['company']
+				p1.year = cd['cyear']
+				p1.save();
+			else:
+				p1 = Person(netid=currentNetid, first_name=['first_name'], 
+					last_name=cd['last_name'], lat=cd['lat_s'], 
+					lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
+				p1.save();
+			return HttpResponseRedirect('/meet/')
 	else:
-		form = ProfileForm()
-	return render(request, 'profile.html')
+		pf = ProfileForm()
+	return render(request, 'profile.html', {'form': pf})
 
 @login_required
 def talk(request):

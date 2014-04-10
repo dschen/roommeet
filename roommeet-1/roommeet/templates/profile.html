@@ -23,39 +23,21 @@
 				{% endif %}
 
 				<form action="" method="post">
-					<div class="field">
-						{{ form.first_name.errors }}
-						<label>First Name: ​</label>​
-						<input type="text" name="firstname">
-						{{ form.first_name }}
-					</div> <br> </br>
-					<div class="field">
-						{{ form.last_name.errors }}
-						<label>Last Name: ​</label>​
-						<input type="text" name="lastname">
-						{{ form.last_name }}
-					</div> <br> </br>
-					<div class="field">
-						{{ form.cyear.errors }}
-						<label>Class Year: ​</label>​
-						<input type="text" name="cyear">
-						{{ form.cyear }}
-					</div> <br> </br>
-					<div class="field">
-						{{ form.company.errors }}
-						<label>Company:​ </label>​
-						<input type="text" name="company">
-						{{ form.company }}
-					</div> <br> </br>
-					<div class="field">
-						<input type="hidden" value="" id="lat" name="lat"/>
-					</div>
-					<div class="field">
-						<input type="hidden" value="" id="lat" name="lon">
-					</div>
+					{% for field in form.visible_fields %}
+						<div class="fieldWrapper">
+							{{ field.errors }}
+							{{ field.label_tag }} {{ field }}
+						</div> <br>
+					{% endfor %}
+                    {% for hidden in form.hidden_fields %}
+                        {% if hidden.errors %}
+                            Please click on the map.
+                        {% endif %}
+                        {{ hidden }}
+                    {% endfor %}
 					{% csrf_token %}
-					<input type="submit" class="btn btn-primary" value="Save Changes" name="_save">
-					<button type="submit" class="btn btn-danger" value="Cancel" name="_cancel"> Cancel </button>
+					<input type="submit" class="btn btn-primary" value="Save Changes">
+					<input type="reset" class="btn btn-danger" value="Cancel">
 				</form>                
             </ul>
         </div>
