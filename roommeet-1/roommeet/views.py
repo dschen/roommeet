@@ -50,7 +50,7 @@ def profile(request):
 				p1.lat = cd['lat_s']
 				p1.lon = cd['lon_s']
 				p1.company = cd['company']
-				p1.year = cd['cyear']
+				p1.year = (int)(cd['cyear'])
 				p1.save();
 			else:
 				p1 = Person(netid=currentNetid, first_name=['first_name'], 
@@ -58,8 +58,11 @@ def profile(request):
 					lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
 				p1.save();
 			return HttpResponseRedirect('/meet/')
+		else:
+			pf.errors['lat_s'] = pf.error_class()
 	else:
 		pf = ProfileForm()
+
 	return render(request, 'profile.html', {'form': pf})
 
 @login_required
