@@ -12,7 +12,7 @@ from django.template import Context
 from django.utils.html import strip_tags
 
 import datetime
-from forms import LatLonForm
+from roommeet.forms import ProfileForm
 
 from django.views.decorators.csrf import csrf_exempt
 from people.models import Person
@@ -21,22 +21,46 @@ from django.contrib.auth.decorators import login_required
 #function to generate html and return
 @login_required
 def meet(request):
-	people = people.objects.all()
+	people = Person.objects.all()
 	q = False
 	for person in people:
-		if (request.user.netid == person.netid):
+		if (request.user.username == person.netid):
 			q = True
 			break
 
 	if not q:
-		p = new Person('netid':request.user.netid)
-		people.add(p)
-		return render(request, 'profile.html')
+		p = Person(netid=request.user.username)
+		p.save()
+		return HttpResponseRedirect('profile/')
 	return render(request, 'meet.html')
 
 @login_required
 def profile(request):
-    return render(request, 'profile.html')
+	currentNetid = request.user.username
+	if request.method == 'POST':
+		pf = ProfileForm(request.POST)
+		if pf.is_valid():
+			cd = pf.cleaned_data
+			p = Person.objects.filter(netid=currentNetid)
+			if (p):
+				p1 = p[0];
+				p1.netid = currentNetid
+				p1.first_name = cd['first_name']
+				p1.last_name = cd['last_name']
+				p1.lat = cd['lat_s']
+				p1.lon = cd['lon_s']
+				p1.company = cd['company']
+				p1.year = cd['cyear']
+				p1.save();
+			else:
+				p1 = Person(netid=currentNetid, first_name=['first_name'], 
+					last_name=cd['last_name'], lat=cd['lat_s'], 
+					lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
+				p1.save();
+			return HttpResponseRedirect('/meet/')
+	else:
+		pf = ProfileForm()
+	return render(request, 'profile.html', {'form': pf})
 
 @login_required
 def talk(request):
@@ -48,7 +72,7 @@ def talk(request):
 @login_required
 def get_marks(request):
 	currentNetid = request.user.username
-	radius = 200*69.172;
+	radius = 100000000000;
 	if request.POST:
 		if 'radius' in request.POST:
 			radius = int(request.POST['radius']);
@@ -128,26 +152,31 @@ def remove_person(request):
 def user(request):
 	currentNetid = request.user.username
 	if request.POST:
-		if '_save' in request.POST:
-			p = Person.objects.filter(netid=currentNetid)
-			if (p):
-				p1 = p[0];
-				p1.netid = currentNetid
-				p1.first_name = request.POST['firstname']
-				p1.last_name = request.POST['lastname']
-				p1.lat = request.POST['lat-s']
-				p1.lon = request.POST['lon-s']
-				p1.company = request.POST['company']
-				p1.year = (int)(request.POST['cyear'])
-				p1.save();
-			else:
-				p1 = Person(netid=currentNetid, first_name=request.POST['firstname'], 
-					last_name=request.POST['lastname'], lat=request.POST['lat-s'], 
-					lon=request.POST['lon-s'], company=request.POST['company'], year=request.POST['cyear'])
-				p1.save();
-			return HttpResponseRedirect('/')
-		elif '_cancel' in request.POST:
-			return HttpResponseRedirect('/')
+		form = ProfileForm(request.POST)
+		if form.is_valid():
+			cd = form.cleaned_data
+			if '_save' in request.POST:
+				p = Person.objects.filter(netid=currentNetid)
+				if (p):
+					p1 = p[0];
+					p1.netid = currentNetid
+					p1.first_name = cd['first_name']
+					p1.last_name = cd['last_name']
+					p1.lat = request.POST['lat-s']
+					p1.lon = request.POST['lon-s']
+					p1.company = cd['company']
+					p1.year = cd['cyear']
+					p1.save();
+				else:
+					p1 = Person(netid=currentNetid, first_name=['first_name'], 
+						last_name=cd['last_name'], lat=request.POST['lat-s'], 
+						lon=request.POST['lon-s'], company=cd['company'], year=cd['year'])
+					p1.save();
+				return HttpResponseRedirect('/')
+			elif '_cancel' in request.POST:
+				return HttpResponseRedirect('/')
+		else:
+			form = ContactForm()
 			
 
 
