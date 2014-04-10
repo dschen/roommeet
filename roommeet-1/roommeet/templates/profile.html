@@ -22,25 +22,27 @@
 				</p>
 				{% endif %}
                 {{ form.non_field_errors }}
-				<form action="" method="post">
-					{% for field in form.visible_fields %}
-						<div class="fieldWrapper">
-                                {{ field.errors }}
-							{{ field.label_tag }} {{ field }}
-						</div> <br>
-					{% endfor %}
-                    {% for hidden in form.hidden_fields %}
-                        {% if hidden.errors %}
-                            Please click on the map.
-                            <br>
-                        {% endif %}
-                        {{ hidden }}
-                    {% endfor %}
-					{% csrf_token %}
-                    <br>
-					<input type="submit" class="btn btn-primary" value="Save Changes">
-                    <a class="btn btn-danger" href="/">Cancel</a>
-				</form>          
+                <script type="text/javascript">
+                    var frm = $('pform');
+                    frm.submit(function () {
+                        $.ajax({
+                            type: frm.attr('method'),
+                            url: frm.attr('action'),
+                            data: frm.serialize(),
+                            success: function (data) {
+                                $("pformdiv").html(data.html);
+                            },
+                            error: function(data) {
+                                $("pformdiv").html("Something went wrong!");
+                            }
+                        });
+                        return false;
+                    });
+                </script>
+				<div id="pformdiv">
+                    {% include "pformfill.html" %}
+                </div>
+
             </ul>
         </div>
     </div>

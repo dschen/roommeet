@@ -60,9 +60,12 @@ def profile(request):
 			return HttpResponseRedirect('/meet/')
 		else:
 			pf.errors['lat_s'] = pf.error_class()
+			t = get_template('pformfill.html')
+			html = t.render(Context({'form': pf}))
+			ret['html'] = html
+			return HttpResponse(json.dumps(ret), mimetype='application/json; charset=UTF-8')
 	else:
 		pf = ProfileForm()
-
 	return render(request, 'profile.html', {'form': pf})
 
 @login_required
