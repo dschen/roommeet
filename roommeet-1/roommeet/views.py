@@ -47,15 +47,15 @@ def profile(request):
 				p1.netid = currentNetid
 				p1.first_name = cd['first_name']
 				p1.last_name = cd['last_name']
-				p1.lat = cd['lat-s']
-				p1.lon = cd['lon-s']
+				p1.lat = cd['lat_s']
+				p1.lon = cd['lon_s']
 				p1.company = cd['company']
 				p1.year = cd['cyear']
 				p1.save();
 			else:
 				p1 = Person(netid=currentNetid, first_name=['first_name'], 
-					last_name=cd['last_name'], lat=request.POST['lat-s'], 
-					lon=request.POST['lon-s'], company=cd['company'], year=cd['year'])
+					last_name=cd['last_name'], lat=cd['lat_s'], 
+					lon=cd['lon_s'], company=cd['company'], year=cd['year'])
 				p1.save();
 			return HttpResponseRedirect('/meet/')
 	else:

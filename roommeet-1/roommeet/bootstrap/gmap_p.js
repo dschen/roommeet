@@ -80,8 +80,8 @@ function addMarker(location) {
   marker.setPosition(location);
 
   //post send of position must go here
-  document.getElementById('lat-s').value = location.lat().toFixed(5);
-  document.getElementById('lon-s').value = location.lng().toFixed(5);
+  document.getElementById('lat_s').value = location.lat().toFixed(5);
+  document.getElementById('lon_s').value = location.lng().toFixed(5);
 
 }
 
