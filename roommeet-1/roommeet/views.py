@@ -39,29 +39,25 @@ def profile(request):
 	currentNetid = request.user.username
 	if request.method == 'POST':
 		form = ProfileForm(request.POST)
-		print form, form.errors
 		if form.is_valid():
 			cd = form.cleaned_data
-			if 'Save Changes' in request.POST:
-				p = Person.objects.filter(netid=currentNetid)
-				if (p):
-					p1 = p[0];
-					p1.netid = currentNetid
-					p1.first_name = cd['first_name']
-					p1.last_name = cd['last_name']
-					p1.lat = cd['lat-s']
-					p1.lon = cd['lon-s']
-					p1.company = cd['company']
-					p1.year = cd['cyear']
-					p1.save();
-				else:
-					p1 = Person(netid=currentNetid, first_name=['first_name'], 
-						last_name=cd['last_name'], lat=request.POST['lat-s'], 
-						lon=request.POST['lon-s'], company=cd['company'], year=cd['year'])
-					p1.save();
-				return HttpResponseRedirect('/meet/')
-			elif '_cancel' in request.POST:
-				return HttpResponseRedirect('/')
+			p = Person.objects.filter(netid=currentNetid)
+			if (p):
+				p1 = p[0];
+				p1.netid = currentNetid
+				p1.first_name = cd['first_name']
+				p1.last_name = cd['last_name']
+				p1.lat = cd['lat-s']
+				p1.lon = cd['lon-s']
+				p1.company = cd['company']
+				p1.year = cd['cyear']
+				p1.save();
+			else:
+				p1 = Person(netid=currentNetid, first_name=['first_name'], 
+					last_name=cd['last_name'], lat=request.POST['lat-s'], 
+					lon=request.POST['lon-s'], company=cd['company'], year=cd['year'])
+				p1.save();
+			return HttpResponseRedirect('/meet/')
 	else:
 		form = ProfileForm()
 	return render(request, 'profile.html', {'forms': form})
