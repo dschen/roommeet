@@ -7,3 +7,8 @@ class ProfileForm(forms.Form):
 	company = forms.CharField(max_length=100)
 	lat_s = forms.DecimalField(max_digits=13, decimal_places=10)
 	lon_s = forms.DecimalField(max_digits=13, decimal_places=10)
+
+	widgets = {
+            'lon_s': forms.HiddenInput(),
+            'lat_s': forms.HiddenInput()
+        }
