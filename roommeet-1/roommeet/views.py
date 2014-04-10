@@ -39,8 +39,7 @@ def profile(request):
 	currentNetid = request.user.username
 	if request.method == 'POST':
 		pf = ProfileForm(request.POST)
-		pf.errors['lat_s'] = pf.error_class()
-		if (not pf.errors) or (len(pf.errors) == len(pf.non_field_errors())):
+		if pf.is_valid():
 			cd = pf.cleaned_data
 			p = Person.objects.filter(netid=currentNetid)
 			if (p):
@@ -59,8 +58,11 @@ def profile(request):
 					lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
 				p1.save();
 			return HttpResponseRedirect('/meet/')
+		else:
+			pf.errors['lat_s'] = pf.error_class()
 	else:
 		pf = ProfileForm()
+
 	return render(request, 'profile.html', {'form': pf})
 
 @login_required
