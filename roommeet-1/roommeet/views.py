@@ -40,6 +40,7 @@ def profile(request):
 	if request.method == 'POST':
 		pf = ProfileForm(request.POST)
 		if pf.is_valid():
+			pf.errors['lat_s'] = pf['lat_s'].error_class()
 			cd = pf.cleaned_data
 			p = Person.objects.filter(netid=currentNetid)
 			if (p):
