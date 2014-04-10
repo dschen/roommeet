@@ -37,13 +37,12 @@ def meet(request):
 @login_required
 def profile(request):
 	currentNetid = request.user.username
-
+	form = ProfileForm()
 	if request.is_ajax():
 		template = 'pformfill.html'
 	else:
 		template = 'profile.html'
-
-
+	
 	if request.method == 'POST':
 		form = ProfileForm(request.POST)
 		if form.is_valid():
