@@ -48,8 +48,16 @@ INSTALLED_APPS = (
     'psycopg2',
     'people',
     'django.contrib.contenttypes',
+    'django_facebook',
     
 )
+
+#FACEBOOK
+FACEBOOK_APP_ID = 1396823877262310
+FACEBOOK_APP_SECRET = 'b97eb1803919d59de8e6c6a99493fa9a'
+
+#AUTH_USER_MODEL = 'django_facebook.FacebookCustomUser'
+AUTH_PROFILE_MODULE = 'django_facebook.FacebookProfile'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -65,6 +73,7 @@ MIDDLEWARE_CLASSES = (
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'django_cas.backends.CASBackend',
+    'django_facebook.auth_backends.FacebookBackend',
 )
 
 CAS_SERVER_URL = 'https://fed.princeton.edu/cas/'
