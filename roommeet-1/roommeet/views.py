@@ -60,7 +60,7 @@ def profile(request):
 			return HttpResponseRedirect('/meet/')
 	else:
 		pf = ProfileForm()
-	return render(request, 'profile.html', {'forms': pf})
+		return render(request, 'profile.html', {'forms': pf})
 
 @login_required
 def talk(request):
