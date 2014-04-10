@@ -29,6 +29,9 @@
 							{{ field.label_tag }} {{ field }}
 						</div> <br>
 					{% endfor %}
+                    {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
 					{% csrf_token %}
 					<input type="submit" class="btn btn-primary" value="Save Changes">
 					<input type="reset" class="btn btn-danger" value="Cancel">

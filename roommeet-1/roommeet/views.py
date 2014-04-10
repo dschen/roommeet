@@ -58,8 +58,8 @@ def profile(request):
 					lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
 				p1.save();
 			return HttpResponseRedirect('/meet/')
-
-	pf = ProfileForm()
+	else:
+		pf = ProfileForm()
 	return render(request, 'profile.html', {'form': pf})
 
 @login_required
