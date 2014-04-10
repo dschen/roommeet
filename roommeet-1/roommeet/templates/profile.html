@@ -30,6 +30,8 @@
 						</div> <br>
 					{% endfor %}
                     {% for hidden in form.hidden_fields %}
+                        {% if hidden.errors %}
+                            Please click on the map.
                         {{ hidden }}
                     {% endfor %}
 					{% csrf_token %}
