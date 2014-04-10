@@ -23,18 +23,19 @@
 				{% endif %}
                 {{ form.non_field_errors }}
                 <script type="text/javascript">
-                    $(document).on('submit', 'form.dynamic-form', function(form) {
+                    var frm = $('pform');
+                    frm.submit(function () {
                         console.log("caught");
-                        var $form = $(form);
                         $.ajax({
-                            type: form.method,
-                            url: form.action,
-                            data: $form.serialize(),
-                            success: function(data) {
+                            type: frm.attr('method'),
+                            url: frm.attr('action'),
+                            data: frm.serialize(),
+                            success: function (data) {
                                 console.log("success");
-                                $form.replace(data);
-                            }
+                                $("pformdiv").html(data);
+                            },
                         });
+                        return false;
                     });
                 </script>
 				<div id="pformdiv">
