@@ -14,7 +14,9 @@
     <div class="col-md-4">
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
-                <li class="nav-header">Please click on the map where you will be working</li> <br> <br>
+                <li class="nav-header" style="font-weight:bold;">Please click on the map where you will be working</li>
+                <br>
+                <br>
 
 		{% if form.errors %}
 		<p style="color: red;">
@@ -23,17 +25,20 @@
 		{% endif %}
 
                 {{ form.non_field_errors }}
+
 		<form action="" method="post">
 		  {% for field in form.visible_fields %}
 		  <div class="fieldWrapper">
                     {{ field.errors }}
 		    {{ field.label_tag }}
                     {{ field }}
-		  </div> <br>
+		  </div>
+                  <br>
 		  {% endfor %}
 
                   {% for hidden in form.hidden_fields %}
                     {% if hidden.errors %}
+                      <br>
                       Please click on the map.
                       <br>
                     {% endif %}
