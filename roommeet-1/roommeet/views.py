@@ -62,6 +62,7 @@ def profile(request):
 			pf.errors['lat_s'] = pf.error_class()
 			t = get_template('pformfill.html')
 			html = t.render(Context({'form': pf}))
+			ret = {}
 			ret['html'] = html
 			return HttpResponse(json.dumps(ret), mimetype='application/json; charset=UTF-8')
 	else:
