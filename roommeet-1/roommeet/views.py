@@ -51,7 +51,7 @@ def profile(request):
 				p1.lat = cd['lat_s']
 				p1.lon = cd['lon_s']
 				p1.company = cd['company']
-				p1.year = (int)cd['cyear']
+				p1.year = (int)(cd['cyear'])
 				p1.save();
 			else:
 				p1 = Person(netid=currentNetid, first_name=['first_name'], 
@@ -166,7 +166,7 @@ def user(request):
 					p1.lat = request.POST['lat-s']
 					p1.lon = request.POST['lon-s']
 					p1.company = cd['company']
-					p1.year = (int)cd['cyear']
+					p1.year = cd['cyear']
 					p1.save();
 				else:
 					p1 = Person(netid=currentNetid, first_name=['first_name'], 
