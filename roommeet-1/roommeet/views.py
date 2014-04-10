@@ -41,15 +41,15 @@ def profile(request):
 		form = ProfileForm(request.POST)
 		if form.is_valid():
 			cd = form.cleaned_data
-			if '_save' in request.POST:
+			if 'Save Changes' in request.POST:
 				p = Person.objects.filter(netid=currentNetid)
 				if (p):
 					p1 = p[0];
 					p1.netid = currentNetid
 					p1.first_name = cd['first_name']
 					p1.last_name = cd['last_name']
-					p1.lat = request.POST['lat-s']
-					p1.lon = request.POST['lon-s']
+					p1.lat = cd['lat-s']
+					p1.lon = cd['lon-s']
 					p1.company = cd['company']
 					p1.year = cd['cyear']
 					p1.save();
