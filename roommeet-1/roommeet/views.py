@@ -67,7 +67,8 @@ def profile(request):
         	return redirect('/')
         else:
 			form.errors['lat_s'] = pf.error_class()
-	else:
+
+	if not request.method == 'POST':
 		form = ProfileForm()
 
 	return render(request, template, {'form': form})
