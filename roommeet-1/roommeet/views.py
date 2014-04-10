@@ -12,7 +12,7 @@ from django.template import Context
 from django.utils.html import strip_tags
 
 import datetime
-from forms import ProfileForm
+from roommeet.forms import ProfileForm
 
 from django.views.decorators.csrf import csrf_exempt
 from people.models import Person
