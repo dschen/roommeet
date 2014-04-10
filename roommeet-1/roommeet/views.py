@@ -39,9 +39,9 @@ def profile(request):
 	currentNetid = request.user.username
 	if request.method == 'POST':
 		pf = ProfileForm(request.POST)
+		return HttpResponse(f.errors)
 		pf.errors['lat_s'] = pf.error_class()
 		if pf.is_valid():
-			
 			cd = pf.cleaned_data
 			p = Person.objects.filter(netid=currentNetid)
 			if (p):
