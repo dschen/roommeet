@@ -23,26 +23,12 @@
 				{% endif %}
 
 				<form action="" method="post">
-					<div class="field">
-						{{ form.first_name.errors }}
-						<label>First Name: ​</label>​
-						{{ form.first_name }}
-					</div> <br> </br>
-					<div class="field">
-						{{ form.last_name.errors }}
-						<label>Last Name: ​</label>​
-						{{ form.last_name }}
-					</div> <br> </br>
-					<div class="field">
-						{{ form.cyear.errors }}
-						<label>Class Year: ​</label>​
-						{{ form.cyear }}
-					</div> <br> </br>
-					<div class="field">
-						{{ form.company.errors }}
-						<label>Company:​ </label>​
-						{{ form.company }}
-					</div> <br> </br>
+					{% for field in form.visible_fields %}
+						<div class="fieldWrapper">
+							{{ field.errors }}
+							{{ field.label_tag }} {{ field }}
+						</div> <br>
+					{% endfor %}
 					<div class="field">
 						<input type="hidden" value="" id="lat_s" name="lat"/>
 					</div>
@@ -50,7 +36,7 @@
 						<input type="hidden" value="" id="lon_s" name="lon">
 					</div>
 					{% csrf_token %}
-					<input type="submit" class="btn btn-primary" value="Save Changes">
+					<p><input type="submit" class="btn btn-primary" value="Save Changes"></p>
 					<input type="reset" class="btn btn-danger" value="Cancel">
 				</form>                
             </ul>
