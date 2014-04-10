@@ -39,7 +39,7 @@ def profile(request):
 	currentNetid = request.user.username
 	if request.method == 'POST':
 		pf = ProfileForm(request.POST)
-		pf.errors['lat_s'] = pf['lat_s'].error_class()
+		pf.errors['lat_s'] = pf.error_class()
 		if pf.is_valid():
 			
 			cd = pf.cleaned_data
