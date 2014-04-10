@@ -39,6 +39,7 @@ def profile(request):
 	currentNetid = request.user.username
 	if request.method == 'POST':
 		form = ProfileForm(request.POST)
+		print form, form.errors
 		if form.is_valid():
 			cd = form.cleaned_data
 			if 'Save Changes' in request.POST:
@@ -58,14 +59,12 @@ def profile(request):
 						last_name=cd['last_name'], lat=request.POST['lat-s'], 
 						lon=request.POST['lon-s'], company=cd['company'], year=cd['year'])
 					p1.save();
-				return HttpResponseRedirect('/')
+				return HttpResponseRedirect('/meet/')
 			elif '_cancel' in request.POST:
 				return HttpResponseRedirect('/')
-		else:
-			return render(request, 'profile.html', {'forms': form})
 	else:
 		form = ProfileForm()
-	return render(request, 'profile.html')
+	return render(request, 'profile.html', {'forms': form})
 
 @login_required
 def talk(request):
