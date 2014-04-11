@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 
+.hor5spacer{
+    width:5px;
+    height:auto;
+    display:inline-block;
+}
 
 {% block lnavitems %}
 {# active is initial, href = url, >title</a = title #}
@@ -57,7 +62,8 @@
 
     <div class="col-md-8">
     	<input id="pac-input" class="controls" type="text" placeholder="Search Box">
-        <div id="map_canvas"></div>
+        <div class="hor5spacer"/>
+		<div id="map_canvas"></div>
     </div>
 </div>
 {% endblock %}
