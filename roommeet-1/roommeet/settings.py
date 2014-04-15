@@ -48,7 +48,7 @@ INSTALLED_APPS = (
     'psycopg2',
     'people',
     'django.contrib.contenttypes',
-    'django_facebook',
+    #'django_facebook',
     
 )
 
