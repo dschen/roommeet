@@ -116,10 +116,6 @@ def meet_person(request):
 	html = ''
 	if (me.friends.filter(netid=addNetid)):
 		r['result'] = 'already there'
-        elif (currentNetid == addNetid):
-                p1 = Person.objects.et(netid=addNetid)
-                t = get_template('buttonfill.html')
-                html = t.render(Context({'person':p1, 'add':True}))
 	else:
 		p1 = Person.objects.get(netid=addNetid)
 		me.friends.add(p1)
