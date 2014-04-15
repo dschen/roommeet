@@ -114,7 +114,7 @@ def meet_person(request):
 	addNetid = ''
 	if request.POST:
 		if 'netid' in request.POST:
-			addNeetid = request.POST['netid']
+			addNetid = request.POST['netid']
 	me = Person.objects.get(netid=currentNetid)
 	r = {'result':'success'}
 	html = ''
