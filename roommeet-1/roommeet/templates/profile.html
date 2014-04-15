@@ -32,22 +32,22 @@
 		    {{ field.label_tag }}
                     {{ field }}
 		  </div>
-                  <br>
+		  <br>
 		  {% endfor %}
 
-                  {% for hidden in form.hidden_fields %}
-                    {% if hidden.errors %}
-                      <br>
-                      Please click on the map.
-                      <br>
-                    {% endif %}
-                    {{ hidden }}
-                  {% endfor %}
+		  {% for hidden in form.hidden_fields %}
+			{% if hidden.errors %}
+			  <br>
+			  Please click on the map.
+			  <br>
+			{% endif %}
+			{{ hidden }}
+		  {% endfor %}
 
 		  {% csrf_token %}
                   <br>
 		  <input type="submit" class="btn btn-primary" style="margin: 2%;" value="Save Changes">
-                  <a class="btn btn-danger" href="/">Cancel</a>
+                  <a class="btn btn-danger" style="margin: 2%;" href="/">Cancel</a>
 		</form>
 
             </ul>
