@@ -4,13 +4,9 @@
 <br>
 <b>Year:</b> {{ person.year }}
 <div align='right'>
-{% if isSelf %}
-
+{% if add %}
+<button type='submit' id='person_add' onclick='meetPerson("{{ person.netid }}")'  class='btn btn-xs active btn-success'> add </button>
 {% else %}
-    {% if add %}
-        <button type='submit' id='person_add' onclick='meetPerson("{{ person.netid }}")'  class='btn btn-xs active btn-success'> add </button>
-
-    {% else %}
-        <button type='submit' id='person_remove' onclick='removePerson("{{ person.netid }}")' class='btn btn-xs active btn-danger'> remove </button>
+<button type='submit' id='person_remove' onclick='removePerson("{{ person.netid }}")' class='btn btn-xs active btn-danger'> remove </button>
 {% endif %}
 </div>
