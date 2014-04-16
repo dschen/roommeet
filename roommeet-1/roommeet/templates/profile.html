@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
-{% block lnavitems %}
+
+{% block lnavitems %} 
 {# active is initial, href = url, >title</a = title #}
 <li><a href="/meet/">Meet</a></li>
 <li><a href="/talk/">Talk</a></li>
@@ -13,50 +14,40 @@
     <div class="col-md-4">
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
-                <li class="nav-header" style="font-weight:bold;">Please click on the map where you will be working</li>
-                <br>
-                <br>
-
-		{% if form.errors %}
-		<p style="color: red;">
-		  Please correct the error{{ form.errors|pluralize }} below.
-		</p>
-		{% endif %}
-
+                <li class="nav-header">Please click on the map where you will be working</li> <br> <br>
+                
+				{% if form.errors %}
+				<p style="color: red;">
+					Please correct the error{{ form.errors|pluralize }} below.
+				</p>
+				{% endif %}
                 {{ form.non_field_errors }}
-
-		<form action="" method="post">
-		  {% for field in form.visible_fields %}
-		  <div class="fieldWrapper">
-                    {{ field.errors }}
-		    {{ field.label_tag }}
-                    {{ field }}
-		  </div>
-		  <br>
-		  {% endfor %}
-
-		  {% for hidden in form.hidden_fields %}
-			{% if hidden.errors %}
-			  <br>
-			  Please click on the map.
-			  <br>
-			{% endif %}
-			{{ hidden }}
-		  {% endfor %}
-
-		  {% csrf_token %}
-                  <br>
-		  <input type="submit" class="btn btn-primary" style="margin: 2%;" value="Save Changes">
-                  <a class="btn btn-danger" style="margin: 2%;" href="/">Cancel</a>
-		</form>
-
+				<form action="" method="post">
+					{% for field in form.visible_fields %}
+						<div class="fieldWrapper">
+                                {{ field.errors }}
+							{{ field.label_tag }} {{ field }}
+						</div> <br>
+					{% endfor %}
+                    {% for hidden in form.hidden_fields %}
+                        {% if hidden.errors %}
+                            Please click on the map.
+                            <br>
+                        {% endif %}
+                        {{ hidden }}
+                    {% endfor %}
+					{% csrf_token %}
+                    <br>
+					<input type="submit" class="btn btn-primary" value="Save Changes">
+                    <a class="btn btn-danger" href="/">Cancel</a>
+				</form>          
             </ul>
         </div>
     </div>
 
     <div class="col-md-8">
     	<input id="pac-input" class="controls" type="text" placeholder="Search Box">
-		<div id="map_canvas"></div>
+        <div id="map_canvas"></div>
     </div>
 </div>
 {% endblock %}
