@@ -48,7 +48,7 @@ INSTALLED_APPS = (
     'psycopg2',
     'people',
     'django.contrib.contenttypes',
-    #'django_facebook',
+    'django_facebook',
     
 )
 
@@ -57,7 +57,7 @@ FACEBOOK_APP_ID = 1396823877262310
 FACEBOOK_APP_SECRET = 'b97eb1803919d59de8e6c6a99493fa9a'
 
 #AUTH_USER_MODEL = 'django_facebook.FacebookCustomUser'
-AUTH_PROFILE_MODULE = 'django.contrib.auth.user'
+#AUTH_PROFILE_MODULE = 'django.contrib.auth.user'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -82,6 +82,18 @@ ROOT_URLCONF = 'roommeet.urls'
 
 WSGI_APPLICATION = 'roommeet.wsgi.application'
 
+
+TEMPLATE_CONTEXT_PROCESSORS = {
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages',
+    'django_facebook.context_processors.facebook',
+}
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
