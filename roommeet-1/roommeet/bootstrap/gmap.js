@@ -95,7 +95,7 @@ function initialize()
 	  	}
 
   		map.fitBounds(bounds);
-  		map.setZoom(14);
+  		map.setZoom(12);
 	});
 
 }
