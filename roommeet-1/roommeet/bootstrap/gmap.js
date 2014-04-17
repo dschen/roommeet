@@ -227,8 +227,8 @@ $('#mapmodals').on('shown.bs.modal',function(){google.maps.event.trigger(map,"re
 
 
 $(window).resize(function () {
-    var h = 600;//$(window).height();
-    var offsetTop = 60; // Calculate the top offset
+    var h = $(window).height();
+    var offsetTop = 40; // Calculate the top offset
 
     $('#map_canvas').css('height', (h - offsetTop));
 }).resize();
