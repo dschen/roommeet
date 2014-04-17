@@ -8,8 +8,17 @@
 
 
 {% block mainpage %}
+
+<style>
+.pos_fixed
+{
+position:fixed;
+top:30px;
+right:5px;
+}
+</style>
 <div class="row-fluid">
-    <div class="well sidebar-nav">
+    <div class="well sidebar-nav pos_fixed">
         <ul class="nav nav-list">
             Select Search Radius: 
             <button type="submit" class="btn" style="margin: 1% 5%; width: auto" id="5-radius"> 5 miles </button> 
