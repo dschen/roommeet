@@ -7,18 +7,20 @@
 {% endblock %}
 
 
-{% block mainpage %}
+
+{% block precontainter %}
 
 <style>
 .pos_fixed
 {
 position:fixed;
 top:30px;
-right:5px;
+left:5px;
 }
 </style>
-<div class="row-fluid">
-    <div class="well sidebar-nav pos_fixed">
+
+<div class="row-fluid pos_fixed">
+    <div class="well sidebar-nav">
         <ul class="nav nav-list">
             Select Search Radius: 
             <button type="submit" class="btn" style="margin: 1% 5%; width: auto" id="5-radius"> 5 miles </button> 
@@ -29,6 +31,12 @@ right:5px;
         </ul>
     </div>
 </div>
+{% endblock %}
+
+{% block mainpage %}
+
+
+
 <div class="row-fluid">
     <div class="well col-md-12">
         {% csrf_token %} 
