@@ -83,6 +83,8 @@
   </head>
 
   <body>
+    {% block precontainter %}
+    {% endblock %}
     <!-- Static navbar -->
     <div class="navbar navbar-inverse navbar-fixed-top" id="topnavbar">
       <div class="container-fluid">
@@ -120,8 +122,6 @@
         </div><!--/.nav-collapse -->
       </div><!--/.container-fluid -->
     </div>
-    {% block precontainter %}
-    {% endblock %}
     <div class="container-fluid">
       <!-- Main component for a primary marketing message or call to action -->
       {% block mainpage %}
