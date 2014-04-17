@@ -231,7 +231,7 @@ $('#mapmodals').on('shown.bs.modal',function(){google.maps.event.trigger(map,"re
 
 $(window).resize(function () {
     var h = $(window).height();
-    var offsetTop = 20; // Calculate the top offset
+    var offsetTop = 0; // Calculate the top offset
 
     $('#map_canvas').css('height', (h - offsetTop));
 }).resize();
