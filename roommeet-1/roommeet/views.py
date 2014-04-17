@@ -57,11 +57,15 @@ def profile(request):
 				p1.lon = cd['lon_s']
 				p1.company = cd['company']
 				p1.year = (int)(cd['cyear'])
+				p1.start = cd['start']
+				p1.end = cd['end']
+				p1.desired = cd['desired']
 				p1.save();
 			else:
-				p1 = Person(netid=currentNetid, first_name=['first_name'], 
+				p1 = Person(netid=currentNetid, first_name=cd['first_name'], 
 					last_name=cd['last_name'], lat=cd['lat_s'], 
-					lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
+					lon=cd['lon_s'], company=cd['company'], year=cd['cyear'],
+					start=cd['start'], end=cd['end'], desired=cd['desired'])
 				p1.save();
         	return redirect('/')
         else:
@@ -188,37 +192,3 @@ def remove_person(request):
 		r = {'html':html}
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
-
-
-@login_required
-def user(request):
-	currentNetid = request.user.username
-	if request.POST:
-		form = ProfileForm(request.POST)
-		if form.is_valid():
-			cd = form.cleaned_data
-			if '_save' in request.POST:
-				p = Person.objects.filter(netid=currentNetid)
-				if (p):
-					p1 = p[0];
-					p1.netid = currentNetid
-					p1.first_name = cd['first_name']
-					p1.last_name = cd['last_name']
-					p1.lat = request.POST['lat-s']
-					p1.lon = request.POST['lon-s']
-					p1.company = cd['company']
-					p1.year = cd['cyear']
-					p1.save();
-				else:
-					p1 = Person(netid=currentNetid, first_name=['first_name'], 
-						last_name=cd['last_name'], lat=request.POST['lat-s'], 
-						lon=request.POST['lon-s'], company=cd['company'], year=cd['year'])
-					p1.save();
-				return HttpResponseRedirect('/')
-			elif '_cancel' in request.POST:
-				return HttpResponseRedirect('/')
-		else:
-			form = ContactForm()
-			
-
-
