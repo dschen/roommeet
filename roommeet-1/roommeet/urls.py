@@ -13,7 +13,6 @@ urlpatterns = patterns('roommeet.views',
     url(r'^get_marks/$', 'get_marks'),
     url(r'^meet_person/$', 'meet_person'),
     url(r'^remove_person/$', 'remove_person'),
-    url(r'^user/$', 'user'),
     url(r'^admin/', include(admin.site.urls)),
 )
 
