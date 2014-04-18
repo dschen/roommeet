@@ -7,7 +7,7 @@ function initialize()
 {
 	var markers = [];
 	var mapOptions={center:myLatlng,zoom:4,mapTypeControl:true,center:myLatlng,panControl:false,rotateControl:false,
-					streetViewControl:false,mapTypeId:google.maps.MapTypeId.ROADMAP,scrollwheel:false};
+					streetViewControl:false,mapTypeId:google.maps.MapTypeId.ROADMAP,scrollwheel:true};
 
 	map=new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 
@@ -49,7 +49,7 @@ function initialize()
 
   	
 	// Create the search box and link it to the UI element.
-	
+
 	var input = /** @type {HTMLInputElement} */(
 		document.getElementById('pac-input'));
 	map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
