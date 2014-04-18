@@ -93,11 +93,14 @@ def get_marks(request):
 	for p1 in p:
 		friend = "no"
 		f = True
+                isSelf = False
+                if (p1.netid == currentNetid):
+                        isSelf = True
 		if (me.friends.filter(netid=p1.netid)):
 			friend = "yes"
 			f = False
 		t = get_template('buttonfill.html')
-		html = t.render(Context({'person':p1, 'add':f}))
+		html = t.render(Context({'person':p1, 'add':f, 'isSelf':isSelf}))
 		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'netid':p1.netid, 'html':html})
 	#locs.append({'lat':str(me.lat), 'lon':str(me.lon)})
 	return HttpResponse(json.dumps(locs), mimetype='application/json; charset=UTF-8')
@@ -120,11 +123,15 @@ def meet_person(request):
 	html = ''
 	if (me.friends.filter(netid=addNetid)):
 		r['result'] = 'already there'
+        elif (currentNetid == addNetid):
+                p1 = Person.objects.get(netid=addNetid)
+                t = get_template('buttonfill.html')
+                html = t.render(Context({'person':p1, 'add':True, 'isSelf':True}))
 	else:
 		p1 = Person.objects.get(netid=addNetid)
 		me.friends.add(p1)
 		t = get_template('buttonfill.html')
-		html = t.render(Context({'person':p1, 'add':False}))
+		html = t.render(Context({'person':p1, 'add':False}, 'isSelf':False))
 
 	r['html'] = html
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
@@ -149,7 +156,7 @@ def remove_person(request):
 		r = {'html':html}
 	else:
 		t = get_template('buttonfill.html')
-		html = t.render(Context({'person':p1, 'add':True}))
+		html = t.render(Context({'person':p1, 'add':True, 'isSelf':False}))
 		r = {'html':html}
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
