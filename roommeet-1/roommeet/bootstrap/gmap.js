@@ -132,6 +132,8 @@ function setRadius(evt)
 
 		}
 		map.fitBounds(bounds);
+		if (count == 1)
+			map.setZoom(12);
 	});
 }
 
