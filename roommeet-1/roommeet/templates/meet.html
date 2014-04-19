@@ -15,14 +15,7 @@
 {% endblock %}
 
 
-{% block mainpage %}
-<div class="row-fluid">
-    <div class="well col-md-12">
-        {% csrf_token %} 
-    	<input id="pac-input" class="controls" type="text" placeholder="Search Box">
-        <div id="map_canvas"></div>
-    </div>
-{% endblock %}
+
 {% block precontainter %}
 {% csrf_token %} 
 <input id="pac-input" class="controls" type="text" placeholder="Search Box">
@@ -61,7 +54,8 @@ background-color: rgba(235, 235, 235, 0.80);
 
 {% endblock %}
 
-
+{% block mainpage %}
+{% endblock %}
 
 
 
