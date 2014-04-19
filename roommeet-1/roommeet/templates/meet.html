@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
 
+{% block headext %}
+<style>
+    html, body {
+        overflow:hidden;
+    }
+</style>
+{% endblock %}
+
 
 {% block lnavitems %} 
 <li class="active"><a href="/meet/">Meet</a></li>
@@ -7,6 +15,7 @@
 {% endblock %}
 
 
+<<<<<<< HEAD
 {% block mainpage %}
 <div class="row-fluid">
     <div class="well sidebar-nav">
@@ -26,7 +35,48 @@
     	<input id="pac-input" class="controls" type="text" placeholder="Search Box">
         <div id="map_canvas"></div>
     </div>
+=======
+
+{% block precontainter %}
+{% csrf_token %} 
+<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+<div id="map_canvas"></div>
+<style>
+.pos_fixed
+{
+position:fixed;
+bottom:30px;
+left:60px;
+right:60px;
+z-index:10;
+color: #000000;
+background-color: rgba(235, 235, 235, 0.80);
+}
+</style>
+
+<div class="navbar navbar-inverse navbar-fixed-bottom" id="topnavbar">
+  <div class="container-fluid">
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a>Select Search Radius: </a></li>
+        <li><a id="5-radius"> 5 miles </a> </li>
+        <li><a id="10-radius"> 10 miles </a> </li>
+        <li><a id="20-radius"> 20 miles </a> </li>
+        <li><a id="50-radius"> 50 miles </a> </li>
+        <li><a id="no-radius"> No filter </a> </li>
+
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container-fluid -->
+>>>>>>> master
 </div>
+
+
+
+
+{% endblock %}
+
+{% block mainpage %}
 {% endblock %}
 
 

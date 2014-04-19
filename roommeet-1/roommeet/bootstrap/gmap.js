@@ -7,7 +7,7 @@ function initialize()
 {
 	var markers = [];
 	var mapOptions={center:myLatlng,zoom:4,mapTypeControl:true,center:myLatlng,panControl:false,rotateControl:false,
-					streetViewControl:false,mapTypeId:google.maps.MapTypeId.ROADMAP,scrollwheel:false};
+					streetViewControl:false,mapTypeId:google.maps.MapTypeId.ROADMAP,scrollwheel:true};
 
 	map=new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 
@@ -49,9 +49,11 @@ function initialize()
 
   	
 	// Create the search box and link it to the UI element.
+
 	var input = /** @type {HTMLInputElement} */(
 		document.getElementById('pac-input'));
 	map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
 
 	var searchBox = new google.maps.places.SearchBox(
 		/** @type {HTMLInputElement} */(input));
@@ -130,6 +132,8 @@ function setRadius(evt)
 
 		}
 		map.fitBounds(bounds);
+		if (count == 1)
+			map.setZoom(12);
 	});
 }
 
@@ -227,8 +231,8 @@ $('#mapmodals').on('shown.bs.modal',function(){google.maps.event.trigger(map,"re
 
 
 $(window).resize(function () {
-    var h = 600;//$(window).height();
-    var offsetTop = 60; // Calculate the top offset
+    var h = $(window).height();
+    var offsetTop = 0; // Calculate the top offset
 
     $('#map_canvas').css('height', (h - offsetTop));
 }).resize();
