@@ -56,8 +56,8 @@ INSTALLED_APPS = (
 FACEBOOK_APP_ID = 1396823877262310
 FACEBOOK_APP_SECRET = 'b97eb1803919d59de8e6c6a99493fa9a'
 
-#AUTH_USER_MODEL = 'django_facebook.FacebookCustomUser'
-#AUTH_PROFILE_MODULE = 'django.contrib.auth.user'
+#AUTH_USER_MODEL = 'django_facebook.FacebookProfileModel'
+#AUTH_PROFILE_MODULE = 'django_cas.models.CustomProfile'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
