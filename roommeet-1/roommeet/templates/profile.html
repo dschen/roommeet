@@ -24,6 +24,27 @@
 		{% endif %}
 
                 {{ form.non_field_errors }}
+<<<<<<< HEAD
+                <script type="text/javascript">
+                    var frm = $('pform');
+                    frm.submit(function () {
+                        console.log("caught");
+                        $.ajax({
+                            type: frm.attr('method'),
+                            url: frm.attr('action'),
+                            data: frm.serialize(),
+                            success: function (data) {
+                                console.log("success");
+                                $("pformdiv").html(data);
+                            },
+                        });
+                        return false;
+                    });
+                </script>
+				<div id="pformdiv">
+                    {% include "pformfill.html" %}
+                </div>
+=======
 
 		<form action="" method="post">
 		  {% for field in form.visible_fields %}
@@ -49,6 +70,7 @@
 		  <input type="submit" class="btn btn-primary" style="margin: 2%;" value="Save Changes">
                   <a class="btn btn-danger" style="margin: 2%;" href="/">Cancel</a>
 		</form>
+>>>>>>> master
 
             </ul>
         </div>
