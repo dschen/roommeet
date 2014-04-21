@@ -32,6 +32,9 @@
 
 {% block precontainter %}
 {% csrf_token %} 
+
+
+
 <input id="pac-input" class="controls" type="text" placeholder="Search Box">
 <div id="map_canvas"></div>
 <style>
@@ -47,10 +50,11 @@ background-color: rgba(235, 235, 235, 0.80);
 }
 #profilebox
 {
-    color: #FFF;
+    display: none;
     padding: 10px;
     position:fixed;
     left:60px;
+    top:100px;
 }
 </style>
 
@@ -70,7 +74,19 @@ background-color: rgba(235, 235, 235, 0.80);
   </div><!--/.container-fluid -->
 </div>
 
+<style>
+#profilebox
+{
+    display: none;
+    padding: 10px;
+    position:fixed;
+    left:60px;
+    top:100px;
+}
+</style>
+
 <div id="profilebox">
+<div class="container">
 <div class="row-fluid">
     <div class="col-md-4">
         <div class="well sidebar-nav">
@@ -123,12 +139,11 @@ background-color: rgba(235, 235, 235, 0.80);
             </ul>
         </div>
     </div>
-
-    <div class="col-md-8">
-        <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-        <div id="map_canvas_p"></div>
-    </div>
 </div>
+</div>
+</div>
+
+
 
 
 {% endblock %}
@@ -142,7 +157,7 @@ background-color: rgba(235, 235, 235, 0.80);
 <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
 <script src="{{STATIC_URL}}/gmap.js"></script>
-<script src="{{STATIC_URL}}/gmap_p.js"></script>
+
 
 
 {% endblock %}

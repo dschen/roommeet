@@ -7,6 +7,7 @@ $(function()
 {
 $("#profile_toggle").click(function()
      {
+     	
          $("#profilebox").slideToggle();
          return false;
 }); 
