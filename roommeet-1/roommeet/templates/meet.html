@@ -31,6 +31,13 @@ z-index:10;
 color: #000000;
 background-color: rgba(235, 235, 235, 0.80);
 }
+#profilebox
+{
+    position:fixed;
+    left:60px;
+    top:100px;
+    display: none;
+}
 </style>
 
 <div class="navbar navbar-inverse navbar-fixed-bottom" id="topnavbar">
@@ -50,6 +57,63 @@ background-color: rgba(235, 235, 235, 0.80);
 </div>
 
 
+<div id="profilebox">
+<div class="container">
+<div class="row-fluid">
+    <div class="col-md-4">
+        <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+                <li class="nav-header" style="font-weight:bold;">Please click on the map where you will be working</li>
+                <br>
+                <br>
+
+        {% if form.errors %}
+        <p style="color: red;">
+          <b>Please correct the error{{ form.errors|pluralize }} below.</b>
+        </p>
+        {% endif %}
+
+                {{ form.non_field_errors }}
+
+        <form action="" method="post">
+            
+            <table border="1" style="width:300px">
+            <table>
+          {% for field in form.visible_fields %}
+          <div class="fieldWrapper">
+                    
+            <tr><td>{{ field.errors }}</td></tr>
+            <tr><td>{{ field.label_tag }}</td>
+                    <td>{{ field }}<br><br></td>
+                    </tr>
+          </div>
+          
+          {% endfor %}
+          </table>
+          {% for hidden in form.hidden_fields %}
+            {% if hidden.errors %}
+              <br>
+              <p style="color: red;">
+                Please click on the map.
+                </p>
+              <br>
+            {% endif %}
+            {{ hidden }}
+          {% endfor %}
+
+          {% csrf_token %}
+                  <br>
+          <input type="submit" class="btn btn-primary" style="margin: 2%;" value="Save Changes">
+                  <a class="btn btn-danger" style="margin: 2%;" href="/">Cancel</a>
+        </form>
+
+
+            </ul>
+        </div>
+    </div>
+</div>
+</div>
+</div>
 
 
 {% endblock %}

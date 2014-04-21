@@ -2,6 +2,15 @@ var map;
 myLatlng=new google.maps.LatLng(39.828127,-98.579404);
 var markers = [];
 
+$(function()
+{
+$("#profile_toggle").click(function()
+     {
+      
+         $("#profilebox").slideToggle();
+         return false;
+}); 
+});
 
 function initialize()
 {
