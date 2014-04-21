@@ -2,24 +2,13 @@ var map;
 myLatlng=new google.maps.LatLng(39.828127,-98.579404);
 var marker = null;
 
-
-$(function()
-{
-$("#profile_toggle").click(function()
-     {
-     	
-         $("#profilebox").slideToggle();
-         return false;
-}); 
-});
-
 function initialize()
 {
 	
 	var mapOptions={center:myLatlng,zoom:4,mapTypeControl:true,center:myLatlng,panControl:false,rotateControl:false,
 					streetViewControl:false,mapTypeId:google.maps.MapTypeId.ROADMAP};
 
-	map=new google.maps.Map(document.getElementById("map_canvas_p"),mapOptions);
+	map=new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 
 	google.maps.event.addListener(map, 'click', function(event) {
     addMarker(event.latLng);
