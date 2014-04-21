@@ -37,16 +37,10 @@ def meet(request):
 @login_required
 def profile(request):
 	currentNetid = request.user.username
-	form = ProfileForm()
-	if request.is_ajax():
-		template = 'pformfill.html'
-	else:
-		template = 'profile.html'
-	
 	if request.method == 'POST':
-		form = ProfileForm(request.POST)
-		if form.is_valid():
-			cd = form.cleaned_data
+		pf = ProfileForm(request.POST)
+		if pf.is_valid():
+			cd = pf.cleaned_data
 			p = Person.objects.filter(netid=currentNetid)
 			if (p):
 				p1 = p[0];
@@ -57,24 +51,21 @@ def profile(request):
 				p1.lon = cd['lon_s']
 				p1.company = cd['company']
 				p1.year = (int)(cd['cyear'])
-				p1.start = cd['start']
-				p1.end = cd['end']
-				p1.desired = cd['desired']
 				p1.save();
 			else:
-				p1 = Person(netid=currentNetid, first_name=cd['first_name'], 
+				p1 = Person(netid=currentNetid, first_name=['first_name'], 
 					last_name=cd['last_name'], lat=cd['lat_s'], 
-					lon=cd['lon_s'], company=cd['company'], year=cd['cyear'],
-					start=cd['start'], end=cd['end'], desired=cd['desired'])
+					lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
 				p1.save();
-        	return redirect('/')
-        else:
-			form.errors['lat_s'] = form.error_class()
+			return HttpResponseRedirect('/meet/')
+		else:
+			pf.errors['lat_s'] = pf.error_class()
+	else:
+		pf = ProfileForm()
 
-	if not request.method == 'POST':
-		form = ProfileForm()
+	return render(request, 'profile.html', {'form': pf})
 
-	return render(request, template, {'form': form})
+
 
 
 	# currentNetid = request.user.username
