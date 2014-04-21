@@ -37,16 +37,10 @@ def meet(request):
 @login_required
 def profile(request):
 	currentNetid = request.user.username
-	form = ProfileForm()
-	if request.is_ajax():
-		template = 'pformfill.html'
-	else:
-		template = 'profile.html'
-	
 	if request.method == 'POST':
-		form = ProfileForm(request.POST)
-		if form.is_valid():
-			cd = form.cleaned_data
+		pf = ProfileForm(request.POST)
+		if pf.is_valid():
+			cd = pf.cleaned_data
 			p = Person.objects.filter(netid=currentNetid)
 			if (p):
 				p1 = p[0];
@@ -63,14 +57,15 @@ def profile(request):
 					last_name=cd['last_name'], lat=cd['lat_s'], 
 					lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
 				p1.save();
-        	return redirect('/')
-        else:
-			form.errors['lat_s'] = form.error_class()
+			return HttpResponseRedirect('/meet/')
+		else:
+			pf.errors['lat_s'] = pf.error_class()
+	else:
+		pf = ProfileForm()
 
-	if not request.method == 'POST':
-		form = ProfileForm()
+	return render(request, 'profile.html', {'form': pf})
 
-	return render(request, template, {'form': form})
+
 
 
 	# currentNetid = request.user.username
