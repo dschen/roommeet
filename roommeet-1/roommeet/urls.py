@@ -1,12 +1,6 @@
 from django.conf.urls import *
 from django.contrib import admin
 
-##threaded messages:
-from django.conf.urls import *
-from django.views.generic import RedirectView
-from threaded_messages.views import *
-
-
 admin.autodiscover()
 
 
@@ -27,6 +21,6 @@ urlpatterns = patterns('roommeet.views',
 urlpatterns += patterns('',
     url(r'^accounts/login/$', 'django_cas.views.login'),
     url(r'^accounts/logout/$', 'django_cas.views.logout'),
-    url(r'^facebook/', include('django_facebook.urls')),
+    #url(r'^facebook/', include('django_facebook.urls')),
     #url(r'^fbaccounts/', include('django_facebook.auth_urls')),
 )
