@@ -1,5 +1,5 @@
-{% extends 'base.html' %}
 
+<<<<<<< HEAD
 
 {% block lnavitems %} 
 {# active is initial, href = url, >title</a = title #}
@@ -42,33 +42,56 @@
                 {{ form.non_field_errors }}
 
 		<form action="" method="post" id ="form1">
+=======
+<ul class="nav nav-list">
+        <li  style="font-weight:bold;">Please click on the map where you will be working</li>
+        <br>
+        <br>
+
+        {% if form.errors %}
+        <p style="color: red;">
+          <b>Please correct the error{{ form.errors|pluralize }} below.</b>
+        </p>
+        {% endif %}
+
+                {{ form.non_field_errors }}
+       
+        <form id="pform" action="/meet/" method="post">
+        {% csrf_token %}
+>>>>>>> ltolias
             
             <table border="1" style="width:300px">
             <table>
-		  {% for field in form.visible_fields %}
-		  <div class="fieldWrapper">
+          {% for field in form.visible_fields %}
+          <div class="fieldWrapper">
                     
+<<<<<<< HEAD
 		    <tr><td>{{ field.errors }}</td></tr>
             <tr><td>{{ field.label_tag }}&nbsp</td>
+=======
+            <tr><td>{{ field.errors }}</td></tr>
+            <tr><td>{{ field.label_tag }}</td>
+>>>>>>> ltolias
                     <td>{{ field }}<br><br></td>
                     </tr>
-		  </div>
-		  
-		  {% endfor %}
+          </div>
+          
+          {% endfor %}
           </table>
-		  {% for hidden in form.hidden_fields %}
-			{% if hidden.errors %}
-			  <br>
-			  <p style="color: red;">
+          {% for hidden in form.hidden_fields %}
+            {% if hidden.errors %}
+              <br>
+              <p style="color: red;">
                 Please click on the map.
                 </p>
-			  <br>
-			{% endif %}
-			{{ hidden }}
-		  {% endfor %}
+              <br>
+            {% endif %}
+            {{ hidden }}
+          {% endfor %}
 
-		  {% csrf_token %}
+       
                   <br>
+<<<<<<< HEAD
 		  <input type="submit" class="btn btn-primary" style="margin: 2%;" value="Save Profile">
                   <a class="btn btn-danger" style="margin: 2%;" href="/">Cancel</a>
 		</form>
@@ -86,5 +109,10 @@
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
 <script src="{{STATIC_URL}}/gmap_p.js"></script>
 
+=======
+          <input type="submit" class="btn btn-primary" style="margin: 2%;" value="Save Changes">
+                  <a id="close_profile" class="btn btn-danger" style="margin: 2%;">Cancel</a>
+        </form>
+>>>>>>> ltolias
 
-{% endblock %}
+    </ul>

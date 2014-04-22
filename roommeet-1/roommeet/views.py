@@ -8,7 +8,7 @@ import math
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 #templates and contexts, not necessary with render shortcut
 from django.template.loader import get_template
-from django.template import Context
+from django.template import Context, RequestContext
 from django.utils.html import strip_tags
 
 import datetime
@@ -18,21 +18,58 @@ from django.views.decorators.csrf import csrf_exempt
 from people.models import Person
 from django.contrib.auth.decorators import login_required
 
+from django.forms.models import model_to_dict
+
 #function to generate html and return
+
 @login_required
 def meet(request):
-	people = Person.objects.all()
-	q = False
-	for person in people:
-		if (request.user.username == person.netid):
-			q = True
-			break
+	p = Person.objects.filter(netid=request.user.username)
+	if (not p):
+		p1 = Person(netid=request.user.username)
+		p1.save()
 
-	if not q:
-		p = Person(netid=request.user.username)
-		p.save()
-		return HttpResponseRedirect('profile/')
-	return render(request, 'meet.html')
+	currentNetid = request.user.username
+	me = Person.objects.get(netid=currentNetid)
+	if request.method == 'POST':
+		pf = ProfileForm(request.POST)
+
+		if pf.is_valid():
+			cd = pf.cleaned_data
+			p = Person.objects.filter(netid=currentNetid)
+			if (p):
+				p1 = p[0];
+				p1.netid = currentNetid
+				p1.first_name = cd['first_name']
+				p1.last_name = cd['last_name']
+				p1.lat = cd['lat_s']
+				p1.lon = cd['lon_s']
+				p1.company = cd['company']
+				p1.year = (int)(cd['year'])
+				p1.save();
+			else:
+				p1 = Person(netid=currentNetid, first_name=['first_name'], 
+				last_name=cd['last_name'], lat=cd['lat_s'], 
+				lon=cd['lon_s'], company=cd['company'], year=cd['year'])
+				p1.save();
+
+			t = get_template('profile.html')
+			html = t.render(RequestContext(request, {'form': pf}))
+			data = {'success':'true', 'html':html}
+			return HttpResponse(json.dumps(data), content_type = "application/json")
+
+		else:
+			pf.errors['lat_s'] = pf.error_class()
+
+		t = get_template('profile.html')
+		html = t.render(RequestContext(request, {'form': pf}))
+		
+		data = {'success':'false', 'html':html}
+		return HttpResponse(json.dumps(data), content_type = "application/json")
+
+	else:
+		pf = ProfileForm(initial=model_to_dict(me))
+	return render(request, 'meet.html', {'form': pf})
 
 @login_required
 def profile(request):
@@ -129,6 +166,7 @@ def get_marks(request):
 		t = get_template('buttonfill.html')
 		html = t.render(Context({'person':p1, 'add':f}))
 		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'netid':p1.netid, 'html':html})
+	locs.append({'lat':str(me.lat), 'lon':str(me.lon),})
 	#locs.append({'lat':str(me.lat), 'lon':str(me.lon)})
 	return HttpResponse(json.dumps(locs), mimetype='application/json; charset=UTF-8')
 	#form = LatLonForm(request.POST)
