@@ -6,7 +6,9 @@ var markerp = null;
 
 
 $('#pform').submit(function () {
-	var frm = $('#pform')
+	var frm = $('#pform');
+
+	frm.submit(function () {
         $.ajax({
             type: frm.attr('method'),
             url: frm.attr('action'),
@@ -18,8 +20,11 @@ $('#pform').submit(function () {
                 $("#profilebox").html("Something went wrong!");
             }
         });
-        return false;
+
     });
+    return false;
+
+});
 
 
 
@@ -159,7 +164,9 @@ function initialize()
 
 
 function addMarkerProfile(location) {
-  if (markerp == null)
+	if (profile == true)
+	{
+  	if (markerp == null)
   {
   	markerp = new google.maps.Marker({
 		position: location,
@@ -171,7 +178,7 @@ function addMarkerProfile(location) {
   //post send of position must go here
   document.getElementById('id_lat_s').value = location.lat().toFixed(5);
   document.getElementById('id_lon_s').value = location.lng().toFixed(5);
-
+}
 }
 
 

@@ -22,43 +22,42 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def meet(request):
-  p = Person.objects.filter(netid=request.user.username)
-  if (not p):
-    p1 = Person(netid=request.user.username)
-    p1.save()
+	p = Person.objects.filter(netid=request.user.username)
+	if (not p):
+		p1 = Person(netid=request.user.username)
+		p1.save()
 
-  if request.method == 'POST':
-    pf = ProfileForm(request.POST)
-    if pf.is_valid():
-      cd = pf.cleaned_data
-      p = Person.objects.filter(netid=currentNetid)
-      if (p):
-        p1 = p[0];
-        p1.netid = currentNetid
-        p1.first_name = cd['first_name']
-        p1.last_name = cd['last_name']
-        p1.lat = cd['lat_s']
-        p1.lon = cd['lon_s']
-        p1.company = cd['company']
-        p1.year = (int)(cd['cyear'])
-        p1.save();
-      else:
-        p1 = Person(netid=currentNetid, first_name=['first_name'], 
-        	last_name=cd['last_name'], lat=cd['lat_s'], 
-        	lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
-        p1.save();
-        return HttpResponseRedirect('/meet/')
-    else:
-    	pf.errors['lat_s'] = pf.error_class()
+	if request.method == 'POST':
+		pf = ProfileForm(request.POST)
+		if pf.is_valid():
+			cd = pf.cleaned_data
+			p = Person.objects.filter(netid=currentNetid)
+			if (p):
+				p1 = p[0];
+				p1.netid = currentNetid
+				p1.first_name = cd['first_name']
+				p1.last_name = cd['last_name']
+				p1.lat = cd['lat_s']
+				p1.lon = cd['lon_s']
+				p1.company = cd['company']
+				p1.year = (int)(cd['cyear'])
+				p1.save();
+			else:
+				p1 = Person(netid=currentNetid, first_name=['first_name'], 
+				last_name=cd['last_name'], lat=cd['lat_s'], 
+				lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
+				p1.save();
+			return HttpResponseRedirect('/meet/')
+		else:
+			pf.errors['lat_s'] = pf.error_class()
 
-	t = get_template('profile.html')
-	html = t.render(Context({'form': pf}))
-	
-	return HttpResponse(json.dumps(html), mimetype='application/json; charset=UTF-8')
-  else:
-    pf = ProfileForm()
+		t = get_template('profile.html')
+		html = t.render(Context({'form': pf}))
 
-  return render(request, 'meet.html', {'form': pf})
+		return HttpResponse(json.dumps(html), mimetype='application/json; charset=UTF-8')
+	else:
+		pf = ProfileForm()
+	return render(request, 'meet.html', {'form': pf})
 
 @login_required
 def profile(request):
