@@ -18,6 +18,8 @@ from django.views.decorators.csrf import csrf_exempt
 from people.models import Person
 from django.contrib.auth.decorators import login_required
 
+from django.forms.models import model_to_dict
+
 #function to generate html and return
 
 @login_required
@@ -26,6 +28,9 @@ def meet(request):
 	if (not p):
 		p1 = Person(netid=request.user.username)
 		p1.save()
+
+	currentNetid = request.user.username
+	me = Person.objects.get(netid=currentNetid)
 
 	if request.method == 'POST':
 		pf = ProfileForm(request.POST)
@@ -56,7 +61,7 @@ def meet(request):
 
 		return HttpResponse(json.dumps(html), mimetype='application/json; charset=UTF-8')
 	else:
-		pf = ProfileForm()
+		pf = ProfileForm(initial=model_to_dict(me))
 	return render(request, 'meet.html', {'form': pf})
 
 @login_required

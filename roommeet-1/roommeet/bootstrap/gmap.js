@@ -7,19 +7,17 @@ var markerp = null;
 
 $('#pform').submit(function () {
 	var frm = $('#pform');
-
-	frm.submit(function () {
         $.ajax({
             type: frm.attr('method'),
             url: frm.attr('action'),
             data: frm.serialize(),
             success: function (data) {
                 $("#profilebox").html(data);
+
             },
             error: function(data) {
                 $("#profilebox").html("Something went wrong!");
             }
-        });
 
     });
     return false;
