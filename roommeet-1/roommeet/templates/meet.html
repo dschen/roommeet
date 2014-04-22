@@ -74,52 +74,7 @@ background-color: rgba(135, 135, 235, 0.80);
 
 <div id="profilebox">
 
-    <ul class="nav nav-list">
-        <li  style="font-weight:bold;">Please click on the map where you will be working</li>
-        <br>
-        <br>
-
-        {% if form.errors %}
-        <p style="color: red;">
-          <b>Please correct the error{{ form.errors|pluralize }} below.</b>
-        </p>
-        {% endif %}
-
-                {{ form.non_field_errors }}
-
-        <form action="" method="post">
-            
-            <table border="1" style="width:300px">
-            <table>
-          {% for field in form.visible_fields %}
-          <div class="fieldWrapper">
-                    
-            <tr><td>{{ field.errors }}</td></tr>
-            <tr><td>{{ field.label_tag }}</td>
-                    <td>{{ field }}<br><br></td>
-                    </tr>
-          </div>
-          
-          {% endfor %}
-          </table>
-          {% for hidden in form.hidden_fields %}
-            {% if hidden.errors %}
-              <br>
-              <p style="color: red;">
-                Please click on the map.
-                </p>
-              <br>
-            {% endif %}
-            {{ hidden }}
-          {% endfor %}
-
-          {% csrf_token %}
-                  <br>
-          <input type="submit" class="btn btn-primary" style="margin: 2%;" value="Save Changes">
-                  <a id="close_profile" class="btn btn-danger" style="margin: 2%;">Cancel</a>
-        </form>
-
-    </ul>
+    {% include 'profile.html' %}
 </div>
 
 

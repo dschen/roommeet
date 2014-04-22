@@ -1,15 +1,34 @@
 var map;
 myLatlng=new google.maps.LatLng(39.828127,-98.579404);
 var markers = [];
+var profile = false;
+var markerp = null;
 
 
+$('#pform').submit(function () {
+	var frm = $('#pform')
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: frm.serialize(),
+            success: function (data) {
+                $("#profilebox").html(data);
+            },
+            error: function(data) {
+                $("#MESSAGE-DIV").html("Something went wrong!");
+            }
+        });
+        return false;
+    });
 
 
 
 $(function()
 {
 $("#profile_toggle").click(function()
-     {
+{
+	clearMarkers();
+	profile = true
       
          //$("#profilebox").slideToggle();
          $("#map_canvas").animate({left:"400px"});
@@ -22,6 +41,10 @@ $(function()
 {
 $("#close_profile").click(function()
      {
+
+showMarkers();
+	profile = false;
+	markerp = null;
       
          //$("#profilebox").slideToggle();
          $("#map_canvas").animate({left:"0px"});
@@ -53,6 +76,11 @@ function initialize()
 		}
     	map.fitBounds(bounds);
 	});
+
+	google.maps.event.addListener(map, 'click', function(event) {
+    addMarkerProfile(event.latLng);
+    });
+
 	//var defaultBounds = new google.maps.LatLngBounds();
 	//defaultBounds.extend(myLatlng);
       	
@@ -129,6 +157,22 @@ function initialize()
 
 }
 
+
+function addMarkerProfile(location) {
+  if (markerp == null)
+  {
+  	markerp = new google.maps.Marker({
+		position: location,
+	  	map: map
+		});
+  }
+  markerp.setPosition(location);
+
+  //post send of position must go here
+  document.getElementById('id_lat_s').value = location.lat().toFixed(5);
+  document.getElementById('id_lon_s').value = location.lng().toFixed(5);
+
+}
 
 
 function addEventHandler(elem,eventType,handler) {

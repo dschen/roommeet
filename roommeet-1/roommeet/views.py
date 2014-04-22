@@ -44,12 +44,15 @@ def meet(request):
         p1.save();
       else:
         p1 = Person(netid=currentNetid, first_name=['first_name'], 
-          last_name=cd['last_name'], lat=cd['lat_s'], 
-          lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
+        	last_name=cd['last_name'], lat=cd['lat_s'], 
+        	lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
         p1.save();
-      return HttpResponseRedirect('/meet/')
+        return HttpResponseRedirect('/meet/')
     else:
-      pf.errors['lat_s'] = pf.error_class()
+    	pf.errors['lat_s'] = pf.error_class()
+	t = get_template('profile.html')
+	html = t.render(Context({'form': pf}))
+	return HttpResponse(json.dumps(html), mimetype='application/json; charset=UTF-8')
   else:
     pf = ProfileForm()
 
