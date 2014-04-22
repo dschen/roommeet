@@ -8,6 +8,7 @@ var myloc = null;
 
 $(document).ready(function() {
     $('.datepicker').datepicker();
+    $("#profilebox").animate({left:"0px"});
 });
 
 
@@ -29,7 +30,7 @@ $(document).on("submit","#pform",function(event)
 				    setRadius(radius);
 
 			        $("#map_canvas").animate({left:"0px"});
-			        $("#profilebox").animate({left:"-500px"});
+			        //$("#profilebox").animate({left:"-500px"});
 			        $("#profilebox").html(data.html);
 
 
@@ -84,7 +85,7 @@ $(document).on("click","#close_profile",function(e)
       
          //$("#profilebox").slideToggle();
          $("#map_canvas").animate({left:"0px"});
-         $("#profilebox").animate({left:"-500px"});
+         //$("#profilebox").animate({left:"-500px"});
          return false;
 }); 
 
