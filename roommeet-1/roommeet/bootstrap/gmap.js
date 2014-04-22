@@ -2,12 +2,30 @@ var map;
 myLatlng=new google.maps.LatLng(39.828127,-98.579404);
 var markers = [];
 
+
+
+
+
 $(function()
 {
 $("#profile_toggle").click(function()
      {
       
-         $("#profilebox").slideToggle();
+         //$("#profilebox").slideToggle();
+         $("#map_canvas").animate({left:"400px"});
+         $("#profilebox").animate({left:"10px"});
+         return false;
+}); 
+});
+
+$(function()
+{
+$("#close_profile").click(function()
+     {
+      
+         //$("#profilebox").slideToggle();
+         $("#map_canvas").animate({left:"0px"});
+         $("#profilebox").animate({left:"-500px"});
          return false;
 }); 
 });

@@ -4,6 +4,7 @@
 <style>
     html, body {
         overflow:hidden;
+        background-color:rgb(230,230,230);
     }
 </style>
 {% endblock %}
@@ -17,28 +18,7 @@
 
 
 {% block precontainter %}
-{% csrf_token %} 
-<input id="pac-input" class="controls" type="text" placeholder="Search Box">
-<div id="map_canvas"></div>
-<style>
-.pos_fixed
-{
-position:fixed;
-bottom:30px;
-left:60px;
-right:60px;
-z-index:10;
-color: #000000;
-background-color: rgba(235, 235, 235, 0.80);
-}
-#profilebox
-{
-    position:fixed;
-    left:60px;
-    top:100px;
-    display: none;
-}
-</style>
+
 
 <div class="navbar navbar-inverse navbar-fixed-bottom" id="topnavbar">
   <div class="container-fluid">
@@ -57,15 +37,47 @@ background-color: rgba(235, 235, 235, 0.80);
 </div>
 
 
+<div>
+{% csrf_token %} 
+<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+<div id="map_canvas"></div>
+<style>
+.pos_fixed
+{
+position:fixed;
+bottom:30px;
+left:60px;
+right:60px;
+z-index:10;
+color: #000000;
+background-color: rgba(135, 135, 235, 0.80);
+}
+#profilebox
+{
+    position:fixed;
+    left:-500px;
+    top:100px;
+    z-index:1;
+}
+#topnavbar
+{
+    z-index: 10;
+}
+#map_canvas
+{
+    position:fixed;
+
+}
+</style>
+
+
+
 <div id="profilebox">
-<div class="container">
-<div class="row-fluid">
-    <div class="col-md-4">
-        <div class="well sidebar-nav">
-            <ul class="nav nav-list">
-                <li class="nav-header" style="font-weight:bold;">Please click on the map where you will be working</li>
-                <br>
-                <br>
+
+    <ul class="nav nav-list">
+        <li  style="font-weight:bold;">Please click on the map where you will be working</li>
+        <br>
+        <br>
 
         {% if form.errors %}
         <p style="color: red;">
@@ -104,15 +116,10 @@ background-color: rgba(235, 235, 235, 0.80);
           {% csrf_token %}
                   <br>
           <input type="submit" class="btn btn-primary" style="margin: 2%;" value="Save Changes">
-                  <a class="btn btn-danger" style="margin: 2%;" href="/">Cancel</a>
+                  <a id="close_profile" class="btn btn-danger" style="margin: 2%;">Cancel</a>
         </form>
 
-
-            </ul>
-        </div>
-    </div>
-</div>
-</div>
+    </ul>
 </div>
 
 
