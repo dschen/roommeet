@@ -31,9 +31,9 @@ def meet(request):
 
 	currentNetid = request.user.username
 	me = Person.objects.get(netid=currentNetid)
-
 	if request.method == 'POST':
 		pf = ProfileForm(request.POST)
+
 		if pf.is_valid():
 			cd = pf.cleaned_data
 			p = Person.objects.filter(netid=currentNetid)
@@ -52,15 +52,21 @@ def meet(request):
 				last_name=cd['last_name'], lat=cd['lat_s'], 
 				lon=cd['lon_s'], company=cd['company'], year=cd['year'])
 				p1.save();
-			html = "hello"
-			return HttpResponse(html)
+
+			t = get_template('profile.html')
+			html = t.render(RequestContext(request, {'form': pf}))
+			data = {'success':'true', 'html':html}
+			return HttpResponse(json.dumps(data), content_type = "application/json")
+
 		else:
 			pf.errors['lat_s'] = pf.error_class()
 
 		t = get_template('profile.html')
 		html = t.render(RequestContext(request, {'form': pf}))
+		
+		data = {'success':'false', 'html':html}
+		return HttpResponse(json.dumps(data), content_type = "application/json")
 
-		return HttpResponse(html)
 	else:
 		pf = ProfileForm(initial=model_to_dict(me))
 	return render(request, 'meet.html', {'form': pf})
@@ -160,6 +166,7 @@ def get_marks(request):
 		t = get_template('buttonfill.html')
 		html = t.render(Context({'person':p1, 'add':f}))
 		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'netid':p1.netid, 'html':html})
+	locs.append({'lat':str(me.lat), 'lon':str(me.lon),})
 	#locs.append({'lat':str(me.lat), 'lon':str(me.lon)})
 	return HttpResponse(json.dumps(locs), mimetype='application/json; charset=UTF-8')
 	#form = LatLonForm(request.POST)

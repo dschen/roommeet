@@ -4,11 +4,10 @@ var markers = [];
 var profile = false;
 var markerp = null;
 var radius = '0';
+var myloc = null;
 
 
-$.ajaxSetup({
-  data: {csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value },
-});
+
 
 $(document).on("submit","#pform",function(event)
 {
@@ -19,28 +18,29 @@ $(document).on("submit","#pform",function(event)
             url: frm.attr('action'),
             data: frm.serialize(),
             success: function (data) {
-            	if (data == "hello")
+
+            	if (data.success == "true")
 	            {
 	            	showMarkers();
 					profile = false;
 					markerp.setMap(null);
-					markerp = null;
 				    setRadius(radius);
 
 			        $("#map_canvas").animate({left:"0px"});
 			        $("#profilebox").animate({left:"-500px"});
+			        $("#profilebox").html(data.html);
 
 
 
             	}
             	else
-                	$("#profilebox").html(data);
+                	$("#profilebox").html(data.html);
 
                 return false;
 
             },
             error: function(data) {
-                $("#profilebox").html("Something went wrong!");
+                $("#profilebox").html(data);
             }
 
     });
@@ -54,7 +54,16 @@ $(document).on("submit","#pform",function(event)
 $(document).on("click","#profile_toggle",function(e)
 {
 	clearMarkers();
-	profile = true
+	profile = true;
+	if (markerp == null)
+  	{
+  		markerp = new google.maps.Marker({
+		position: myloc,
+	  	map: null
+		});
+  	}
+	markerp.setMap(map);
+
       
          //$("#profilebox").slideToggle();
          $("#map_canvas").animate({left:"400px"});
@@ -69,7 +78,7 @@ $(document).on("click","#close_profile",function(e)
 
 	showMarkers();
 	profile = false;
-	markerp = null;
+	markerp.setMap(null);
       
          //$("#profilebox").slideToggle();
          $("#map_canvas").animate({left:"0px"});
@@ -91,15 +100,19 @@ function initialize()
 		var response = data
 		var count = response.length;
 		var bounds = new google.maps.LatLngBounds();
-		for(var i = 0; i < count; i++) 
+		for(var i = 0; i < count-1; i++) 
 		{
 
     		var item = response[i];
     		loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+
+
     		addMarker(loc, item.html, item.netid);
     		bounds.extend(loc);
 
 		}
+		var item = response[i];
+		myloc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
     	map.fitBounds(bounds);
 	});
 
@@ -187,16 +200,15 @@ function initialize()
 function addMarkerProfile(location) {
 	if (profile == true)
 	{
-  	if (markerp == null)
+		  	if (markerp == null)
   {
   	markerp = new google.maps.Marker({
 		position: location,
 	  	map: map
 		});
   }
-  markerp.setPosition(location);
+		markerp.setPosition(location);
 
-  //post send of position must go here
   document.getElementById('id_lat_s').value = location.lat().toFixed(5);
   document.getElementById('id_lon_s').value = location.lng().toFixed(5);
 }
@@ -227,7 +239,7 @@ function setRadius(evt)
 		var response = data
 		var count = response.length;
 		var bounds = new google.maps.LatLngBounds();
-		for(var i = 0; i < count; i++) 
+		for(var i = 0; i < count-1; i++) 
 		{
 			var item = response[i];
 			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
