@@ -15,7 +15,7 @@ $('#pform').submit(function () {
                 $("#profilebox").html(data);
             },
             error: function(data) {
-                $("#MESSAGE-DIV").html("Something went wrong!");
+                $("#profilebox").html("Something went wrong!");
             }
         });
         return false;

@@ -50,8 +50,10 @@ def meet(request):
         return HttpResponseRedirect('/meet/')
     else:
     	pf.errors['lat_s'] = pf.error_class()
+
 	t = get_template('profile.html')
 	html = t.render(Context({'form': pf}))
+	
 	return HttpResponse(json.dumps(html), mimetype='application/json; charset=UTF-8')
   else:
     pf = ProfileForm()
