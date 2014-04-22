@@ -20,6 +20,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.forms.models import model_to_dict
 
+
 #function to generate html and return
 
 @login_required
@@ -44,14 +45,16 @@ def meet(request):
 				p1.last_name = cd['last_name']
 				p1.lat = cd['lat_s']
 				p1.lon = cd['lon_s']
+				p1.start = cd['start']
+				p1.end = cd['end']
 				p1.company = cd['company']
 				p1.year = (int)(cd['year'])
-				p1.save();
+				p1.save()
 			else:
 				p1 = Person(netid=currentNetid, first_name=['first_name'], 
 				last_name=cd['last_name'], lat=cd['lat_s'], 
 				lon=cd['lon_s'], company=cd['company'], year=cd['year'])
-				p1.save();
+				p1.save()
 
 			t = get_template('profile.html')
 			html = t.render(RequestContext(request, {'form': pf}))
