@@ -3,29 +3,40 @@ myLatlng=new google.maps.LatLng(39.828127,-98.579404);
 var markers = [];
 var profile = false;
 var markerp = null;
+var radius = '0';
 
 
-$('#pform').submit(function () {
+$.ajaxSetup({
+  data: {csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value },
+});
+
+$(document).on("submit","#pform",function(event)
+{
 	var frm = $('#pform');
+	event.preventDefault();
         $.ajax({
             type: frm.attr('method'),
             url: frm.attr('action'),
             data: frm.serialize(),
             success: function (data) {
-            	if (data == "")
+            	if (data == "hello")
 	            {
 	            	showMarkers();
 					profile = false;
+					markerp.setMap(null);
 					markerp = null;
-				      
-			         //$("#profilebox").slideToggle();
-			         $("#map_canvas").animate({left:"0px"});
-			         $("#profilebox").animate({left:"-500px"});
+				    setRadius(radius);
+
+			        $("#map_canvas").animate({left:"0px"});
+			        $("#profilebox").animate({left:"-500px"});
+
 
 
             	}
             	else
                 	$("#profilebox").html(data);
+
+                return false;
 
             },
             error: function(data) {
@@ -39,9 +50,8 @@ $('#pform').submit(function () {
 
 
 
-$(function()
-{
-$("#profile_toggle").click(function()
+
+$(document).on("click","#profile_toggle",function(e)
 {
 	clearMarkers();
 	profile = true
@@ -51,11 +61,10 @@ $("#profile_toggle").click(function()
          $("#profilebox").animate({left:"10px"});
          return false;
 }); 
-});
 
-$(function()
-{
-$("#close_profile").click(function()
+
+
+$(document).on("click","#close_profile",function(e)
      {
 
 	showMarkers();
@@ -67,7 +76,7 @@ $("#close_profile").click(function()
          $("#profilebox").animate({left:"-500px"});
          return false;
 }); 
-});
+
 
 function initialize()
 {
@@ -203,10 +212,15 @@ function addEventHandler(elem,eventType,handler) {
 
 function setRadius(evt) 
 {
-	if (evt.target.radius == '0')
+	if (!evt.target)
+		cradius = evt;
+	else
+		cradius = evt.target.radius;
+	radius = cradius;
+	if (radius == '0')
 		dict = {csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	else
-		dict = {radius:evt.target.radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		dict = {'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	$.post('/get_marks/', dict, function(data)
 	{

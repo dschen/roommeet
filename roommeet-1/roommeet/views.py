@@ -8,7 +8,7 @@ import math
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 #templates and contexts, not necessary with render shortcut
 from django.template.loader import get_template
-from django.template import Context
+from django.template import Context, RequestContext
 from django.utils.html import strip_tags
 
 import datetime
@@ -45,22 +45,22 @@ def meet(request):
 				p1.lat = cd['lat_s']
 				p1.lon = cd['lon_s']
 				p1.company = cd['company']
-				p1.year = (int)(cd['cyear'])
+				p1.year = (int)(cd['year'])
 				p1.save();
 			else:
 				p1 = Person(netid=currentNetid, first_name=['first_name'], 
 				last_name=cd['last_name'], lat=cd['lat_s'], 
-				lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
+				lon=cd['lon_s'], company=cd['company'], year=cd['year'])
 				p1.save();
-			html = ""
-			return HttpResponse(json.dumps(html), mimetype='application/json; charset=UTF-8')
+			html = "hello"
+			return HttpResponse(html)
 		else:
 			pf.errors['lat_s'] = pf.error_class()
 
 		t = get_template('profile.html')
-		html = t.render(Context({'form': pf}))
+		html = t.render(RequestContext(request, {'form': pf}))
 
-		return HttpResponse(json.dumps(html), mimetype='application/json; charset=UTF-8')
+		return HttpResponse(html)
 	else:
 		pf = ProfileForm(initial=model_to_dict(me))
 	return render(request, 'meet.html', {'form': pf})

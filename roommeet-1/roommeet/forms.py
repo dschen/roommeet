@@ -3,7 +3,7 @@ from django import forms
 class ProfileForm(forms.Form):
 	first_name = forms.CharField(max_length=50)
 	last_name = forms.CharField(max_length=50)
-	cyear = forms.RegexField(regex=r'\d\d\d\d', label='Year')
+	year = forms.RegexField(regex=r'\d\d\d\d', label='Year')
 	company = forms.CharField(max_length=100)
 	start = forms.DateField()
 	end = forms.DateField()
