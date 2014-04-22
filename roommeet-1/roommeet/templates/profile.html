@@ -26,17 +26,12 @@
 
 {% block mainpage %}
 <div class="row-fluid">
-    <div class="col-md-4">
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
-                <li class="nav-header">Please click on the map where you will be working</li> <br> <br>
+                <li class="nav-header">Please click on the map where you will be working</li> <br> 
                 
-				{% if form.errors %}
-				<p style="color: red;">
-					Please correct the error{{ form.errors|pluralize }} below.
-				</p>
-				{% endif %}
-                {{ form.non_field_errors }}
+
+
 
 		{% if form.errors %}
 		<p style="color: red;">
@@ -46,7 +41,7 @@
 
                 {{ form.non_field_errors }}
 
-		<form action="" method="post">
+		<form action="" method="post" id ="form1">
             
             <table border="1" style="width:300px">
             <table>
@@ -54,7 +49,7 @@
 		  <div class="fieldWrapper">
                     
 		    <tr><td>{{ field.errors }}</td></tr>
-            <tr><td>{{ field.label_tag }}</td>
+            <tr><td>{{ field.label_tag }}&nbsp</td>
                     <td>{{ field }}<br><br></td>
                     </tr>
 		  </div>
@@ -74,20 +69,13 @@
 
 		  {% csrf_token %}
                   <br>
-		  <input type="submit" class="btn btn-primary" style="margin: 2%;" value="Save Changes">
+		  <input type="submit" class="btn btn-primary" style="margin: 2%;" value="Save Profile">
                   <a class="btn btn-danger" style="margin: 2%;" href="/">Cancel</a>
 		</form>
 
 
-            </ul>
-        </div>
-    </div>
 
-    <div class="col-md-8">
-    	<input id="pac-input" class="controls" type="text" placeholder="Search Box">
-        <div id="map_canvas"></div>
-    </div>
-</div>
+
 {% endblock %}
 
 
