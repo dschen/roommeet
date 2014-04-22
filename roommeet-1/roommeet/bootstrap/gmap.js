@@ -68,7 +68,7 @@ $(document).on("click","#profile_toggle",function(e)
 
       
          //$("#profilebox").slideToggle();
-         $("#map_canvas").animate({left:"400px"});
+         $("#map_canvas").animate({left:"300px"});
          $("#profilebox").animate({left:"10px"});
          return false;
 }); 

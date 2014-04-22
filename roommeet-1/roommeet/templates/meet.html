@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block headext %}
-<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/base/jquery-ui.css" rel="stylesheet">
 <style>
     html, body {
         overflow:hidden;
@@ -11,6 +10,7 @@
 
 
 
+<link href="{{STATIC_URL}}/datepicker/css/datepicker.css" rel="stylesheet" type="text/css"/>  
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
@@ -63,8 +63,12 @@ background-color: rgba(135, 135, 235, 0.80);
 {
     position:fixed;
     left:-500px;
-    top:100px;
+    top:70px;
     z-index:1;
+    overflow:auto;
+    height: -o-calc(100%- 130px); /* opera */
+    height: -webkit-calc(100% - 130px); /* google, safari */
+    height: -moz-calc(100% - 130px); /* firefox */
 }
 #topnavbar
 {

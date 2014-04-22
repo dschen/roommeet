@@ -1,12 +1,39 @@
 
-<ul class="nav nav-list">
-        <li  style="font-weight:bold;">Please click on the map where you will be working</li>
+<ul class="nav nav-list" style="color:#c2c2c2">
+        <li  style="font-weight:bold;">&nbsp;&nbsp;&nbsp;&nbsp;Please click on the map where <br>&nbsp;&nbsp;&nbsp;&nbsp;you will be working</li>
         <br>
-        <br>
+        <style> 
+  form input[type=text]{ 
+padding: 1px 20px; 
+border: 0; 
+    height:25px; 
+    width: 150px; 
+border-radius: 10px; 
+-moz-border-radius: 10px; 
+-webkit-border-radius: 10px; 
+box-shadow: 1px 1px 0 0 #FFF, 5px 5px 40px 2px #BBB inset; 
+-moz-box-shadow: 1px 1px 0 0 #FFF, 5px 5px 40px 2px #BBB inset; 
+-webkit-box-shadow: 1px 1px 0 0 #FFF, 5px 5px 40px 2px #BBB inset; 
+-webkit-background-clip: padding-box; 
+    outline:0; 
+} 
+form label{
+  height: 40px;
+  line-height: 45px;
+} 
+td
+{
+    max-width: 100px;
+    overflow: visible;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+</style>
 
         {% if form.errors %}
         <p style="color: red;">
-          <b>Please correct the error{{ form.errors|pluralize }} below.</b>
+          <b>&nbsp;&nbsp;&nbsp;&nbsp;Please correct the error{{ form.errors|pluralize }} below.</b>
         </p>
         {% endif %}
 
@@ -19,10 +46,11 @@
             <table>
           {% for field in form.visible_fields %}
           <div class="fieldWrapper">
-                    
+            {% if field.errors %}     
             <tr><td>{{ field.errors }}</td></tr>
-            <tr><td>{{ field.label_tag }}</td>
-                    <td>{{ field }}<br><br></td>
+            {% endif %}
+            <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;{{ field.label_tag }}</td><td> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td style="color: black;"> {{ field }}<br></td>
                     </tr>
           </div>
           
@@ -39,10 +67,8 @@
             {{ hidden }}
           {% endfor %}
 
-       
-                  <br>
-          <input type="submit" class="btn btn-primary" style="margin: 2%;" value="Save Changes">
-                  <a id="close_profile" class="btn btn-danger" style="margin: 2%;">Cancel</a>
+          <input type="submit" class="btn btn-primary" style="margin: 2%;  width:120px;" value="Save Changes">
+                  <a id="close_profile" class="btn btn-danger" style="margin: 2%; width:110px;">Cancel</a>
         </form>
 
     </ul>
