@@ -1,13 +1,98 @@
 var map;
 myLatlng=new google.maps.LatLng(39.828127,-98.579404);
 var markers = [];
+var profile = false;
+var markerp = null;
+var radius = '0';
+var myloc = null;
+
+
+
+
+$(document).on("submit","#pform",function(event)
+{
+	var frm = $('#pform');
+	event.preventDefault();
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: frm.serialize(),
+            success: function (data) {
+
+            	if (data.success == "true")
+	            {
+	            	showMarkers();
+					profile = false;
+					markerp.setMap(null);
+				    setRadius(radius);
+
+			        $("#map_canvas").animate({left:"0px"});
+			        $("#profilebox").animate({left:"-500px"});
+			        $("#profilebox").html(data.html);
+
+
+
+            	}
+            	else
+                	$("#profilebox").html(data.html);
+
+                return false;
+
+            },
+            error: function(data) {
+                $("#profilebox").html(data);
+            }
+
+    });
+    return false;
+
+});
+
+
+
+
+$(document).on("click","#profile_toggle",function(e)
+{
+	clearMarkers();
+	profile = true;
+	if (markerp == null)
+  	{
+  		markerp = new google.maps.Marker({
+		position: myloc,
+	  	map: null
+		});
+  	}
+	markerp.setMap(map);
+
+      
+         //$("#profilebox").slideToggle();
+         $("#map_canvas").animate({left:"400px"});
+         $("#profilebox").animate({left:"10px"});
+         return false;
+}); 
+
+
+
+$(document).on("click","#close_profile",function(e)
+     {
+
+	showMarkers();
+	profile = false;
+	markerp.setMap(null);
+      
+         //$("#profilebox").slideToggle();
+         $("#map_canvas").animate({left:"0px"});
+         $("#profilebox").animate({left:"-500px"});
+         return false;
+}); 
 
 
 function initialize()
 {
 	var markers = [];
 	var mapOptions={center:myLatlng,zoom:4,mapTypeControl:true,center:myLatlng,panControl:false,rotateControl:false,
-					streetViewControl:false,mapTypeId:google.maps.MapTypeId.ROADMAP,scrollwheel:true};
+					streetViewControl:false,mapTypeId:google.maps.MapTypeId.ROADMAP,scrollwheel:true, 
+					backgroundColor:'#B3D3FF'};
 
 	map=new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 
@@ -15,17 +100,26 @@ function initialize()
 		var response = data
 		var count = response.length;
 		var bounds = new google.maps.LatLngBounds();
-		for(var i = 0; i < count; i++) 
+		for(var i = 0; i < count-1; i++) 
 		{
 
     		var item = response[i];
     		loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+
+
     		addMarker(loc, item.html, item.netid);
     		bounds.extend(loc);
 
 		}
+		var item = response[i];
+		myloc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
     	map.fitBounds(bounds);
 	});
+
+	google.maps.event.addListener(map, 'click', function(event) {
+    addMarkerProfile(event.latLng);
+    });
+
 	//var defaultBounds = new google.maps.LatLngBounds();
 	//defaultBounds.extend(myLatlng);
       	
@@ -103,6 +197,23 @@ function initialize()
 }
 
 
+function addMarkerProfile(location) {
+	if (profile == true)
+	{
+		  	if (markerp == null)
+  {
+  	markerp = new google.maps.Marker({
+		position: location,
+	  	map: map
+		});
+  }
+		markerp.setPosition(location);
+
+  document.getElementById('id_lat_s').value = location.lat().toFixed(5);
+  document.getElementById('id_lon_s').value = location.lng().toFixed(5);
+}
+}
+
 
 function addEventHandler(elem,eventType,handler) {
  if (elem.addEventListener)
@@ -113,17 +224,22 @@ function addEventHandler(elem,eventType,handler) {
 
 function setRadius(evt) 
 {
-	if (evt.target.radius == '0')
+	if (!evt.target)
+		cradius = evt;
+	else
+		cradius = evt.target.radius;
+	radius = cradius;
+	if (radius == '0')
 		dict = {csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	else
-		dict = {radius:evt.target.radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		dict = {'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	$.post('/get_marks/', dict, function(data)
 	{
 		var response = data
 		var count = response.length;
 		var bounds = new google.maps.LatLngBounds();
-		for(var i = 0; i < count; i++) 
+		for(var i = 0; i < count-1; i++) 
 		{
 			var item = response[i];
 			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
