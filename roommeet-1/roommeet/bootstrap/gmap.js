@@ -12,7 +12,20 @@ $('#pform').submit(function () {
             url: frm.attr('action'),
             data: frm.serialize(),
             success: function (data) {
-                $("#profilebox").html(data);
+            	if (data == "")
+	            {
+	            	showMarkers();
+					profile = false;
+					markerp = null;
+				      
+			         //$("#profilebox").slideToggle();
+			         $("#map_canvas").animate({left:"0px"});
+			         $("#profilebox").animate({left:"-500px"});
+
+
+            	}
+            	else
+                	$("#profilebox").html(data);
 
             },
             error: function(data) {
@@ -45,7 +58,7 @@ $(function()
 $("#close_profile").click(function()
      {
 
-showMarkers();
+	showMarkers();
 	profile = false;
 	markerp = null;
       
@@ -60,7 +73,8 @@ function initialize()
 {
 	var markers = [];
 	var mapOptions={center:myLatlng,zoom:4,mapTypeControl:true,center:myLatlng,panControl:false,rotateControl:false,
-					streetViewControl:false,mapTypeId:google.maps.MapTypeId.ROADMAP,scrollwheel:true};
+					streetViewControl:false,mapTypeId:google.maps.MapTypeId.ROADMAP,scrollwheel:true, 
+					backgroundColor:'#B3D3FF'};
 
 	map=new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 

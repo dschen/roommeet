@@ -52,7 +52,8 @@ def meet(request):
 				last_name=cd['last_name'], lat=cd['lat_s'], 
 				lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
 				p1.save();
-			return HttpResponseRedirect('/meet/')
+			html = ""
+			return HttpResponse(json.dumps(html), mimetype='application/json; charset=UTF-8')
 		else:
 			pf.errors['lat_s'] = pf.error_class()
 
