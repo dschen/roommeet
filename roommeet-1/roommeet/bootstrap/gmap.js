@@ -6,7 +6,9 @@ var markerp = null;
 var radius = '0';
 var myloc = null;
 
-
+$(document).ready(function() {
+    $('.datepicker').datepicker();
+});
 
 
 $(document).on("submit","#pform",function(event)
@@ -35,7 +37,7 @@ $(document).on("submit","#pform",function(event)
             	}
             	else
                 	$("#profilebox").html(data.html);
-
+                $('.datepicker').datepicker();
                 return false;
 
             },
@@ -113,6 +115,8 @@ function initialize()
 		}
 		var item = response[i];
 		myloc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+		document.getElementById('id_lat_s').value = myloc.lat().toFixed(5);
+  		document.getElementById('id_lon_s').value = myloc.lng().toFixed(5);
     	map.fitBounds(bounds);
 	});
 
