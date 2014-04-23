@@ -81,6 +81,10 @@ def talk(request):
 	me = Person.objects.get(netid=currentNetid)
 	friends = me.friends.all()
 	return render(request, 'talk.html', {'friend_list':friends})
+	
+@login_required
+def settings(request):
+	return render(request, 'settings.html')
 
 @login_required
 def get_marks(request):
