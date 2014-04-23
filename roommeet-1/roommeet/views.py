@@ -157,17 +157,6 @@ def remove_person(request):
 	p1 = Person.objects.get(netid=remNetid)
 	me.friends.remove(p1)
 	friends = me.friends.all()
-<<<<<<< HEAD
-	if (rtype == 'talk'):
-		t = get_template('tablefill.html')
-		html = t.render(Context({'friend_list':friends}))
-		r = {'html':html}
-	else:
-		t = get_template('buttonfill.html')
-		html = t.render(Context({'person':p1, 'add':True, 'isSelf':False}))
-		r = {'html':html}
-=======
-
 	t = get_template('tablefill.html')
 	table = t.render(Context({'friend_list':friends}))
 	r = {'table':table}
@@ -175,6 +164,5 @@ def remove_person(request):
 	t = get_template('buttonfill.html')
 	html = t.render(Context({'person':p1, 'add':True}))
 	r['html'] = html
->>>>>>> ltolias
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
