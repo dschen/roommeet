@@ -135,7 +135,7 @@ def meet_person(request):
 		p1 = Person.objects.get(netid=addNetid)
 		me.friends.add(p1)
 		t = get_template('buttonfill.html')
-		html = t.render(Context({'person':p1, 'add':False}, 'isSelf':False))
+		html = t.render(Context({'person':p1, 'add':False, 'isSelf':False}))
 
 	r['html'] = html
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
