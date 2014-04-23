@@ -64,6 +64,20 @@ $(document).on("click","#profile_toggle",function(e)
 	return false;
 }); 
 
+$(document).on("click","#talk-table",function(event)
+{
+    event.stopPropagation();
+    var $target = $(event.target);
+
+    if ( $target.closest("td").attr("colspan") > 1 ) 
+    {
+    } 
+    else {
+        $target.closest("tr").next().find("p").slideToggle();
+    }                    
+});
+
+$("tr[class='c']").find("p").hide();
 
 
 $(document).on("click","#close_profile",function(e)
@@ -75,6 +89,35 @@ $(document).on("click","#close_profile",function(e)
 	$("#map_canvas").animate({left:"0px"});
 	return false;
 }); 
+
+$(document).on("click","#talk_toggle",function(e)
+{
+	if ($("#talk-box").css('right') == '-500px')
+	{
+		document.getElementById("meet_nav").className = "";
+		document.getElementById("talk_nav").className = "active";
+		$("#talk-box").animate({right:"10px"});
+	}
+	else
+	{
+		$("#talk-box").animate({right:"-500px"});
+		document.getElementById("meet_nav").className = "active";
+		document.getElementById("talk_nav").className = "";
+	}
+	return false;
+}); 
+$(document).on("click","#meet_toggle",function(e)
+{
+	$("#talk-box").animate({right:"-500px"});
+	document.getElementById("meet_nav").className = "active";
+	document.getElementById("talk_nav").className = "";
+	showMarkers();
+	profile = false;
+	markerp.setMap(null);
+	$("#map_canvas").animate({left:"0px"});
+	return false;
+}); 
+
 
 
 function initialize()
@@ -205,6 +248,29 @@ function addEventHandler(elem,eventType,handler) {
 		elem.attachEvent ('on'+eventType,handler); 
 }
 
+
+function removeList(nid)
+{
+  dict = {'type':'talk', 'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+  $.post('/remove_person/', dict, function(data)
+  {
+    document.getElementById("friendList").innerHTML=data.table;
+    for (var i = 0; i < markers.length; i++)
+	{
+		if (markers[i].title == nid)
+		{
+			markers[i].html = data.html;
+			infowindow.setContent(markers[i].html);
+			break;
+		}
+	}
+
+
+
+    $("tr[class='c']").find("p").hide();
+  });
+
+}
 function setRadius(evt) 
 {
 	if (!evt.target)
@@ -270,6 +336,8 @@ function meetPerson(nid)
 					break;
 				}
 			}
+			document.getElementById("friendList").innerHTML=response.table;
+			$("tr[class='c']").find("p").hide();
 		}
 	});
 }
@@ -289,6 +357,8 @@ function removePerson(nid)
 				break;
 			}
 		}
+		document.getElementById("friendList").innerHTML=response.table;
+		$("tr[class='c']").find("p").hide();
 
 	});
 }
