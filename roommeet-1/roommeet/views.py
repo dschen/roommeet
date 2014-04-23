@@ -72,7 +72,8 @@ def meet(request):
 
 	else:
 		pf = ProfileForm(initial=model_to_dict(me))
-	return render(request, 'meet.html', {'form': pf})
+	friends = me.friends.all()
+	return render(request, 'meet.html', {'form': pf, 'friend_list':friends})
 
 
 @login_required
@@ -138,6 +139,10 @@ def meet_person(request):
 		html = t.render(Context({'person':p1, 'add':False, 'isSelf':False}))
 
 	r['html'] = html
+	t = get_template('tablefill.html')
+	friends = me.friends.all()
+	table = t.render(Context({'friend_list':friends}))
+	r['table'] = table
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
 @login_required
@@ -148,12 +153,11 @@ def remove_person(request):
 	if request.POST:
 		if 'netid' in request.POST:
 			remNetid = request.POST['netid']
-		if 'type' in request.POST:
-			rtype = request.POST['type']
 	me = Person.objects.get(netid=currentNetid)
 	p1 = Person.objects.get(netid=remNetid)
 	me.friends.remove(p1)
 	friends = me.friends.all()
+<<<<<<< HEAD
 	if (rtype == 'talk'):
 		t = get_template('tablefill.html')
 		html = t.render(Context({'friend_list':friends}))
@@ -162,5 +166,15 @@ def remove_person(request):
 		t = get_template('buttonfill.html')
 		html = t.render(Context({'person':p1, 'add':True, 'isSelf':False}))
 		r = {'html':html}
+=======
+
+	t = get_template('tablefill.html')
+	table = t.render(Context({'friend_list':friends}))
+	r = {'table':table}
+
+	t = get_template('buttonfill.html')
+	html = t.render(Context({'person':p1, 'add':True}))
+	r['html'] = html
+>>>>>>> ltolias
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
