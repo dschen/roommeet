@@ -74,70 +74,6 @@ def meet(request):
 		pf = ProfileForm(initial=model_to_dict(me))
 	return render(request, 'meet.html', {'form': pf})
 
-@login_required
-def profile(request):
-	currentNetid = request.user.username
-	if request.method == 'POST':
-		pf = ProfileForm(request.POST)
-		if pf.is_valid():
-			cd = pf.cleaned_data
-			p = Person.objects.filter(netid=currentNetid)
-			if (p):
-				p1 = p[0];
-				p1.netid = currentNetid
-				p1.first_name = cd['first_name']
-				p1.last_name = cd['last_name']
-				p1.lat = cd['lat_s']
-				p1.lon = cd['lon_s']
-				p1.company = cd['company']
-				p1.year = (int)(cd['cyear'])
-				p1.save();
-			else:
-				p1 = Person(netid=currentNetid, first_name=['first_name'], 
-					last_name=cd['last_name'], lat=cd['lat_s'], 
-					lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
-				p1.save();
-			return HttpResponseRedirect('/meet/')
-		else:
-			pf.errors['lat_s'] = pf.error_class()
-	else:
-		pf = ProfileForm()
-
-	return render(request, 'profile.html', {'form': pf})
-
-
-
-
-	# currentNetid = request.user.username
-	# if request.method == 'POST':
-	# 	pf = ProfileForm(request.POST)
-	# 	if pf.is_valid():
-	# 		cd = pf.cleaned_data
-	# 		p = Person.objects.filter(netid=currentNetid)
-	# 		if (p):
-	# 			p1 = p[0];
-	# 			p1.netid = currentNetid
-	# 			p1.first_name = cd['first_name']
-	# 			p1.last_name = cd['last_name']
-	# 			p1.lat = cd['lat_s']
-	# 			p1.lon = cd['lon_s']
-	# 			p1.company = cd['company']
-	# 			p1.year = (int)(cd['cyear'])
-	# 			p1.save();
-	# 		else:
-	# 			p1 = Person(netid=currentNetid, first_name=['first_name'], 
-	# 				last_name=cd['last_name'], lat=cd['lat_s'], 
-	# 				lon=cd['lon_s'], company=cd['company'], year=cd['cyear'])
-	# 			p1.save();
-	# 		return HttpResponseRedirect('/meet/')
-	# 	else:
-	# 		pf.errors['lat_s'] = pf.error_class()
-	# 		t = get_template('pformfill.html')
-	# 		html = t.render(Context({'form': pf}))
-	# 		return HttpResponse(json.dumps(html), mimetype='application/json; charset=UTF-8')
-	# else:
-	# 	pf = ProfileForm()
-	# return render(request, 'profile.html', {'form': pf})
 
 @login_required
 def talk(request):
@@ -173,15 +109,8 @@ def get_marks(request):
 		html = t.render(Context({'person':p1, 'add':f, 'isSelf':isSelf}))
 		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'netid':p1.netid, 'html':html})
 	locs.append({'lat':str(me.lat), 'lon':str(me.lon),})
-	#locs.append({'lat':str(me.lat), 'lon':str(me.lon)})
 	return HttpResponse(json.dumps(locs), mimetype='application/json; charset=UTF-8')
-	#form = LatLonForm(request.POST)
-	#if form.is_valid():
-	#	cd = form.cleaned_data
-	#	lat = cd['lat']
-	#	lon = cd['lon']
 
-	#return HttpResponse('OK', mimetype='text/plain; charset=UTF-8')
 @login_required
 def meet_person(request):
 	currentNetid = request.user.username
