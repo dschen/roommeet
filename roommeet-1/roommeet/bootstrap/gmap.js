@@ -352,6 +352,7 @@ function genderFilter(evt)
 	gender = cgen;
 	if (gender = null)
 		dict = {csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		
 	else
 		dict = {'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
