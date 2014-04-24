@@ -27,19 +27,48 @@
 {% block precontainter %}
 
 
-<div class="navbar navbar-inverse navbar-fixed-bottom" id="topnavbar">
+<div class="navbar navbar-inverse navbar-fixed-bottom" id="bottomnavbar" >
   <div class="container-fluid">
-    <div class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li><a>Select Search Radius: </a></li>
-        <li><a id="5-radius"> 5 miles </a> </li>
-        <li><a id="10-radius"> 10 miles </a> </li>
-        <li><a id="20-radius"> 20 miles </a> </li>
-        <li><a id="50-radius"> 50 miles </a> </li>
-        <li><a id="no-radius"> No filter </a> </li>
-        <li><a>Filter By Gender: </a></li>
-        <li><a id="gen_male"> Male </a></li>
-        <li><a id="gen_female"> Female </a></li>
+    <div class="navbar-header">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class='dropdown-toggle' data-toggle='dropdown'>
+          Filter by Radius 
+          <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#" id="5-radius"> 5 miles </a> </li>
+            <li><a href="#" id="10-radius"> 10 miles </a> </li>
+            <li><a href="#" id="20-radius"> 20 miles </a> </li>
+            <li><a href="#" id="50-radius"> 50 miles </a> </li>
+            <li><a href="#" id="no-radius"> World </a> </li>
+          </ul>
+
+          </li>
+        <li class='dropdown'>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Filter by Gender 
+          <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a id="gen_male"> Male </a></li>
+            <li><a id="gen_female"> Female </a></li>
+            <li><a id="gen_either"> Either </a></li>
+          </ul>
+        </li>
+
+        <li class='dropdown'>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Filter by Class Year 
+          <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a id="cyear_17"> 2017 </a></li>
+            <li><a id="cyear_16"> 2016 </a></li>
+            <li><a id="cyear_15"> 2015 </a></li>
+            <li><a id="cyear_14"> 2014 </a></li>
+            <li><a id="cyear_none"> All </a></li>
+          
+          </ul>
+        </li>
+
 
       </ul>
     </div><!--/.nav-collapse -->
@@ -114,6 +143,8 @@ background-color: rgba(135, 135, 235, 0.80);
 
   
 }
+
+
 .panel-title {
     font-size: 100%;
 }

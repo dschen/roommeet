@@ -19,7 +19,7 @@
         Contact: 
         <a href="mailto:{{ person.netid }}@princeton.edu?Subject=RoomMeet%20Hello"> {{ person.netid }}@princeton.edu </a>
         <br>
-        Desired: roomate</p>
+        Desired: {{ person.desired }}</p>
         </td>
         <td style="border-bottom: initial;"><p><br>
         <button type="submit" style:"right:10px; z-index:4;" class="btn btn-sm btn-danger" id="{{ person.netid }}-remove" onclick="removeList('{{ person.netid }}')"> remove </button> </p>
