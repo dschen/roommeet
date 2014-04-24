@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+
+{% block lnavitems %} 
+{# active is initial, href = url, >title</a = title #}
+<li><a href="/meet/">Meet</a></li>
+<li><a href="/talk/">Talk</a></li>
+{% endblock %}
+
+
+
+{% block mainpage %}
+<div class="row-fluid">
+    <div class="col-md-4">
+        <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+                <li class="nav-header">Please click on the map where you will be working</li> <br> <br>
+                <form action="/user/" method="post">{% csrf_token %}
+                    <label class=​"col-sm-2 control-label">​First Name​:</label>​
+                    <div class="col-sm-13">
+                        <input type="text" name="firstname" class="form-control">
+                    </div>
+                    <br>
+                    <label class=​"col-sm-2 control-label">​Last Name:​</label>​
+                    <div class="col-sm-13">
+                        <input type="text" name="lastname" class="form-control">
+                    </div>
+                    <br>
+                    <label class=​"col-sm-2 control-label">​netid:​</label>​
+                    <div class="col-sm-13">
+                        <input type="text" name="netid" class="form-control">
+                    </div>
+                
+                    <input type="hidden" id="lat-s" name="lat-s" size="1"> 
+                    <input type="hidden" id="lon-s" name="lon-s" size="1"> 
+                    <div class="form-actions">
+                    <br>
+                        <button type="submit" class="btn btn-primary" value="Save" name="_save"> Save Changes </button>
+                    <br><br>
+                        <button type="submit" class="btn" value="Cancel" name="_cancel"> Cancel </button>
+                    </div>
+                </form>
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+    	<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+        <div id="map_canvas"></div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block scriptext %}
+
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+<script src="{{STATIC_URL}}/gmap_p.js"></script>
+
+
+{% endblock %}

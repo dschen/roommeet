@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load avatar_tags %}
+{% load pagination_tags %}
+{% load truncchar_tag %}
+
+{% block mainpage %}
+
+<div class="container">
+  <h1>
+  <div class="well">  {% trans "Talk Inbox" %} </div></h1>
+  <div style="clear:both;"></div>
+  <div class="container">
+  <div class="row marketing">
+      
+      <div class="col-xs-8">Send Messages!</div>
+      <div class="col-xs-4">
+       <form action="{% url "messages_search" %}" method="GET">
+          <label class="inline" for="q">{% if keywords %}{{ keywords }}{% else %}{% trans 'Search Messages' %}{% endif %}</label>
+          <input type="text" title="{% trans 'Search Messages' %}" id="q" name="q" class="message-search forum-search"/>
+        </form>
+      </div>
+      
+        <a class="btn btn-s btn-success" href="{% url "messages_compose" %}" rel='facebox'>
+        {% trans "Create message" %}
+        </a><br><br>
+
+        <form action="{% url "messages_batch_update" %}" method="post">
+        {% csrf_token %}
+        {% trans "show" %}:
+        {% if only_unread or only_read %}<a href="{% url "messages_inbox" %}">{% trans "all" %}</a>{% else %}{% trans "all" %}{% endif %} ·
+        {% if not only_read %}<a href="{% url "messages_inbox" %}?only_read=1">{% trans "read" %}</a>{% else %}{% trans "read" %}{% endif %} ·
+        {% if not only_unread %}<a href="{% url "messages_inbox" %}?only_unread=1">{% trans "unread" %}</a>{% else %}{% trans "unread" %}{% endif %}
+      </div>
+      
+
+      <br>
+
+      <div style="clear:both;"></div>
+
+      <div style="clear: both;"></div>
+      
+      <table class="table">
+      <thead>
+        <h4>
+        <th>
+        {% trans "Sender" %}
+        </th>
+        <th>
+        {% trans "Date" %}
+        </th>
+        <th>
+        {% trans "Subject" %}
+        </th>
+        <th>
+        {% trans "Body" %}
+        </th>
+        <th>
+        {% trans "Select" %}
+        </th>
+        </h4>
+      </thead>
+
+
+      <tbody>
+      <div style="clear: both;"></div>
+
+      {% for message in thread_list %}
+      <tr>
+        <div class="message {% if message.new %}unread{% endif %}">
+
+          <td>
+          <!--<a href="{{ message.thread.latest_msg.sender.get_absolute_url }}">{% avatar message.thread.latest_msg.sender 30 %}</a>
+          -->
+          <a href="{{ message.thread.latest_msg.sender.get_absolute_url }}">{{ message.thread.latest_msg.sender }}</a>
+          </td>
+        
+          <td>
+          <span class="date">{{ message.thread.latest_msg.sent_at|date:_("DATETIME_FORMAT") }}</span>
+          </td>
+
+          <td>
+          <a href="{{message.thread.get_absolute_url }}">{% if message.new %}<b>{% endif %}{{ message.thread.subject|truncchar:45 }}{% if message.new %}</b>{% endif %}</a>
+          </td>
+        
+
+          <td>
+          <span class="message-tease">{{message.thread.latest_msg.body|truncatewords:8}}</span>
+          </td>
+
+          <td>
+          <input name="batchupdateids" type="checkbox" value="{{message.thread.pk}}" />
+          </td>
+
+          {% if message.replied %}{% endif %}
+          {% if message.new %}{% endif %}
+          <div style="clear: both;"></div>  
+          {% empty %}
+          
+          <td>
+          <div class="message unread">
+            <b class="no-message">{% trans "No messages" %}</b>
+          </div>
+          </td>
+        </tr>
+        {% endfor %}
+
+      <div class="messages-footer">{% paginate %}</div>
+      </table>
+
+    <div class="col-xs-10"></div>
+    <div class="col-xs-2">
+    
+      <div class="inbox-action-box">
+        <button type="submit" name="action" value="read" class="btn btn-xs btn-danger">{% trans "mark as read" %}</button>
+        <button type="submit" name="action" value="delete" class="btn btn-xs btn-danger">{% trans "delete messages" %}</button>
+        <div style="clear: both;"></div>
+      </div>
+    </form>
+    <br><br>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}

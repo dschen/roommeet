@@ -17,6 +17,7 @@ TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
 )
 
+
 STATICFILES_DIRS = (
     os.path.join(os.path.dirname(__file__), 'bootstrap').replace('\\','/'),
 )
@@ -47,7 +48,16 @@ INSTALLED_APPS = (
     'psycopg2',
     'people',
     'django.contrib.contenttypes',
+    #'django_facebook',
+    
 )
+
+#FACEBOOK
+FACEBOOK_APP_ID = 1396823877262310
+FACEBOOK_APP_SECRET = 'b97eb1803919d59de8e6c6a99493fa9a'
+
+#AUTH_USER_MODEL = 'django_facebook.FacebookProfileModel'
+#AUTH_PROFILE_MODULE = 'django_cas.models.CustomProfile'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -57,11 +67,13 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_cas.middleware.CASMiddleware',
+    #'pagination.middleware.PaginationMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'django_cas.backends.CASBackend',
+    'django_facebook.auth_backends.FacebookBackend',
 )
 
 CAS_SERVER_URL = 'https://fed.princeton.edu/cas/'

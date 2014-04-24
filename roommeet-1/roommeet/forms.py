@@ -13,6 +13,7 @@ class ProfileForm(forms.Form):
 	company = forms.CharField(max_length=100)
 	start = forms.DateField(widget=DateInput(), input_formats=('%m/%d/%Y',))
 	end = forms.DateField(widget=DateInput(),  input_formats=('%m/%d/%Y',))
-	desired = forms.CharField(max_length=100)
+	choices = (('RM','Roommate'), ('FR','Friends'),)
+	desired = forms.ChoiceField(choices=choices)
 	lat_s = forms.DecimalField(max_digits=13, decimal_places=10, widget=forms.HiddenInput)
 	lon_s = forms.DecimalField(max_digits=13, decimal_places=10, widget=forms.HiddenInput)

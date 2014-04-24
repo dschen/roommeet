@@ -172,6 +172,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Options <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 {% block rnavdropdown %}
+
                 <li><a id="profile_toggle">Profile</a></li>
                 <li><a href="/settings/">Settings</a></li>
                 <li><a href="/accounts/logout/">Logout</a></li>
@@ -186,13 +187,7 @@
     <div class="container-fluid">
       <!-- Main component for a primary marketing message or call to action -->
       {% block mainpage %}
-      <div class="jumbotron">
-        <h1>RoomMeet</h1>
-        <p>I love bad bitches thats my fucking problem.</p>
-        <p>
-          <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
-        </p>
-      </div>
+
       {% endblock %}
 
     </div> <!-- /container -->
@@ -203,6 +198,31 @@
     <!-- Placed at the end of the document so the pages load faster -->
     
     <script src="{{STATIC_URL}}/js/bootstrap.min.js"></script>
+    <script>
+function changeScreen()
+{
+var xmlhttp;
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    prof = xmlhttp.response;
+    document.getElementById("hello").innerHTML="<div class='col-md-8'><div id='map_canvas'></div></div><div class='col-md-4'>" + prof + "</div>";
+    }
+  }
+xmlhttp.open("GET","http://localhost:8000/profile",true);
+xmlhttp.send();
+}
+</script>
+
 
     {% block scriptext %}
     {% endblock %}
