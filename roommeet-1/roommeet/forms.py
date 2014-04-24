@@ -1,12 +1,18 @@
 from django import forms
+from django.forms import ModelForm
+from django.contrib.admin import widgets
+from people.models import Person
+
+from functools import partial
+DateInput = partial(forms.DateInput, {'class': 'datepicker'}, format='%m/%d/%Y')
 
 class ProfileForm(forms.Form):
 	first_name = forms.CharField(max_length=50)
 	last_name = forms.CharField(max_length=50)
-	cyear = forms.RegexField(regex=r'\d\d\d\d', label='Year')
+	year = forms.RegexField(regex=r'\d\d\d\d', label='Year')
 	company = forms.CharField(max_length=100)
-	start = forms.DateField()
-	end = forms.DateField()
+	start = forms.DateField(widget=DateInput(), input_formats=('%m/%d/%Y',))
+	end = forms.DateField(widget=DateInput(),  input_formats=('%m/%d/%Y',))
 	desired = forms.CharField(max_length=100)
 	lat_s = forms.DecimalField(max_digits=13, decimal_places=10, widget=forms.HiddenInput)
 	lon_s = forms.DecimalField(max_digits=13, decimal_places=10, widget=forms.HiddenInput)

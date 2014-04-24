@@ -4,34 +4,28 @@
 <style>
     html, body {
         overflow:hidden;
+        background-color:rgb(230,230,230);
     }
 </style>
+
+
+
+<link href="{{STATIC_URL}}/datepicker/css/datepicker.css" rel="stylesheet" type="text/css"/>  
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
 {% endblock %}
 
 
 {% block lnavitems %} 
-<li class="active"><a href="/meet/">Meet</a></li>
-<li><a href="/talk/">Talk</a></li>
+<li class="active" id="meet_nav"><a  id="meet_toggle">Meet</a></li>
+<li id="talk_nav"><a id="talk_toggle">Talk</a></li>
 {% endblock %}
 
 
 
 {% block precontainter %}
-{% csrf_token %} 
-<input id="pac-input" class="controls" type="text" placeholder="Search Box">
-<div id="map_canvas"></div>
-<style>
-.pos_fixed
-{
-position:fixed;
-bottom:30px;
-left:60px;
-right:60px;
-z-index:10;
-color: #000000;
-background-color: rgba(235, 235, 235, 0.80);
-}
-</style>
+
 
 <div class="navbar navbar-inverse navbar-fixed-bottom" id="topnavbar">
   <div class="container-fluid">
@@ -50,6 +44,111 @@ background-color: rgba(235, 235, 235, 0.80);
 </div>
 
 
+<div>
+{% csrf_token %} 
+<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+<div id="map_canvas"></div>
+<style>
+.pos_fixed
+{
+position:fixed;
+bottom:30px;
+left:60px;
+right:60px;
+z-index:10;
+color: #000000;
+background-color: rgba(135, 135, 235, 0.80);
+}
+#map_canvas
+{
+    position:fixed;
+    z-index:2;
+
+}   
+#profilebox
+{
+    position:fixed;
+    left:-500px;
+    top:70px;
+    z-index:1;
+    overflow:auto;
+    height: -o-calc(100%- 130px); /* opera */
+    height: -webkit-calc(100% - 130px); /* google, safari */
+    height: -moz-calc(100% - 130px); /* firefox */
+}
+#topnavbar
+{
+    z-index: 10;
+}
+
+</style>
+
+<style>
+.talkbox {
+  color:#c2c2c2;
+  position:fixed;
+  overflow:auto;
+  right:-500px;
+  top:65px;
+  height: -o-calc(100%- 130px); /* opera */
+  height: -webkit-calc(100% - 130px); /* google, safari */
+  height: -moz-calc(100% - 130px); /* firefox */
+  
+  margin: 0 auto;
+  width: 500px;
+  padding: 20px;
+  text-align: left;
+  /* border-radius */
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  /* box-shadow */
+  -webkit-box-shadow: rgba(0,0,0,0.2) 0px 1px 3px;
+  -moz-box-shadow: rgba(0,0,0,0.2) 0px 1px 3px;
+  box-shadow: rgba(0,0,0,0.2) 0px 1px 3px;
+  z-index:3;
+  background: url('{{STATIC_URL}}/datepicker/img/darkdenim3.png') repeat 0 0 #555;
+}
+.panel-title {
+    font-size: 100%;
+}
+</style>
+
+<div id="profilebox">
+
+    {% include 'profile.html' %}
+</div>
+<style type="text/css">
+    table{ width: 75%; }
+
+
+</style>
+
+<div id="talk-box" class="talkbox">
+<table id="talk-table" class="table col-md-10"  >
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Year
+            </th>
+            <th>
+                Dates
+            </th>
+            <th>
+                Distance
+            </th>
+        </tr>
+    </thead>
+    <tbody id="friendList">
+        {% include "tablefill.html" %}    
+    </tbody>
+    
+</table>
+
+</div>
 
 
 {% endblock %}
