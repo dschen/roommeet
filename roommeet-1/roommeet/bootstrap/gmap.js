@@ -6,6 +6,7 @@ var markerp = null;
 var radius = '1000000000';
 var gender = 'either';
 var myloc = null;
+var year = '0'
 
 $(document).ready(function() {
 	$('.datepicker').datepicker();
@@ -167,7 +168,7 @@ function initialize()
 
 	map=new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 
-	$.post('/get_marks/',{'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value}, function(data)
+	$.post('/get_marks/',{'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value}, function(data)
 	{
 		var response = data
 		var count = response.length;
@@ -208,14 +209,32 @@ function initialize()
 	rno.addEventListener('click', setRadius, false);
 
 	var m = document.getElementById('gen_male');
-	m.gender = 'M';
+	m.gender = 'Male';
 	m.addEventListener('click', genderFilter, false);
 	var f = document.getElementById('gen_female');
-	f.gender = 'F';
+	f.gender = 'Female';
 	f.addEventListener('click', genderFilter, false);
 	var e = document.getElementById('gen_either');
 	e.gender = 'either';
 	e.addEventListener('click', genderFilter, false);
+
+	var cy0 = document.getElementById('cyear_none');
+	cy0.year = '0';
+	cy0.addEventListener('click', yearFilter, false);
+	var cy14 = document.getElementById('cyear_14');
+	cy14.year = '2014';
+	cy14.addEventListener('click', yearFilter, false);
+	var cy15 = document.getElementById('cyear_15');
+	cy15.year = '2015';
+	cy15.addEventListener('click', yearFilter, false);
+	var cy16 = document.getElementById('cyear_16');
+	cy16.year = '2016';
+	cy16.addEventListener('click', yearFilter, false);
+	var cy17 = document.getElementById('cyear_17');
+	cy17.year = '2017';
+	cy17.addEventListener('click', yearFilter, false);
+	
+	
 
 
 	// Create the search box and link it to the UI element.
@@ -327,9 +346,9 @@ function setRadius(evt)
 		cradius = evt.target.radius;
 	radius = cradius;
 	if (radius == '0')
-		dict = {'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		dict = {'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	else
-		dict = {'radius':radius, 'gender':gender,csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		dict = {'year':year, 'radius':radius, 'gender':gender,csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	$.post('/get_marks/', dict, function(data)
 	{
@@ -353,7 +372,7 @@ function setRadius(evt)
 function genderFilter(evt)
 {
 	gender = evt.target.gender;
-	dict = {'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	dict = {'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	$.post('/get_marks/', dict, function(data)
 	{
@@ -373,6 +392,32 @@ function genderFilter(evt)
 			map.setZoom(12);
 	});
 }
+
+
+function yearFilter(evt)
+{
+	year = evt.target.year;
+	dict = {'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	deleteMarkers();
+	$.post('/get_marks/', dict, function(data)
+	{
+		var response = data
+		var count = response.length;
+		var bounds = new google.maps.LatLngBounds();
+		for(var i = 0; i < count-1; i++) 
+		{
+			var item = response[i];
+			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+			addMarker(loc, item.html, item.netid);
+			bounds.extend(loc);
+
+		}
+		map.fitBounds(bounds);
+		if (count == 1)
+			map.setZoom(12);
+	});
+}
+
 
 function addMarker(location, html, netid) {
 	var marker = new google.maps.Marker({

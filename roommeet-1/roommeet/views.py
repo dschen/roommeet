@@ -97,17 +97,25 @@ def get_marks(request):
 			print "new radius: ", radius
 		if 'gender' in request.POST:
 			gender = str(request.POST['gender'])
+		if 'year' in request.POST:
+			year = int(request.POST['year'])
+
 		if radius == 0:
 			radius = 100000000000;
-
 	me = Person.objects.get(netid=currentNetid)
 	lrad = math.cos(math.radians(float(me.lat))) * 111.325 * 0.621371;
 	lonrad = radius / lrad;
 	radius = radius / 69.172;
-	if gender == 'either':
+
+	print gender, year
+	if gender == 'either' and year == 0:
 		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad)
-	else :
+	elif gender == 'either' and year != 0:
+		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad).filter(year=year)
+	elif gender != 'either' and year == 0:
 		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad).filter(gender=gender)
+	else :
+		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad).filter(gender=gender).filter(year=year)
 	print radius
 	locs = []
 	for p1 in p:
