@@ -49,6 +49,7 @@ def meet(request):
 				p1.end = cd['end']
 				p1.company = cd['company']
 				p1.year = (int)(cd['year'])
+				p1.desired = cd['desired']
 				p1.save()
 			else:
 				p1 = Person(netid=currentNetid, first_name=['first_name'], 
