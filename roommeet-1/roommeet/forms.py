@@ -11,7 +11,7 @@ class ProfileForm(forms.Form):
 	last_name = forms.CharField(max_length=50)
 	gchoices = (('',''),('Male','Male'),('Female','Female'),('Decline','Decline to State'),)
 	gender = forms.ChoiceField(choices=gchoices)
-	year = forms.RegexField(regex=r'\d\d\d\d', label='Class Year')
+	year = forms.RegexField(regex=r'201[4-8]', label='Class Year')
 	company = forms.CharField(max_length=100)
 	start = forms.DateField(widget=DateInput(), input_formats=('%m/%d/%Y',))
 	end = forms.DateField(widget=DateInput(),  input_formats=('%m/%d/%Y',))

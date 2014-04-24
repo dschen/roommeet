@@ -7,10 +7,10 @@
         <p>{{ person.year }}</p>      
     </td>
     <td>
-        <p>June 3 to August 20</p>
+        <p>{{ person.start.month }}/{{person.start.day}}/{{person.start.year}} - {{ person.end.month }}/{{person.end.day}}/{{person.end.year}}</p>
     </td>
     <td>
-        <p>10 miles</p>  
+        <p id="talk_dist"> {{person.lat}}</p>  
     </td>
     </tr>
     <tr  class="c" >
