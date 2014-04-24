@@ -83,10 +83,7 @@ def talk(request):
 	me = Person.objects.get(netid=currentNetid)
 	friends = me.friends.all()
 	return render(request, 'talk.html', {'friend_list':friends})
-	
-@login_required
-def settings(request):
-	return render(request, 'settings.html')
+
 
 @login_required
 def get_marks(request):
@@ -167,37 +164,5 @@ def remove_person(request):
 	r['html'] = html
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
-
-
-@login_required
-def user(request):
-	currentNetid = request.user.username
-	if request.POST:
-		form = ProfileForm(request.POST)
-		if form.is_valid():
-			cd = form.cleaned_data
-			if '_save' in request.POST:
-				p = Person.objects.filter(netid=currentNetid)
-				if (p):
-					p1 = p[0];
-					p1.netid = currentNetid
-					p1.first_name = cd['first_name']
-					p1.last_name = cd['last_name']
-					p1.lat = request.POST['lat-s']
-					p1.lon = request.POST['lon-s']
-					p1.company = cd['company']
-					p1.year = cd['cyear']
-					p1.save();
-				else:
-					p1 = Person(netid=currentNetid, first_name=['first_name'], 
-						last_name=cd['last_name'], lat=request.POST['lat-s'], 
-						lon=request.POST['lon-s'], company=cd['company'], year=cd['year'])
-					p1.save();
-				return HttpResponseRedirect('/')
-			elif '_cancel' in request.POST:
-				return HttpResponseRedirect('/')
-		else:
-			form = ContactForm()
-			
 
 

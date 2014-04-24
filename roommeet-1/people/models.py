@@ -12,6 +12,7 @@ class Person(models.Model):
 	start = models.DateField(blank=True, null=True)
 	end = models.DateField(blank=True, null=True)
 	desired = models.CharField(max_length=100, blank=True)
+	gender = models.CharField(max_length=10, blank=True)
 
 	def __unicode__(self):
 		return u'%s %s' % (self.first_name,self.last_name)

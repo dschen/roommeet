@@ -169,6 +169,10 @@ function initialize()
 	rno.radius = '0';
 	rno.addEventListener('click', setRadius, false);
 
+	var m = document.getElementById('gen_male');
+	m.gender = 'male';
+	m.addEventListener('click', genderFilter, false);
+
 
 	// Create the search box and link it to the UI element.
 
@@ -302,6 +306,36 @@ function setRadius(evt)
 	});
 }
 
+function genderFilter(evt)
+{
+	if (!evt.target)
+		cgen = evt;
+	else
+		cgen = evt.target.gender;
+	gender = cgen;
+	if (gender = null)
+		dict = {csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	else
+		dict = {'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	deleteMarkers();
+	$.post('/get_marks/', dict, function(data)
+	{
+		var response = data
+		var count = response.length;
+		var bounds = new google.maps.LatLngBounds();
+		for(var i = 0; i < count-1; i++) 
+		{
+			var item = response[i];
+			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+			addMarker(loc, item.html, item.netid);
+			bounds.extend(loc);
+
+		}
+		map.fitBounds(bounds);
+		if (count == 1)
+			map.setZoom(12);
+	});
+}
 function addMarker(location, html, netid) {
 	var marker = new google.maps.Marker({
 		position: location,
