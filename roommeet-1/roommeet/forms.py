@@ -9,7 +9,7 @@ DateInput = partial(forms.DateInput, {'class': 'datepicker'}, format='%m/%d/%Y')
 class ProfileForm(forms.Form):
 	first_name = forms.CharField(max_length=50)
 	last_name = forms.CharField(max_length=50)
-	gchoices = (('',''),('Male','Male'),('Female','Female'),('','Decline to State'),)
+	gchoices = (('',''),('Male','Male'),('Female','Female'),('Decline','Decline to State'),)
 	gender = forms.ChoiceField(choices=gchoices)
 	year = forms.RegexField(regex=r'\d\d\d\d', label='Class Year')
 	company = forms.CharField(max_length=100)
