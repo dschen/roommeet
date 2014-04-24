@@ -92,15 +92,27 @@ def get_marks(request):
 	radius = 100000000000;
 	if request.POST:
 		if 'radius' in request.POST:
-			radius = int(request.POST['radius']);
-	
+			print "radius: ", radius
+			radius = int(request.POST['radius'])
+			print "new radius: ", radius
+		if 'gender' in request.POST:
+			gender = str(request.POST['gender'])
+		if radius == 0:
+			radius = 100000000000;
+
 	me = Person.objects.get(netid=currentNetid)
 	lrad = math.cos(math.radians(float(me.lat))) * 111.325 * 0.621371;
 	lonrad = radius / lrad;
 	radius = radius / 69.172;
-	p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad)
+	if gender == 'either':
+		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad)
+	else :
+		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad).filter(gender=gender)
+	print radius
 	locs = []
 	for p1 in p:
+		print p1.first_name,
+		print p1.gender
 		friend = "no"
 		f = True
                 isSelf = False

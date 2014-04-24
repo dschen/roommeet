@@ -3,7 +3,8 @@ myLatlng=new google.maps.LatLng(39.828127,-98.579404);
 var markers = [];
 var profile = false;
 var markerp = null;
-var radius = '0';
+var radius = '1000000000';
+var gender = 'either';
 var myloc = null;
 
 $(document).ready(function() {
@@ -166,7 +167,7 @@ function initialize()
 
 	map=new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 
-	$.post('/get_marks/',{csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value}, function(data)
+	$.post('/get_marks/',{'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value}, function(data)
 	{
 		var response = data
 		var count = response.length;
@@ -207,8 +208,14 @@ function initialize()
 	rno.addEventListener('click', setRadius, false);
 
 	var m = document.getElementById('gen_male');
-	m.gender = 'male';
+	m.gender = 'M';
 	m.addEventListener('click', genderFilter, false);
+	var f = document.getElementById('gen_female');
+	f.gender = 'F';
+	f.addEventListener('click', genderFilter, false);
+	var e = document.getElementById('gen_either');
+	e.gender = 'either';
+	e.addEventListener('click', genderFilter, false);
 
 
 	// Create the search box and link it to the UI element.
@@ -320,9 +327,9 @@ function setRadius(evt)
 		cradius = evt.target.radius;
 	radius = cradius;
 	if (radius == '0')
-		dict = {csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		dict = {'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	else
-		dict = {'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		dict = {'radius':radius, 'gender':gender,csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	$.post('/get_marks/', dict, function(data)
 	{
@@ -345,15 +352,8 @@ function setRadius(evt)
 
 function genderFilter(evt)
 {
-	if (!evt.target)
-		cgen = evt;
-	else
-		cgen = evt.target.gender;
-	gender = cgen;
-	if (gender = null)
-		dict = {csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
-	else
-		dict = {'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	gender = evt.target.gender;
+	dict = {'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	$.post('/get_marks/', dict, function(data)
 	{
@@ -373,6 +373,7 @@ function genderFilter(evt)
 			map.setZoom(12);
 	});
 }
+
 function addMarker(location, html, netid) {
 	var marker = new google.maps.Marker({
 		position: location,
