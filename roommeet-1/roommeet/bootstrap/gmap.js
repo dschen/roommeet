@@ -9,6 +9,7 @@ var myloc = null;
 $(document).ready(function() {
 	$('.datepicker').datepicker();
 	$("#profilebox").animate({left:"10px"});
+
 });
 
 

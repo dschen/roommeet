@@ -108,6 +108,8 @@ background-color: rgba(135, 135, 235, 0.80);
   box-shadow: rgba(0,0,0,0.2) 0px 1px 3px;
   z-index:3;
   background: url('{{STATIC_URL}}/datepicker/img/darkdenim3.png') repeat 0 0 #555;
+  opacity:.95;
+  
 }
 .panel-title {
     font-size: 100%;
@@ -119,13 +121,18 @@ background-color: rgba(135, 135, 235, 0.80);
     {% include 'profile.html' %}
 </div>
 <style type="text/css">
-    table{ width: 75%; }
+    table{ width: 75%;
+        
+     }
+     td {
+        border:hidden;
+     }
 
 
 </style>
 
 <div id="talk-box" class="talkbox">
-<table id="talk-table" class="table col-md-10"  >
+<table id="talk-table" class="table "   >
     <thead>
         <tr>
             <th>
