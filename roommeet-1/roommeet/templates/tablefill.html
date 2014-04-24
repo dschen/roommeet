@@ -1,16 +1,30 @@
 {% for person in friend_list %}
-<tr>
-    <td class="col-md-10">
-        {{ person.first_name }}  {{ person.last_name }} {{ person.year }}
+<tr >
+    <td>
+        <p>{{ person.first_name }}  {{ person.last_name }}</p> 
     </td>
     <td>
-        {{ person.company }}
+        <p>{{ person.year }}</p>      
     </td>
     <td>
+        <p>June 3 to August 20</p>
+    </td>
+    <td>
+        <p>10 miles</p>  
+    </td>
+    </tr>
+    <tr class="c" >
+    <td colspan="3"><p>
+        Company: {{ person.company }} <br>
+        Contact: 
         <a href="mailto:{{ person.netid }}@princeton.edu?Subject=RoomMeet%20Hello"> {{ person.netid }}@princeton.edu </a>
-    </td>
-    <td>
-        <button type="submit" class="btn btn-sm btn-danger" id="{{ person.netid }}-remove" onclick="removeList('{{ person.netid }}')"> remove </button> <br><br>
+        <br>
+        Desired: roomate</p>
+        </td>
+        <td><p><br>
+        <button type="submit" style:"right:10px; z-index:4;" class="btn btn-sm btn-danger" id="{{ person.netid }}-remove" onclick="removeList('{{ person.netid }}')"> remove </button> </p>
     </td>
 </tr>
 {% endfor %}
+
+
