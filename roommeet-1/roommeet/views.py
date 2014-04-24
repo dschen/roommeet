@@ -90,6 +90,8 @@ def talk(request):
 def get_marks(request):
 	currentNetid = request.user.username
 	radius = 100000000000;
+	gender = 'either'
+	year = 0
 	if request.POST:
 		if 'radius' in request.POST:
 			print "radius: ", radius
