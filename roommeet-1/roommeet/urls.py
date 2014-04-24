@@ -7,9 +7,7 @@ admin.autodiscover()
 #regex to view function mapping
 urlpatterns = patterns('roommeet.views',
     url(r'^$', 'meet'),
-    url(r'^profile/$', 'profile'),
     url(r'^meet/$', 'meet'),
-    url(r'^talk/$', 'talk'),
     url(r'^/$', 'talk'),
 	url(r'^get_marks/$', 'get_marks'),
     url(r'^meet_person/$', 'meet_person'),
