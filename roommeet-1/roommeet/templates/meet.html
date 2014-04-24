@@ -37,6 +37,9 @@
         <li><a id="20-radius"> 20 miles </a> </li>
         <li><a id="50-radius"> 50 miles </a> </li>
         <li><a id="no-radius"> No filter </a> </li>
+        <li><a>Filter By Gender: </a></li>
+        <li><a id="gen_male"> Male </a></li>
+        <li><a id="gen_female"> Female </a></li>
 
       </ul>
     </div><!--/.nav-collapse -->
@@ -108,6 +111,8 @@ background-color: rgba(135, 135, 235, 0.80);
   box-shadow: rgba(0,0,0,0.2) 0px 1px 3px;
   z-index:3;
   background: url('{{STATIC_URL}}/datepicker/img/darkdenim3.png') repeat 0 0 #555;
+
+  
 }
 .panel-title {
     font-size: 100%;
@@ -119,13 +124,21 @@ background-color: rgba(135, 135, 235, 0.80);
     {% include 'profile.html' %}
 </div>
 <style type="text/css">
-    table{ width: 75%; }
-
+    table{ width: 75%;
+        
+     }
+     td {
+        border:hidden;
+        background-color: rgba(10, 10, 10, 0.40);
+     }
+     th {
+         background-color: rgba(10, 10, 10, 0.40);
+     }
 
 </style>
 
 <div id="talk-box" class="talkbox">
-<table id="talk-table" class="table col-md-10"  >
+<table id="talk-table" class="table "   >
     <thead>
         <tr>
             <th>

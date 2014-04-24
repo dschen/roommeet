@@ -9,6 +9,8 @@ var myloc = null;
 $(document).ready(function() {
 	$('.datepicker').datepicker();
 	$("#profilebox").animate({left:"10px"});
+	$("#map_canvas").animate({left:"0px"});
+
 });
 
 
@@ -48,19 +50,18 @@ $(document).on("submit","#pform",function(event)
 
 $(document).on("click","#profile_toggle",function(e)
 {
-	clearMarkers();
-	profile = true;
-	if (markerp == null)
+	if ($("#map_canvas").css('left') == '0px' )
 	{
-		markerp = new google.maps.Marker(
-		{
-			position: myloc,
-			map: null
-		});
+		hideTalk();
+
+		showProfile();
 	}
-	markerp.setMap(map);
-	$("#map_canvas").animate({left:"300px"});
-	$("#profilebox").animate({left:"10px"});
+	else 
+	{
+		hideProfile();
+	}
+
+
 	return false;
 }); 
 
@@ -83,10 +84,7 @@ $("tr[class='c']").find("p").hide();
 $(document).on("click","#close_profile",function(e)
 {
 
-	showMarkers();
-	profile = false;
-	markerp.setMap(null);
-	$("#map_canvas").animate({left:"0px"});
+	hideProfile();
 	return false;
 }); 
 
@@ -94,27 +92,66 @@ $(document).on("click","#talk_toggle",function(e)
 {
 	if ($("#talk-box").css('right') == '-500px')
 	{
-		document.getElementById("meet_nav").className = "";
-		document.getElementById("talk_nav").className = "active";
-		$("#talk-box").animate({right:"10px"});
+		hideProfile();
+		showTalk();
 	}
 	else
 	{
-		$("#talk-box").animate({right:"-500px"});
-		document.getElementById("meet_nav").className = "active";
-		document.getElementById("talk_nav").className = "";
+		hideTalk();
 	}
 	return false;
 }); 
-$(document).on("click","#meet_toggle",function(e)
+
+function hideTalk()
 {
 	$("#talk-box").animate({right:"-500px"});
 	document.getElementById("meet_nav").className = "active";
 	document.getElementById("talk_nav").className = "";
+}
+
+function showTalk()
+{
+	document.getElementById("meet_nav").className = "";
+	document.getElementById("profile_nav").className = "";
+	document.getElementById("talk_nav").className = "active";
+	$("#talk-box").animate({right:"10px"});
+}
+
+function showProfile()
+{
+	document.getElementById("meet_nav").className = "";
+	document.getElementById("profile_nav").className = "active";
+	document.getElementById("talk_nav").className = "";
+	hideTalk();
+	clearMarkers();
+	profile = true;
+	if (markerp == null)
+	{
+		markerp = new google.maps.Marker(
+		{
+			position: myloc,
+			map: null
+		});
+	}
+	markerp.setMap(map);
+	$("#map_canvas").animate({left:"300px"});
+	$("#profilebox").animate({left:"10px"});
+}
+function hideProfile()
+{
+	document.getElementById("meet_nav").className = "active";
+	document.getElementById("profile_toggle").className = "";
 	showMarkers();
 	profile = false;
-	markerp.setMap(null);
+	if (markerp != null)
+		markerp.setMap(null);
 	$("#map_canvas").animate({left:"0px"});
+}
+
+$(document).on("click","#meet_toggle",function(e)
+{
+	hideTalk();
+	hideProfile();
 	return false;
 }); 
 
@@ -168,6 +205,10 @@ function initialize()
 	var rno = document.getElementById('no-radius');
 	rno.radius = '0';
 	rno.addEventListener('click', setRadius, false);
+
+	var m = document.getElementById('gen_male');
+	m.gender = 'male';
+	m.addEventListener('click', genderFilter, false);
 
 
 	// Create the search box and link it to the UI element.
@@ -302,6 +343,36 @@ function setRadius(evt)
 	});
 }
 
+function genderFilter(evt)
+{
+	if (!evt.target)
+		cgen = evt;
+	else
+		cgen = evt.target.gender;
+	gender = cgen;
+	if (gender = null)
+		dict = {csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	else
+		dict = {'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	deleteMarkers();
+	$.post('/get_marks/', dict, function(data)
+	{
+		var response = data
+		var count = response.length;
+		var bounds = new google.maps.LatLngBounds();
+		for(var i = 0; i < count-1; i++) 
+		{
+			var item = response[i];
+			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+			addMarker(loc, item.html, item.netid);
+			bounds.extend(loc);
+
+		}
+		map.fitBounds(bounds);
+		if (count == 1)
+			map.setZoom(12);
+	});
+}
 function addMarker(location, html, netid) {
 	var marker = new google.maps.Marker({
 		position: location,

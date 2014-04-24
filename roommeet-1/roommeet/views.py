@@ -49,6 +49,8 @@ def meet(request):
 				p1.end = cd['end']
 				p1.company = cd['company']
 				p1.year = (int)(cd['year'])
+				p1.desired = cd['desired']
+				p1.gender = cd['gender']
 				p1.save()
 			else:
 				p1 = Person(netid=currentNetid, first_name=['first_name'], 
@@ -83,6 +85,7 @@ def talk(request):
 	friends = me.friends.all()
 	return render(request, 'talk.html', {'friend_list':friends})
 
+
 @login_required
 def get_marks(request):
 	currentNetid = request.user.username
@@ -100,11 +103,14 @@ def get_marks(request):
 	for p1 in p:
 		friend = "no"
 		f = True
+                isSelf = False
+                if (p1.netid == currentNetid):
+                        isSelf = True
 		if (me.friends.filter(netid=p1.netid)):
 			friend = "yes"
 			f = False
 		t = get_template('buttonfill.html')
-		html = t.render(Context({'person':p1, 'add':f}))
+		html = t.render(Context({'person':p1, 'add':f, 'isSelf':isSelf}))
 		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'netid':p1.netid, 'html':html})
 	locs.append({'lat':str(me.lat), 'lon':str(me.lon),})
 	return HttpResponse(json.dumps(locs), mimetype='application/json; charset=UTF-8')
@@ -121,11 +127,15 @@ def meet_person(request):
 	html = ''
 	if (me.friends.filter(netid=addNetid)):
 		r['result'] = 'already there'
+        elif (currentNetid == addNetid):
+                p1 = Person.objects.get(netid=addNetid)
+                t = get_template('buttonfill.html')
+                html = t.render(Context({'person':p1, 'add':True, 'isSelf':True}))
 	else:
 		p1 = Person.objects.get(netid=addNetid)
 		me.friends.add(p1)
 		t = get_template('buttonfill.html')
-		html = t.render(Context({'person':p1, 'add':False}))
+		html = t.render(Context({'person':p1, 'add':False, 'isSelf':False}))
 
 	r['html'] = html
 	t = get_template('tablefill.html')
@@ -146,7 +156,6 @@ def remove_person(request):
 	p1 = Person.objects.get(netid=remNetid)
 	me.friends.remove(p1)
 	friends = me.friends.all()
-
 	t = get_template('tablefill.html')
 	table = t.render(Context({'friend_list':friends}))
 	r = {'table':table}
@@ -156,37 +165,5 @@ def remove_person(request):
 	r['html'] = html
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
-
-
-@login_required
-def user(request):
-	currentNetid = request.user.username
-	if request.POST:
-		form = ProfileForm(request.POST)
-		if form.is_valid():
-			cd = form.cleaned_data
-			if '_save' in request.POST:
-				p = Person.objects.filter(netid=currentNetid)
-				if (p):
-					p1 = p[0];
-					p1.netid = currentNetid
-					p1.first_name = cd['first_name']
-					p1.last_name = cd['last_name']
-					p1.lat = request.POST['lat-s']
-					p1.lon = request.POST['lon-s']
-					p1.company = cd['company']
-					p1.year = cd['cyear']
-					p1.save();
-				else:
-					p1 = Person(netid=currentNetid, first_name=['first_name'], 
-						last_name=cd['last_name'], lat=request.POST['lat-s'], 
-						lon=request.POST['lon-s'], company=cd['company'], year=cd['year'])
-					p1.save();
-				return HttpResponseRedirect('/')
-			elif '_cancel' in request.POST:
-				return HttpResponseRedirect('/')
-		else:
-			form = ContactForm()
-			
 
 
