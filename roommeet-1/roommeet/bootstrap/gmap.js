@@ -9,6 +9,7 @@ var myloc = null;
 $(document).ready(function() {
 	$('.datepicker').datepicker();
 	$("#profilebox").animate({left:"10px"});
+	$("#map_canvas").animate({left:"0px"});
 
 });
 
@@ -49,19 +50,18 @@ $(document).on("submit","#pform",function(event)
 
 $(document).on("click","#profile_toggle",function(e)
 {
-	clearMarkers();
-	profile = true;
-	if (markerp == null)
+	if ($("#map_canvas").css('left') == '0px' )
 	{
-		markerp = new google.maps.Marker(
-		{
-			position: myloc,
-			map: null
-		});
+		hideTalk();
+
+		showProfile();
 	}
-	markerp.setMap(map);
-	$("#map_canvas").animate({left:"300px"});
-	$("#profilebox").animate({left:"10px"});
+	else 
+	{
+		hideProfile();
+	}
+
+
 	return false;
 }); 
 
@@ -84,10 +84,7 @@ $("tr[class='c']").find("p").hide();
 $(document).on("click","#close_profile",function(e)
 {
 
-	showMarkers();
-	profile = false;
-	markerp.setMap(null);
-	$("#map_canvas").animate({left:"0px"});
+	hideProfile();
 	return false;
 }); 
 
@@ -95,27 +92,66 @@ $(document).on("click","#talk_toggle",function(e)
 {
 	if ($("#talk-box").css('right') == '-500px')
 	{
-		document.getElementById("meet_nav").className = "";
-		document.getElementById("talk_nav").className = "active";
-		$("#talk-box").animate({right:"10px"});
+		hideProfile();
+		showTalk();
 	}
 	else
 	{
-		$("#talk-box").animate({right:"-500px"});
-		document.getElementById("meet_nav").className = "active";
-		document.getElementById("talk_nav").className = "";
+		hideTalk();
 	}
 	return false;
 }); 
-$(document).on("click","#meet_toggle",function(e)
+
+function hideTalk()
 {
 	$("#talk-box").animate({right:"-500px"});
 	document.getElementById("meet_nav").className = "active";
 	document.getElementById("talk_nav").className = "";
+}
+
+function showTalk()
+{
+	document.getElementById("meet_nav").className = "";
+	document.getElementById("profile_nav").className = "";
+	document.getElementById("talk_nav").className = "active";
+	$("#talk-box").animate({right:"10px"});
+}
+
+function showProfile()
+{
+	document.getElementById("meet_nav").className = "";
+	document.getElementById("profile_nav").className = "active";
+	document.getElementById("talk_nav").className = "";
+	hideTalk();
+	clearMarkers();
+	profile = true;
+	if (markerp == null)
+	{
+		markerp = new google.maps.Marker(
+		{
+			position: myloc,
+			map: null
+		});
+	}
+	markerp.setMap(map);
+	$("#map_canvas").animate({left:"300px"});
+	$("#profilebox").animate({left:"10px"});
+}
+function hideProfile()
+{
+	document.getElementById("meet_nav").className = "active";
+	document.getElementById("profile_toggle").className = "";
 	showMarkers();
 	profile = false;
-	markerp.setMap(null);
+	if (markerp != null)
+		markerp.setMap(null);
 	$("#map_canvas").animate({left:"0px"});
+}
+
+$(document).on("click","#meet_toggle",function(e)
+{
+	hideTalk();
+	hideProfile();
 	return false;
 }); 
 
