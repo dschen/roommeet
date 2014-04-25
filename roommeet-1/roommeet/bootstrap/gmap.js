@@ -442,6 +442,10 @@ function yearFilter(evt)
 		if (count == 1)
 			map.setZoom(12);
 	});
+	if (year == '0')
+		document.getElementById("yfilter").innerHTML="Filter by Class Year <b class='caret'></b></a>";
+	else
+		document.getElementById("yfilter").innerHTML="Year: " + year + " <b class='caret'></b></a>";
 }
 
 
@@ -467,10 +471,14 @@ function olapFilter(evt)
 		if (count == 1)
 			map.setZoom(12);
 	});
-	if (year == "0")
-		document.getElementById("yfilter").innerHTML="Filter by Class Year <b class='caret'></b></a>";
-	else
-		document.getElementById("yfilter").innerHTML="Year: " + year + " <b class='caret'></b></a>";
+	if (olap == "-10000")
+		document.getElementById("dfilter").innerHTML="Filter by Date Overlap <b class='caret'></b></a>";
+	else if (olap == "0")
+		document.getElementById("dfilter").innerHTML="Date Overlap: Any <b class='caret'></b></a>";
+	else if (olap == "7")
+		document.getElementById("dfilter").innerHTML="Date Overlap: 1 Week <b class='caret'></b></a>";
+	else if (olap == "30")
+		document.getElementById("dfilter").innerHTML="Date Overlap: 1 Month <b class='caret'></b></a>";
 }
 
 
