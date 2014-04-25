@@ -7,7 +7,7 @@ var radius = '1000000000';
 var gender = 'either';
 var myloc = null;
 var year = '0'
-var olap = '0'
+var olap = '-10000'
 
 $(document).ready(function() {
 	$('.datepicker').datepicker();
