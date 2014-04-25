@@ -91,6 +91,8 @@ def get_marks(request):
 	currentNetid = request.user.username
 	radius = 100000000000;
 	gender = 'either'
+	olap = -10000
+
 	year = 0
 	if request.POST:
 		if 'radius' in request.POST:
@@ -101,6 +103,8 @@ def get_marks(request):
 			gender = str(request.POST['gender'])
 		if 'year' in request.POST:
 			year = int(request.POST['year'])
+		if 'olap' in request.POST:
+			olap = int(request.POST['olap'])
 
 		if radius == 0:
 			radius = 100000000000;
@@ -108,8 +112,9 @@ def get_marks(request):
 	lrad = math.cos(math.radians(float(me.lat))) * 111.325 * 0.621371;
 	lonrad = radius / lrad;
 	radius = radius / 69.172;
+	olap = olap
 
-	print gender, year
+	print gender, year, olap
 	if gender == 'either' and year == 0:
 		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad)
 	elif gender == 'either' and year != 0:
@@ -120,7 +125,24 @@ def get_marks(request):
 		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad).filter(gender=gender).filter(year=year)
 	print radius
 	locs = []
-	for p1 in p:
+	people = []
+	for person in p:
+		mylength = me.end - me.start
+		personlength = person.end - person.start
+			
+		if me.start < person.start:
+			startdiff = person.start - me.start
+			overlapTime = min(mylength-startdiff, personlength)
+			print "length days: ", overlapTime.days
+		else : 
+			startdiff = me.start - person.start
+			overlapTime = min(personlength-startdiff, mylength)
+			print "length days: ", overlapTime.days
+		if overlapTime.days > olap:
+			people.append(person)
+	if not people:
+		people.append(me)
+	for p1 in people:
 		print p1.first_name,
 		print p1.gender
 		friend = "no"

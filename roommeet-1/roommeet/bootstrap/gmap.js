@@ -7,6 +7,7 @@ var radius = '1000000000';
 var gender = 'either';
 var myloc = null;
 var year = '0'
+var olap = '0'
 
 $(document).ready(function() {
 	$('.datepicker').datepicker();
@@ -172,7 +173,7 @@ function initialize()
 
 	map=new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 
-	$.post('/get_marks/',{'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value}, function(data)
+	$.post('/get_marks/',{'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value}, function(data)
 	{
 		var response = data
 		var count = response.length;
@@ -238,6 +239,19 @@ function initialize()
 	cy17.year = '2017';
 	cy17.addEventListener('click', yearFilter, false);
 	
+
+	var do0 = document.getElementById('olap_off');
+	do0.olap = '-10000';
+	do0.addEventListener('click', olapFilter, false);
+	var doON = document.getElementById('olap_on');
+	doON.olap = '0';
+	doON.addEventListener('click', olapFilter, false);
+	var do7 = document.getElementById('olap_wk');
+	do7.olap = '7';
+	do7.addEventListener('click', olapFilter, false);
+	var do30 = document.getElementById('olap_month');
+	do30.olap = '30';
+	do30.addEventListener('click', olapFilter, false);
 	
 
 
@@ -350,9 +364,9 @@ function setRadius(evt)
 		cradius = evt.target.radius;
 	radius = cradius;
 	if (radius == '0')
-		dict = {'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		dict = {'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	else
-		dict = {'year':year, 'radius':radius, 'gender':gender,csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		dict = {'olap':olap, 'year':year, 'radius':radius, 'gender':gender,csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	$.post('/get_marks/', dict, function(data)
 	{
@@ -380,7 +394,7 @@ function setRadius(evt)
 function genderFilter(evt)
 {
 	gender = evt.target.gender;
-	dict = {'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	$.post('/get_marks/', dict, function(data)
 	{
@@ -409,7 +423,32 @@ function genderFilter(evt)
 function yearFilter(evt)
 {
 	year = evt.target.year;
-	dict = {'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	deleteMarkers();
+	$.post('/get_marks/', dict, function(data)
+	{
+		var response = data
+		var count = response.length;
+		var bounds = new google.maps.LatLngBounds();
+		for(var i = 0; i < count-1; i++) 
+		{
+			var item = response[i];
+			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+			addMarker(loc, item.html, item.netid);
+			bounds.extend(loc);
+
+		}
+		map.fitBounds(bounds);
+		if (count == 1)
+			map.setZoom(12);
+	});
+}
+
+
+function olapFilter(evt)
+{
+	olap = evt.target.olap;
+	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	$.post('/get_marks/', dict, function(data)
 	{
