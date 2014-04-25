@@ -140,7 +140,7 @@ def get_marks(request):
 			print "length days: ", overlapTime.days
 		if overlapTime.days > olap:
 			people.append(person)
-	if not people:
+	if not people or me not in people:
 		people.append(me)
 	for p1 in people:
 		print p1.first_name,
