@@ -1,13 +1,14 @@
-
-
-<b>Name:</b>  {{ person.first_name }} {{ person.last_name }} 
+<b>Name:</b>  {{ person.first_name }} {{ person.last_name }}
 <br>
 <b>Company:</b> {{ person.company }}
 <br>
 <b>Year:</b> {{ person.year }}
 <br>
 <div align='right'>
-{% if add %}
+{% if isSelf %}
+
+{% else %}
+    {% if add %}
         <button type='submit' id='person_add' onclick='meetPerson("{{ person.netid }}")'  class='btn btn-outlined btn-xs btn-block active btn-success'> Add </button>
     {% else %}
         <button type='submit' id='person_remove' onclick='removePerson("{{ person.netid }}")' class='btn btn-outlined btn-xs btn-block active btn-danger'> Remove </button>
