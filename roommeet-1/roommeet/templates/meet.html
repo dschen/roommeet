@@ -132,13 +132,12 @@ background-color: rgba(135, 135, 235, 0.80);
 .talkbox {
   color:#c2c2c2;
   position:fixed;
-  overflow:auto;
   right:-500px;
   top:65px;
   height: -o-calc(100%- 130px); /* opera */
   height: -webkit-calc(100% - 130px); /* google, safari */
   height: -moz-calc(100% - 130px); /* firefox */
-
+  overflow:auto;
   margin: 0 auto;
   width: 500px;
   padding: 20px;
@@ -168,19 +167,20 @@ background-color: rgba(135, 135, 235, 0.80);
     {% include 'profile.html' %}
 </div>
 <style type="text/css">
-    table{ width: 75%;
-
+    table{ 
+      width: 75%;
      }
      td {
         border:hidden;
      }
 
+
 </style>
 
 <div id="talk-box" class="talkbox">
-<table id="talk-table" class="table "   >
+<table id="talk-table" class="table">
   <caption>Click entries for contact information</caption>
-    <thead>
+    <thead id='talk-head'>
         <tr>
             <th>
                 Name

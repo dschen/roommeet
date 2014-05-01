@@ -14,6 +14,7 @@ $(document).ready(function() {
 	$("#profilebox").animate({left:"10px"});
 	$("#map_canvas").animate({left:"0px"});
 
+
 });
 
 
