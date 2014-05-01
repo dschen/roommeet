@@ -30,12 +30,7 @@ $(document).on("submit","#pform",function(event)
 		{
 			if (data.success == "true")
 			{
-				showMarkers();
-				profile = false;
-				markerp.setMap(null);
-				setRadius(radius);
-
-				$("#map_canvas").animate({left:"0px"});
+				hideProfile();
 			}
 			$("#profilebox").html(data.html);
 			$('.datepicker').datepicker();
