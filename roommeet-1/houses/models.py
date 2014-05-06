@@ -1,7 +1,7 @@
 from django.db import models
 
 class House(models.Model):
-	
+
 	lat = models.DecimalField(max_digits=13, decimal_places=10, null=True)
 	lon = models.DecimalField(max_digits=13, decimal_places=10, null=True)
 	start = models.DateField(blank=True, null=True)

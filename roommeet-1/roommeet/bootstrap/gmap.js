@@ -49,6 +49,36 @@ $(document).on("submit","#pform",function(event)
 });
 
 
+$(document).on("submit","#hform",function(event)
+{
+	var frm = $('#hform');
+	event.preventDefault();
+	$.ajax(
+	{
+		type: frm.attr('method'),
+		url: frm.attr('action'),
+		data: frm.serialize(),
+		success: function (data) 
+		{
+			if (data.success == "true")
+			{
+				hideAddHouse();
+			}
+			$("#addhousebox").html(data.html);
+			$('.datepicker').datepicker();
+			return false;
+
+		},
+		error: function(data) 
+		{
+			$("#addhousebox").html(data);
+		}
+	});
+	return false;
+});
+
+
+
 $(document).on("click","#profile_toggle",function(e)
 {
 	if ($("#map_canvas").css('left') == '0px' )
@@ -90,6 +120,15 @@ $(document).on("click","#close_profile",function(e)
 	return false;
 }); 
 
+$(document).on("click","#close_addHouse",function(e)
+{
+
+	hideAddHouse();
+	document.getElementById("hform").reset()
+	return false;
+}); 
+
+
 $(document).on("click","#talk_toggle",function(e)
 {
 	if ($("#talk-box").css('right') == '-500px')
@@ -121,6 +160,22 @@ $(document).on("click","#house_toggle",function(e)
 }); 
 
 
+$(document).on("click","#add_house_toggle",function(e)
+{
+	if ($("#add-house-box").css('right') == '-500px')
+	{
+		hideProfile();
+		hideTalk();
+		showAddHouse();
+	}
+	else
+	{
+		hideAddHouse();
+	}
+	return false;
+}); 
+
+
 function hideTalk()
 {
 	$("#talk-box").animate({right:"-500px"});
@@ -143,7 +198,8 @@ function showTalk()
 function hideHouse()
 {
 	showMarkers();
-	house = false;
+	hideAddHouse();
+	
 	if (markerh != null)
 		markerh.setMap(null);
 	$("#house-box").animate({right:"-500px"});
@@ -156,24 +212,44 @@ function hideHouse()
 
 function showHouse()
 {
-	house = true;
-	clearMarkers();
 	hideTalk();
 	hideProfile();
-	if (markerh == null)
-	{
-		markerh = new google.maps.Marker(
-		{
-			position: myloc,
-			map: null
-		})
-	}
+
 	$("#house-box").animate({right:"10px"});
 	document.getElementById("meet_nav").className = "";
 	document.getElementById("profile_nav").className = "";
-	document.getElementById("talk_nav").className = "active";
-	
+	document.getElementById("talk_nav").className = "";
+	document.getElementById("house_nav").className = "active";
+		
 }
+
+function hideAddHouse()
+{
+	house = false;
+	showMarkers();
+	if (markerh != null)
+		markerh.setMap(null);
+	markerh = null;
+	$("#add-house-box").animate({right:"-500px"});
+	
+	document.getElementById("talk_nav").className = "";
+	document.getElementById("profile_nav").className = "";
+	document.getElementById("house_nav").className = "";
+	document.getElementById("meet_nav").className = "active";
+}
+
+function showAddHouse()
+{
+	house = true;
+	clearMarkers();
+	
+	$("#add-house-box").animate({right:"10px"});
+	document.getElementById("meet_nav").className = "";
+	document.getElementById("profile_nav").className = "";
+	document.getElementById("talk_nav").className = "";
+	document.getElementById("house_nav").className = "active";
+}
+
 
 function showProfile()
 {
@@ -212,6 +288,7 @@ $(document).on("click","#meet_toggle",function(e)
 {
 	hideTalk();
 	hideProfile();
+	hideHouse();
 	return false;
 }); 
 
@@ -247,8 +324,9 @@ function initialize()
 	});
 
 	google.maps.event.addListener(map, 'click', function(event) {
-		addMarkerProfile(event.latLng);
+		addMarkerPH(event.latLng);
 	});
+
 
 	var r5 = document.getElementById('5-radius');
 	r5.radius = '5';
@@ -360,7 +438,7 @@ function initialize()
 
 }
 
-function addMarkerProfile(location) 
+function addMarkerPH(location) 
 {
 	if (profile == true)
 	{
@@ -376,24 +454,22 @@ function addMarkerProfile(location)
 		document.getElementById('id_lat_s').value = location.lat().toFixed(5);
 		document.getElementById('id_lon_s').value = location.lng().toFixed(5);
 	}
-}
-
-
-function addMarkerHouse(location) 
-{
-	if (house == true)
+	else if (house == true)
 	{
 		if (markerh == null)
 		{
+
+
 			markerh = new google.maps.Marker({
 				position: location,
+				icon: '../static/house_marker.png',
 				map: map
 			});
 		}
 		markerh.setPosition(location);
 
-		document.getElementById('id_lat_s').value = location.lat().toFixed(5);
-		document.getElementById('id_lon_s').value = location.lng().toFixed(5);
+		document.getElementById('id_lat_h').value = location.lat().toFixed(5);
+		document.getElementById('id_lon_h').value = location.lng().toFixed(5);
 	}
 }
 
