@@ -92,12 +92,11 @@ def get_marks(request):
 	radius = 100000000000;
 	gender = 'either'
 	olap = -10000
+
 	year = 0
 	if request.POST:
 		if 'radius' in request.POST:
-			print "radius: ", radius
 			radius = int(request.POST['radius'])
-			print "new radius: ", radius
 		if 'gender' in request.POST:
 			gender = str(request.POST['gender'])
 		if 'year' in request.POST:
@@ -112,8 +111,6 @@ def get_marks(request):
 	lonrad = radius / lrad;
 	radius = radius / 69.172;
 	olap = olap
-
-	print gender, year, olap
 	if gender == 'either' and year == 0:
 		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad)
 	elif gender == 'either' and year != 0:
@@ -139,7 +136,7 @@ def get_marks(request):
 			print "length days: ", overlapTime.days
 		if overlapTime.days > olap:
 			people.append(person)
-	if not people:
+	if not people or me not in people:
 		people.append(me)
 	for p1 in people:
 		print p1.first_name,

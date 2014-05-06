@@ -7,12 +7,13 @@ var radius = '1000000000';
 var gender = 'either';
 var myloc = null;
 var year = '0'
-var olap = '0'
+var olap = '-10000'
 
 $(document).ready(function() {
 	$('.datepicker').datepicker();
 	$("#profilebox").animate({left:"10px"});
 	$("#map_canvas").animate({left:"0px"});
+
 
 });
 
@@ -30,12 +31,7 @@ $(document).on("submit","#pform",function(event)
 		{
 			if (data.success == "true")
 			{
-				showMarkers();
-				profile = false;
-				markerp.setMap(null);
-				setRadius(radius);
-
-				$("#map_canvas").animate({left:"0px"});
+				hideProfile();
 			}
 			$("#profilebox").html(data.html);
 			$('.datepicker').datepicker();
@@ -108,23 +104,23 @@ $(document).on("click","#talk_toggle",function(e)
 function hideTalk()
 {
 	$("#talk-box").animate({right:"-500px"});
-	document.getElementById("meet_nav").className = "active";
+	
 	document.getElementById("talk_nav").className = "";
+	document.getElementById("profile_nav").className = "";
+	document.getElementById("meet_nav").className = "active";
 }
 
 function showTalk()
 {
+	$("#talk-box").animate({right:"10px"});
 	document.getElementById("meet_nav").className = "";
 	document.getElementById("profile_nav").className = "";
 	document.getElementById("talk_nav").className = "active";
-	$("#talk-box").animate({right:"10px"});
+	
 }
 
 function showProfile()
 {
-	document.getElementById("meet_nav").className = "";
-	document.getElementById("profile_nav").className = "active";
-	document.getElementById("talk_nav").className = "";
 	hideTalk();
 	clearMarkers();
 	profile = true;
@@ -139,16 +135,20 @@ function showProfile()
 	markerp.setMap(map);
 	$("#map_canvas").animate({left:"300px"});
 	$("#profilebox").animate({left:"10px"});
+	document.getElementById("meet_nav").className = "";
+	document.getElementById("talk_nav").className = "";
+	document.getElementById("profile_nav").className = "active";
 }
 function hideProfile()
 {
-	document.getElementById("meet_nav").className = "active";
-	document.getElementById("profile_toggle").className = "";
 	showMarkers();
 	profile = false;
 	if (markerp != null)
 		markerp.setMap(null);
 	$("#map_canvas").animate({left:"0px"});
+	document.getElementById("profile_nav").className = "";
+	document.getElementById("talk_nav").className = "";
+	document.getElementById("meet_nav").className = "active";
 }
 
 $(document).on("click","#meet_toggle",function(e)
@@ -250,7 +250,6 @@ function initialize()
 	do30.addEventListener('click', olapFilter, false);
 	
 
-
 	// Create the search box and link it to the UI element.
 
 	var input = (document.getElementById('pac-input'));
@@ -300,8 +299,9 @@ function initialize()
 		map.setZoom(12);
 	});
 
-}
 
+
+}
 
 function addMarkerProfile(location) 
 {
@@ -381,6 +381,10 @@ function setRadius(evt)
 		if (count == 1)
 			map.setZoom(12);
 	});
+	if (radius == '0' || radius == '1000000000')
+		document.getElementById("rfilter").innerHTML="Filter by Radius <b class='caret'></b></a>";
+	else
+		document.getElementById("rfilter").innerHTML="Radius: " + radius + " miles <b class='caret'></b></a>";
 }
 
 function genderFilter(evt)
@@ -405,6 +409,10 @@ function genderFilter(evt)
 		if (count == 1)
 			map.setZoom(12);
 	});
+	if (gender == 'either')
+		document.getElementById("gfilter").innerHTML="Filter by Gender <b class='caret'></b></a>";
+	else
+		document.getElementById("gfilter").innerHTML="Gender: " + gender + " <b class='caret'></b></a>";
 }
 
 
@@ -430,6 +438,10 @@ function yearFilter(evt)
 		if (count == 1)
 			map.setZoom(12);
 	});
+	if (year == '0')
+		document.getElementById("yfilter").innerHTML="Filter by Class Year <b class='caret'></b></a>";
+	else
+		document.getElementById("yfilter").innerHTML="Year: " + year + " <b class='caret'></b></a>";
 }
 
 
@@ -455,6 +467,14 @@ function olapFilter(evt)
 		if (count == 1)
 			map.setZoom(12);
 	});
+	if (olap == "-10000")
+		document.getElementById("dfilter").innerHTML="Filter by Date Overlap <b class='caret'></b></a>";
+	else if (olap == "0")
+		document.getElementById("dfilter").innerHTML="Date Overlap: Any <b class='caret'></b></a>";
+	else if (olap == "7")
+		document.getElementById("dfilter").innerHTML="Date Overlap: 1 Week <b class='caret'></b></a>";
+	else if (olap == "30")
+		document.getElementById("dfilter").innerHTML="Date Overlap: 1 Month <b class='caret'></b></a>";
 }
 
 
@@ -539,7 +559,8 @@ function removePerson(nid)
 
 var infowindow = new google.maps.InfoWindow({
 	content: 'stuff',
-	maxWidth: 200
+     maxWidth: 200,
+
 });
 
 // Sets the map on all markers in the array.
