@@ -86,6 +86,13 @@ def talk(request):
 	friends = me.friends.all()
 	return render(request, 'talk.html', {'friend_list':friends})
 
+@login_required
+def house(request):
+	currentNetid = request.user.username
+	me = Person.objects.get(netid=currentNetid)
+	houses = me.houses.all()
+	return render(request, 'house.html', {'house_list':houses})
+
 
 @login_required
 def get_marks(request):
@@ -206,7 +213,3 @@ def remove_person(request):
 	r['html'] = html
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
-
-@login_required
-def housing(request):
-	return render(request)

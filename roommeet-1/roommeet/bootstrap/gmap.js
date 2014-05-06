@@ -2,7 +2,9 @@ var map;
 myLatlng=new google.maps.LatLng(39.828127,-98.579404);
 var markers = [];
 var profile = false;
+var house = false;
 var markerp = null;
+var markerh = null;
 var radius = '1000000000';
 var gender = 'either';
 var myloc = null;
@@ -103,7 +105,7 @@ $(document).on("click","#talk_toggle",function(e)
 	return false;
 }); 
 
-$(document).on("click","#talk_toggle",function(e)
+$(document).on("click","#house_toggle",function(e)
 {
 	if ($("#house-box").css('right') == '-500px')
 	{
@@ -140,6 +142,10 @@ function showTalk()
 
 function hideHouse()
 {
+	showMarkers();
+	house = false;
+	if (markerh != null)
+		markerh.setMap(null);
 	$("#house-box").animate({right:"-500px"});
 	
 	document.getElementById("talk_nav").className = "";
@@ -150,6 +156,18 @@ function hideHouse()
 
 function showHouse()
 {
+	house = true;
+	clearMarkers();
+	hideTalk();
+	hideProfile();
+	if (markerh == null)
+	{
+		markerh = new google.maps.Marker(
+		{
+			position: myloc,
+			map: null
+		})
+	}
 	$("#house-box").animate({right:"10px"});
 	document.getElementById("meet_nav").className = "";
 	document.getElementById("profile_nav").className = "";
@@ -354,6 +372,25 @@ function addMarkerProfile(location)
 			});
 		}
 		markerp.setPosition(location);
+
+		document.getElementById('id_lat_s').value = location.lat().toFixed(5);
+		document.getElementById('id_lon_s').value = location.lng().toFixed(5);
+	}
+}
+
+
+function addMarkerHouse(location) 
+{
+	if (house == true)
+	{
+		if (markerh == null)
+		{
+			markerh = new google.maps.Marker({
+				position: location,
+				map: map
+			});
+		}
+		markerh.setPosition(location);
 
 		document.getElementById('id_lat_s').value = location.lat().toFixed(5);
 		document.getElementById('id_lon_s').value = location.lng().toFixed(5);
