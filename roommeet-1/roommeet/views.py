@@ -83,13 +83,6 @@ def meet(request):
 	return render(request, 'meet.html', {'form': pf, 'friend_list':friends, 'firstTime':first, 'me': me})
 
 
-@login_required
-def talk(request):
-	currentNetid = request.user.username
-	me = Person.objects.get(netid=currentNetid)
-	friends = me.friends.all()
-	return render(request, 'talk.html', {'friend_list':friends})
-
 
 @login_required
 def get_marks(request):
