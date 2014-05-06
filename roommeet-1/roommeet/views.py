@@ -79,7 +79,9 @@ def meet(request):
 	else:
 		pf = ProfileForm(initial=model_to_dict(me))
 	friends = me.friends.all()
+
 	return render(request, 'meet.html', {'form': pf, 'friend_list':friends, 'firstTime':first, 'me': me})
+
 
 @login_required
 def get_marks(request):

@@ -215,6 +215,13 @@ function initialize()
 		}
 		var item = response[i];
 		myloc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+		if (markerp == null)
+		{
+			markerp = new google.maps.Marker({
+				position: myloc,
+				map: null
+			});
+		}
 		document.getElementById('id_lat_s').value = myloc.lat().toFixed(5);
 		document.getElementById('id_lon_s').value = myloc.lng().toFixed(5);
 		map.fitBounds(bounds);
