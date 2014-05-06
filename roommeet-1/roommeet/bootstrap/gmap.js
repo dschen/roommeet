@@ -178,8 +178,12 @@ function hideProfile()
 
 $(document).on("click","#meet_toggle",function(e)
 {
-	hideTalk();
-	hideProfile();
+	if (!($("#first_time").length) )
+	{
+		hideTalk();
+		hideProfile();
+	}
+	
 	return false;
 }); 
 
