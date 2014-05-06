@@ -11,6 +11,11 @@ $(document).ready(function() {
 	$("#profilebox").animate({left:"10px"});
 	$("#map_canvas").animate({left:"0px"});
 
+	if ($("#first_time").length) 
+	{ 
+			showProfile();
+		}
+
 });
 
 

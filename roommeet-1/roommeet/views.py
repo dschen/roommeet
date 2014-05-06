@@ -26,9 +26,13 @@ from django.forms.models import model_to_dict
 @login_required
 def meet(request):
 	p = Person.objects.filter(netid=request.user.username)
+	first = "False";
 	if (not p):
-		p1 = Person(netid=request.user.username)
+		p1 = Person(netid=request.user.username, first_name="", 
+				last_name="", lat=10, 
+				lon=10, company="", year=2016)
 		p1.save()
+		first = "True";
 
 	currentNetid = request.user.username
 	me = Person.objects.get(netid=currentNetid)
@@ -73,7 +77,7 @@ def meet(request):
 	else:
 		pf = ProfileForm(initial=model_to_dict(me))
 	friends = me.friends.all()
-	return render(request, 'meet.html', {'form': pf, 'friend_list':friends})
+	return render(request, 'meet.html', {'form': pf, 'friend_list':friends, 'firstTime':first})
 
 
 @login_required

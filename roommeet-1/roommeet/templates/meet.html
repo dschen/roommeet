@@ -164,6 +164,9 @@ background-color: rgba(135, 135, 235, 0.80);
 {% endblock %}
 
 {% block mainpage %}
+{% if firstTime == "True" %}
+<div id="first_time" style="display: none; visibility: hidden;"> </div>
+{% endif %}
 {% endblock %}
 
 
