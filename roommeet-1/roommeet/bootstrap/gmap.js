@@ -165,18 +165,13 @@ $(document).on("click","#talk_toggle",function(e)
 {
 	if ($("#talk-box").css('right') == '-500px')
 	{
-<<<<<<< HEAD
 		if (!($("#first_time").length) )
 		{
 			hideProfile();
+			hideHouse();
 			showTalk();
 		}
-		
-=======
-		hideProfile();
-		hideHouse();
-		showTalk();
->>>>>>> ccweaver
+
 	}
 	else
 	{
@@ -336,18 +331,14 @@ function hideProfile()
 
 $(document).on("click","#meet_toggle",function(e)
 {
-<<<<<<< HEAD
 	if (!($("#first_time").length) )
 	{
 		hideTalk();
 		hideProfile();
+		hideHouse();
 	}
 	
-=======
-	hideTalk();
-	hideProfile();
-	hideHouse();
->>>>>>> ccweaver
+
 	return false;
 }); 
 
