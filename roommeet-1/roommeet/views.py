@@ -19,19 +19,23 @@ from people.models import Person
 from django.contrib.auth.decorators import login_required
 
 from django.forms.models import model_to_dict
-
+from decimal import Decimal
 
 #function to generate html and return
 
 @login_required
 def meet(request):
+	first = "False"
 	p = Person.objects.filter(netid=request.user.username)
 	if (not p):
 		p1 = Person(netid=request.user.username)
 		p1.save()
-
 	currentNetid = request.user.username
 	me = Person.objects.get(netid=currentNetid)
+	if request.method == 'GET':
+		if (not isinstance(me.lat, Decimal)):
+			first = "True"
+	print first
 	if request.method == 'POST':
 		pf = ProfileForm(request.POST)
 
@@ -75,7 +79,7 @@ def meet(request):
 	else:
 		pf = ProfileForm(initial=model_to_dict(me))
 	friends = me.friends.all()
-	return render(request, 'meet.html', {'form': pf, 'friend_list':friends})
+	return render(request, 'meet.html', {'form': pf, 'friend_list':friends, 'firstTime':first})
 
 
 @login_required

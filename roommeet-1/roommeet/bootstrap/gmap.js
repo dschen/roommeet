@@ -14,7 +14,11 @@ $(document).ready(function() {
 	$("#profilebox").animate({left:"10px"});
 	$("#map_canvas").animate({left:"0px"});
 
-
+	if ($("#first_time").length) 
+	{ 
+		showProfile();
+		$("#close_profile").hide();
+	}
 });
 
 
@@ -32,6 +36,29 @@ $(document).on("submit","#pform",function(event)
 			if (data.success == "true")
 			{
 				hideProfile();
+				$("#close_profile").show();
+				myloc = markerp.getPosition();
+				$.post('/get_marks/',{'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value}, function(data)
+				{
+					var response = data
+					var count = response.length;
+					var bounds = new google.maps.LatLngBounds();
+					for(var i = 0; i < count-1; i++) 
+					{
+						var item = response[i];
+						loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+						addMarker(loc, item.html, item.netid);
+						bounds.extend(loc);
+
+					}
+					var item = response[i];
+					myloc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+					document.getElementById('id_lat_s').value = myloc.lat().toFixed(5);
+					document.getElementById('id_lon_s').value = myloc.lng().toFixed(5);
+					map.fitBounds(bounds);
+				});
+				if ($("#first_time").length)
+					$("#first_time").remove();
 			}
 			$("#profilebox").html(data.html);
 			$('.datepicker').datepicker();
@@ -57,6 +84,7 @@ $(document).on("click","#profile_toggle",function(e)
 	}
 	else 
 	{
+		if (!($("#first_time").length) )
 		hideProfile();
 	}
 
@@ -82,7 +110,7 @@ $("tr[class='c']").find("p").hide();
 
 $(document).on("click","#close_profile",function(e)
 {
-
+	markerp.setPosition(myloc);
 	hideProfile();
 	return false;
 }); 
@@ -91,8 +119,12 @@ $(document).on("click","#talk_toggle",function(e)
 {
 	if ($("#talk-box").css('right') == '-500px')
 	{
-		hideProfile();
-		showTalk();
+		if (!($("#first_time").length) )
+		{
+			hideProfile();
+			showTalk();
+		}
+		
 	}
 	else
 	{
@@ -124,15 +156,8 @@ function showProfile()
 	hideTalk();
 	clearMarkers();
 	profile = true;
-	if (markerp == null)
-	{
-		markerp = new google.maps.Marker(
-		{
-			position: myloc,
-			map: null
-		});
-	}
-	markerp.setMap(map);
+	if (markerp != null)
+		markerp.setMap(map);
 	$("#map_canvas").animate({left:"300px"});
 	$("#profilebox").animate({left:"10px"});
 	document.getElementById("meet_nav").className = "";
@@ -169,6 +194,8 @@ function initialize()
 
 	map=new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 
+	if (!($("#first_time").length))
+	{
 	$.post('/get_marks/',{'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value}, function(data)
 	{
 		var response = data
@@ -188,6 +215,7 @@ function initialize()
 		document.getElementById('id_lon_s').value = myloc.lng().toFixed(5);
 		map.fitBounds(bounds);
 	});
+	}
 
 	google.maps.event.addListener(map, 'click', function(event) {
 		addMarkerProfile(event.latLng);
