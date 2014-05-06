@@ -82,6 +82,7 @@ def meet(request):
 
 	return render(request, 'meet.html', {'form': pf, 'friend_list':friends, 'firstTime':first, 'me': me})
 
+
 @login_required
 def get_marks(request):
 	currentNetid = request.user.username
