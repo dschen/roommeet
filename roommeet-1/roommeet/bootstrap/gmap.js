@@ -250,7 +250,6 @@ function initialize()
 	do30.addEventListener('click', olapFilter, false);
 	
 
-
 	// Create the search box and link it to the UI element.
 
 	var input = (document.getElementById('pac-input'));
@@ -300,8 +299,9 @@ function initialize()
 		map.setZoom(12);
 	});
 
-}
 
+
+}
 
 function addMarkerProfile(location) 
 {
@@ -559,7 +559,8 @@ function removePerson(nid)
 
 var infowindow = new google.maps.InfoWindow({
 	content: 'stuff',
-	maxWidth: 200
+     maxWidth: 200,
+
 });
 
 // Sets the map on all markers in the array.
