@@ -219,67 +219,42 @@ def remove_person(request):
 
 @login_required
 def add_house(request):
-	p = Person.objects.filter(netid=request.user.username)
-
 	currentNetid = request.user.username
 	me = Person.objects.get(netid=currentNetid)
 	if request.method == 'POST':
-		hf = HouseForm(request.POST)
+		if 'type' in request.POST:
+			t = get_template('addhouse.html')
+			hf = HouseForm();
+			html = t.render(RequestContext(request, {'form': hf}))
+			data = {'html':html}
+			return HttpResponse(json.dumps(data), content_type = "application/json")
+		else:
+			hf = HouseForm(request.POST)
 
-		if hf.is_valid():
-			cd = hf.cleaned_data
-			p = Person.objects.filter(netid=currentNetid)
-			
-			h = House(lat = cd['lat_s'], lon = cd['lon_s'], start = cd['start'],
-				end=cd['end'], contact_email = cd['contact_email'],
-				description = cd['description'])
-			p.houses.add(h)
-			p.save()
-			h.save()
+			if hf.is_valid():
+				cd = hf.cleaned_data
+
+				h = House(lat = cd['lat_h'], lon = cd['lon_h'], start = cd['hstart'],
+					end=cd['hend'], contact_email = cd['contact_email'],
+					description = cd['description'])
+
+				h.save()
+				me.houses.add(h)
+
+				me.save()
+				
+				t = get_template('addhouse.html')
+				html = t.render(RequestContext(request, {'form': hf}))
+				data = {'success':'true', 'html':html}
+				return HttpResponse(json.dumps(data), content_type = "application/json")
+
+			else:
+				hf.errors['lat_h'] = hf.error_class()
 
 			t = get_template('addhouse.html')
 			html = t.render(RequestContext(request, {'form': hf}))
-			data = {'success':'true', 'html':html}
+			
+			data = {'success':'false', 'html':html}
 			return HttpResponse(json.dumps(data), content_type = "application/json")
-
-		else:
-			hf.errors['lat_s'] = hf.error_class()
-
-		t = get_template('addhouse.html')
-		html = t.render(RequestContext(request, {'form': hf}))
-		
-		data = {'success':'false', 'html':html}
-		return HttpResponse(json.dumps(data), content_type = "application/json")
-
-	return render(request, 'meet.html', {'hform':hf})
-
-
-	currentNetid = request.user.username
-	addHouseid = ''
-	if request.POST:
-		if 'id' in request.POST:
-			addNetid = request.POST['netid']
-	me = Person.objects.get(netid=currentNetid)
-	r = {'result':'success'}
-	html = ''
-	if (me.friends.filter(netid=addNetid)):
-		r['result'] = 'already there'
-        elif (currentNetid == addNetid):
-                p1 = Person.objects.get(netid=addNetid)
-                t = get_template('buttonfill.html')
-                html = t.render(Context({'person':p1, 'add':True, 'isSelf':True}))
-	else:
-		p1 = Person.objects.get(netid=addNetid)
-		me.friends.add(p1)
-		t = get_template('buttonfill.html')
-		html = t.render(Context({'person':p1, 'add':False, 'isSelf':False}))
-
-	r['html'] = html
-	t = get_template('tablefill.html')
-	friends = me.friends.all()
-	table = t.render(Context({'friend_list':friends}))
-	r['table'] = table
-	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
-
 
 

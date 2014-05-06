@@ -60,11 +60,14 @@ $(document).on("submit","#hform",function(event)
 		data: frm.serialize(),
 		success: function (data) 
 		{
+			console.log(data.success);
 			if (data.success == "true")
 			{
+
 				hideAddHouse();
 			}
-			$("#addhousebox").html(data.html);
+
+			$("#add-house-box").html(data.html);
 			$('.datepicker').datepicker();
 			return false;
 
@@ -242,7 +245,23 @@ function showAddHouse()
 {
 	house = true;
 	clearMarkers();
-	
+	$.ajax(
+	{
+		type: "post",
+		url: "/add_house/",
+		data: {type:"new", csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+		success: function (data) 
+		{
+			$("#add-house-box").html(data.html);
+			$('.datepicker').datepicker();
+			return false;
+
+		},
+		error: function(data) 
+		{
+			$("#add-house-box").html(data);
+		}
+	});
 	$("#add-house-box").animate({right:"10px"});
 	document.getElementById("meet_nav").className = "";
 	document.getElementById("profile_nav").className = "";

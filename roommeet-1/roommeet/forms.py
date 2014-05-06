@@ -24,7 +24,7 @@ class ProfileForm(forms.Form):
 class HouseForm(forms.Form):
 	lat_h = forms.DecimalField(max_digits=13, decimal_places=10, widget=forms.HiddenInput)
 	lon_h = forms.DecimalField(max_digits=13, decimal_places=10, widget=forms.HiddenInput)
-	start = forms.DateField(widget=DateInput(), input_formats=('%m/%d/%Y',))
-	end = forms.DateField(widget=DateInput(),  input_formats=('%m/%d/%Y',))
+	hstart = forms.DateField(widget=DateInput(), input_formats=('%m/%d/%Y',), label='Start')
+	hend = forms.DateField(widget=DateInput(),  input_formats=('%m/%d/%Y',), label='End')
 	contact_email = forms.EmailField(max_length=50)
 	description = forms.CharField(max_length=1000, widget=forms.Textarea)	
