@@ -367,7 +367,7 @@ function removeList(nid)
   dict = {'type':'talk', 'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
   $.post('/remove_person/', dict, function(data)
   {
-    document.getElementById("friendList").innerHTML=data.table;
+    $("#friendList").html(data.table);
     for (var i = 0; i < markers.length; i++)
 	{
 		if (markers[i].title == nid)
@@ -562,7 +562,7 @@ function meetPerson(nid)
 					break;
 				}
 			}
-			document.getElementById("friendList").innerHTML=response.table;
+			$("#friendList").html(response.table);
 			$("tr[class='c']").find("p").hide();
 		}
 	});
@@ -583,7 +583,7 @@ function removePerson(nid)
 				break;
 			}
 		}
-		document.getElementById("friendList").innerHTML=response.table;
+		$("#friendList").html(response.table);
 		$("tr[class='c']").find("p").hide();
 
 	});

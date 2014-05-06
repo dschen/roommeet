@@ -10,7 +10,28 @@
         <p>{{ person.start.month }}/{{person.start.day}}/{{person.start.year}} - {{ person.end.month }}/{{person.end.day}}/{{person.end.year}}</p>
     </td>
     <td>
-        <p id="talk_dist"> not too far</p>  
+        <p id="talk_dist_{{ forloop.counter }}"><script language="JavaScript" type="text/javascript">
+            var rad = function(x) {
+                return x * Math.PI / 180;
+            };
+            
+            var calculateDistance = function(p1lat, p1lon, p2lat, p2lon) {
+                var theta = p1lon-p2lon
+                var dist = Math.sin(rad(p1lat)) * Math.sin(rad(p2lat)) + Math.cos(rad(p1lat)) * Math.cos(rad(p2lat)) * Math.cos(rad(theta));
+                dist = Math.acos(dist)
+                dist = dist * 180/Math.PI
+                dist = dist * 60 * 1.1515
+                return dist
+            };
+
+            var round = function(num) {
+                var rounded = Math.round(num * 10)/10;
+                return rounded;
+            }
+            $("#talk_dist_{{ forloop.counter }}").append(round(calculateDistance({{me.lat}},{{me.lon}},{{person.lat}},{{person.lon}})));
+
+            
+            </script></p>
     </td>
     </tr>
     <tr  class="c" >

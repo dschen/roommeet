@@ -79,7 +79,11 @@ def meet(request):
 	else:
 		pf = ProfileForm(initial=model_to_dict(me))
 	friends = me.friends.all()
+<<<<<<< HEAD
 	return render(request, 'meet.html', {'form': pf, 'friend_list':friends, 'firstTime':first})
+=======
+	return render(request, 'meet.html', {'form': pf, 'friend_list':friends, 'me': me})
+>>>>>>> btchen
 
 
 @login_required
@@ -184,7 +188,7 @@ def meet_person(request):
 	r['html'] = html
 	t = get_template('tablefill.html')
 	friends = me.friends.all()
-	table = t.render(Context({'friend_list':friends}))
+	table = t.render(Context({'friend_list':friends, 'me':me}))
 	r['table'] = table
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
@@ -201,13 +205,12 @@ def remove_person(request):
 	me.friends.remove(p1)
 	friends = me.friends.all()
 	t = get_template('tablefill.html')
-	table = t.render(Context({'friend_list':friends}))
+	table = t.render(Context({'friend_list':friends, 'me':me}))
 	r = {'table':table}
-
 	t = get_template('buttonfill.html')
 	html = t.render(Context({'person':p1, 'add':True}))
 	r['html'] = html
-
+	print table
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
 
