@@ -38,6 +38,7 @@ $(document).on("submit","#pform",function(event)
 				hideProfile();
 				$("#close_profile").show();
 				myloc = markerp.getPosition();
+				deleteMarkers();
 				$.post('/get_marks/',{'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value}, function(data)
 				{
 					var response = data
