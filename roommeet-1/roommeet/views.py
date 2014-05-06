@@ -12,10 +12,11 @@ from django.template import Context, RequestContext
 from django.utils.html import strip_tags
 
 import datetime
-from roommeet.forms import ProfileForm
+from roommeet.forms import ProfileForm, HouseForm
 
 from django.views.decorators.csrf import csrf_exempt
 from people.models import Person
+from houses.models import House
 from django.contrib.auth.decorators import login_required
 
 from django.forms.models import model_to_dict
@@ -79,8 +80,21 @@ def meet(request):
 	else:
 		pf = ProfileForm(initial=model_to_dict(me))
 	friends = me.friends.all()
+<<<<<<< HEAD
+=======
+
+	return render(request, 'meet.html', {'form': pf, 'friend_list':friends})
+>>>>>>> ccweaver
 
 	return render(request, 'meet.html', {'form': pf, 'friend_list':friends, 'firstTime':first, 'me': me})
+
+@login_required
+def house(request):
+	currentNetid = request.user.username
+	me = Person.objects.get(netid=currentNetid)
+	houses = me.houses.all()
+	print "i'm free abo de abo die"
+	return render(request, 'house.html', {'house_list':houses})
 
 
 @login_required
@@ -206,5 +220,46 @@ def remove_person(request):
 	if not request.POST:
 		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
+
+
+@login_required
+def add_house(request):
+	currentNetid = request.user.username
+	me = Person.objects.get(netid=currentNetid)
+	if request.method == 'POST':
+		if 'type' in request.POST:
+			t = get_template('addhouse.html')
+			hf = HouseForm();
+			html = t.render(RequestContext(request, {'form': hf}))
+			data = {'html':html}
+			return HttpResponse(json.dumps(data), content_type = "application/json")
+		else:
+			hf = HouseForm(request.POST)
+
+			if hf.is_valid():
+				cd = hf.cleaned_data
+
+				h = House(lat = cd['lat_h'], lon = cd['lon_h'], start = cd['hstart'],
+					end=cd['hend'], contact_email = cd['contact_email'],
+					description = cd['description'])
+
+				h.save()
+				me.houses.add(h)
+
+				me.save()
+				
+				t = get_template('addhouse.html')
+				html = t.render(RequestContext(request, {'form': hf}))
+				data = {'success':'true', 'html':html}
+				return HttpResponse(json.dumps(data), content_type = "application/json")
+
+			else:
+				hf.errors['lat_h'] = hf.error_class()
+
+			t = get_template('addhouse.html')
+			html = t.render(RequestContext(request, {'form': hf}))
+			
+			data = {'success':'false', 'html':html}
+			return HttpResponse(json.dumps(data), content_type = "application/json")
 
 
