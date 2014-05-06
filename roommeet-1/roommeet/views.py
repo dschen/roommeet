@@ -5,7 +5,7 @@ import json
 import math
 
 #responses, httpresponse not necessary with render shortcut
-from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, HttpResponseNotFound
 #templates and contexts, not necessary with render shortcut
 from django.template.loader import get_template
 from django.template import Context, RequestContext
@@ -79,6 +79,7 @@ def meet(request):
 	else:
 		pf = ProfileForm(initial=model_to_dict(me))
 	friends = me.friends.all()
+<<<<<<< HEAD
 
 	return render(request, 'meet.html', {'form': pf, 'friend_list':friends, 'firstTime':first, 'me': me})
 
@@ -90,6 +91,9 @@ def talk(request):
 	friends = me.friends.all()
 	return render(request, 'talk.html', {'friend_list':friends})
 
+=======
+	return render(request, 'meet.html', {'form': pf, 'friend_list':friends, 'firstTime':first, 'me': me})
+>>>>>>> btchen
 
 @login_required
 def get_marks(request):
@@ -158,6 +162,8 @@ def get_marks(request):
 		html = t.render(Context({'person':p1, 'add':f, 'isSelf':isSelf}))
 		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'netid':p1.netid, 'html':html})
 	locs.append({'lat':str(me.lat), 'lon':str(me.lon),})
+	if not request.POST:
+		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(locs), mimetype='application/json; charset=UTF-8')
 
 @login_required
@@ -187,6 +193,8 @@ def meet_person(request):
 	friends = me.friends.all()
 	table = t.render(Context({'friend_list':friends, 'me':me}))
 	r['table'] = table
+	if not request.POST:
+		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
 @login_required
@@ -207,7 +215,8 @@ def remove_person(request):
 	t = get_template('buttonfill.html')
 	html = t.render(Context({'person':p1, 'add':True}))
 	r['html'] = html
-	print table
+	if not request.POST:
+		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
 
