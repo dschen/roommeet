@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'psycopg2',
     'people',
+    'houses',
     'django.contrib.contenttypes',
     #'django_facebook',
     

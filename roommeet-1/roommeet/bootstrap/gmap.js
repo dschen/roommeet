@@ -52,7 +52,7 @@ $(document).on("click","#profile_toggle",function(e)
 	if ($("#map_canvas").css('left') == '0px' )
 	{
 		hideTalk();
-
+		hideHouse();
 		showProfile();
 	}
 	else 
@@ -77,6 +77,7 @@ $(document).on("click","#talk-table",function(event)
     }                    
 });
 
+
 $("tr[class='c']").find("p").hide();
 
 
@@ -92,6 +93,7 @@ $(document).on("click","#talk_toggle",function(e)
 	if ($("#talk-box").css('right') == '-500px')
 	{
 		hideProfile();
+		hideHouse();
 		showTalk();
 	}
 	else
@@ -101,6 +103,22 @@ $(document).on("click","#talk_toggle",function(e)
 	return false;
 }); 
 
+$(document).on("click","#talk_toggle",function(e)
+{
+	if ($("#house-box").css('right') == '-500px')
+	{
+		hideProfile();
+		hideTalk();
+		showHouse();
+	}
+	else
+	{
+		hideHouse();
+	}
+	return false;
+}); 
+
+
 function hideTalk()
 {
 	$("#talk-box").animate({right:"-500px"});
@@ -108,11 +126,31 @@ function hideTalk()
 	document.getElementById("talk_nav").className = "";
 	document.getElementById("profile_nav").className = "";
 	document.getElementById("meet_nav").className = "active";
+	document.getElementById("house_nav").className = "";
 }
 
 function showTalk()
 {
 	$("#talk-box").animate({right:"10px"});
+	document.getElementById("meet_nav").className = "";
+	document.getElementById("profile_nav").className = "";
+	document.getElementById("talk_nav").className = "active";
+	document.getElementById("house_nav").className = "";	
+}
+
+function hideHouse()
+{
+	$("#house-box").animate({right:"-500px"});
+	
+	document.getElementById("talk_nav").className = "";
+	document.getElementById("profile_nav").className = "";
+	document.getElementById("house_nav").className = "";
+	document.getElementById("meet_nav").className = "active";
+}
+
+function showHouse()
+{
+	$("#house-box").animate({right:"10px"});
 	document.getElementById("meet_nav").className = "";
 	document.getElementById("profile_nav").className = "";
 	document.getElementById("talk_nav").className = "active";
@@ -138,6 +176,7 @@ function showProfile()
 	document.getElementById("meet_nav").className = "";
 	document.getElementById("talk_nav").className = "";
 	document.getElementById("profile_nav").className = "active";
+	document.getElementById("house_nav").className = "";
 }
 function hideProfile()
 {

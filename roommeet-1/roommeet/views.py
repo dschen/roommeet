@@ -12,10 +12,11 @@ from django.template import Context, RequestContext
 from django.utils.html import strip_tags
 
 import datetime
-from roommeet.forms import ProfileForm
+from roommeet.forms import ProfileForm, HouseForm
 
 from django.views.decorators.csrf import csrf_exempt
 from people.models import Person
+from houses.models import House
 from django.contrib.auth.decorators import login_required
 
 from django.forms.models import model_to_dict
@@ -206,4 +207,6 @@ def remove_person(request):
 
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
-
+@login_required
+def housing(request):
+	return render(request)
