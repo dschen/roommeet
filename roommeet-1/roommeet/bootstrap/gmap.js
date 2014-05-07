@@ -631,7 +631,7 @@ function removeHouseList(hid)
     $("#manageHouseList").html(data.table);
     for (var i = 0; i < markers.length; i++)
 	{
-		if (markers[i].title == hid)
+		if (markers[i].hid == hid)
 		{
 			markers[i].setMap(null);
 			markers[i] = markers[markers.length-1];
@@ -809,7 +809,7 @@ function meetHouse(hid)
 		{
 			for (var i = 0; i < markers.length; i++)
 			{
-				if (markers[i].title == hid)
+				if (markers[i].hid == hid)
 				{
 					markers[i].html = response.html;
 					infowindow.setContent(markers[i].html);
@@ -851,7 +851,7 @@ function removeHouse(hid)
 		var response = data
 		for (var i = 0; i < markers.length; i++)
 		{
-			if (markers[i].title == hid)
+			if (markers[i].hid == hid)
 			{
 				markers[i].html = response.html;
 				infowindow.setContent(markers[i].html);
