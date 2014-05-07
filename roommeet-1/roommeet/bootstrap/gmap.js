@@ -287,6 +287,16 @@ function initialize()
 	var do30 = document.getElementById('olap_month');
 	do30.olap = '30';
 	do30.addEventListener('click', olapFilter, false);
+    
+    var r = document.getElementById('desired_roommate');
+	r.desired = 'Roommate';
+	r.addEventListener('click', desiredFilter, false);
+	var fr = document.getElementById('desired_friends');
+	fr.desired = 'Friends';
+	fr.addEventListener('click', desiredFilter, false);
+	var ei = document.getElementById('desired_either');
+	ei.desired = 'Either';
+	ei.addEventListener('click', desiredFilter, false);
 	
 
 	// Create the search box and link it to the UI element.
@@ -399,9 +409,9 @@ function setRadius(evt)
 		cradius = evt.target.radius;
 	radius = cradius;
 	if (radius == '0')
-		dict = {'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		dict = {'olap':olap, 'year':year, 'gender':gender, 'desired':desired, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	else
-		dict = {'olap':olap, 'year':year, 'radius':radius, 'gender':gender,csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		dict = {'olap':olap, 'year':year, 'radius':radius, 'gender':gender, 'desired':desired, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	$.post('/get_marks/', dict, function(data)
 	{
@@ -429,7 +439,7 @@ function setRadius(evt)
 function genderFilter(evt)
 {
 	gender = evt.target.gender;
-	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, 'desired':desired, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	$.post('/get_marks/', dict, function(data)
 	{
@@ -458,7 +468,7 @@ function genderFilter(evt)
 function yearFilter(evt)
 {
 	year = evt.target.year;
-	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, 'desired':desired, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	$.post('/get_marks/', dict, function(data)
 	{
@@ -487,7 +497,7 @@ function yearFilter(evt)
 function olapFilter(evt)
 {
 	olap = evt.target.olap;
-	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, 'desired':desired, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	$.post('/get_marks/', dict, function(data)
 	{
@@ -516,6 +526,33 @@ function olapFilter(evt)
 		document.getElementById("dfilter").innerHTML="Date Overlap: 1 Month <b class='caret'></b></a>";
 }
 
+function desiredFilter(evt)
+{
+	desired = evt.target.desired;
+	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, 'desired':desired, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	deleteMarkers();
+	$.post('/get_marks/', dict, function(data)
+           {
+           var response = data
+           var count = response.length;
+           var bounds = new google.maps.LatLngBounds();
+           for(var i = 0; i < count-1; i++)
+           {
+           var item = response[i];
+           loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+           addMarker(loc, item.html, item.netid);
+           bounds.extend(loc);
+           
+           }
+           map.fitBounds(bounds);
+           if (count == 1)
+           map.setZoom(12);
+           });
+	if (desired == 'Either')
+		document.getElementById("desfilter").innerHTML="Looking For? <b class='caret'></b></a>";
+	else
+		document.getElementById("desfilter").innerHTML="Looking For: " + desired + " <b class='caret'></b></a>";
+}
 
 var rad = function(x) {
   return x * Math.PI / 180;

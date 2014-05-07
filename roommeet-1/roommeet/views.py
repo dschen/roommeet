@@ -89,6 +89,7 @@ def get_marks(request):
 	radius = 100000000000;
 	gender = 'either'
 	olap = -10000
+	desired = 'Either'
 
 	year = 0
 	if request.POST:
@@ -100,6 +101,8 @@ def get_marks(request):
 			year = int(request.POST['year'])
 		if 'olap' in request.POST:
 			olap = int(request.POST['olap'])
+		if 'desired' in request.POST:
+			desired = str(request.POST['desired'])
 
 		if radius == 0:
 			radius = 100000000000;
@@ -108,14 +111,22 @@ def get_marks(request):
 	lonrad = radius / lrad;
 	radius = radius / 69.172;
 	olap = olap
-	if gender == 'either' and year == 0:
+	if gender == 'either' and desired == 'Either' and year == 0:
 		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad)
-	elif gender == 'either' and year != 0:
+	elif gender == 'either' and desired == 'Either' and year != 0:
 		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad).filter(year=year)
-	elif gender != 'either' and year == 0:
+	elif gender != 'either' and desired == 'Either' and year == 0:
 		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad).filter(gender=gender)
-	else :
+	elif gender == 'either' and desired != 'Either' and year == 0:
+		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad).filter(desired=desired)
+	elif gender == 'either' and desired != 'Either' and year != 0:
+		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad).filter(desired=desired).filter(year=year)
+	elif gender != 'either' and desired == 'Either' and year != 0:
 		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad).filter(gender=gender).filter(year=year)
+	elif gender != 'either' and desired != 'Either' and year == 0:
+		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad).filter(gender=gender).filter(desired=desired)
+	else :
+		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad).filter(gender=gender).filter(desired=desired).filter(year=year)
 	print radius
 	locs = []
 	people = []
