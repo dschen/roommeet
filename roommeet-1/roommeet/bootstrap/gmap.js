@@ -156,6 +156,19 @@ $(document).on("click","#talk-table",function(event)
     }                    
 });
 
+$(document).on("click","#manage-house-table",function(event)
+{
+    event.stopPropagation();
+    var $target = $(event.target);
+
+    if ( $target.closest("td").attr("colspan") > 1 ) 
+    {
+    } 
+    else {
+        $target.closest("tr").next().find("p").slideToggle();
+    }                    
+});
+
 
 $("tr[class='c']").find("p").hide();
 
