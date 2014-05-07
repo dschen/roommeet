@@ -283,6 +283,8 @@ def remove_managed_house(request):
 	me = Person.objects.get(netid=currentNetid)
 	h = House.objects.get(id=remHid)
 	me.houses.remove(h)
+	me.save();
+	h.delete();
 	houses = me.houses.all()
 	t = get_template('managehousetablefill.html')
 	table = t.render(Context({'house_list':houses}))
