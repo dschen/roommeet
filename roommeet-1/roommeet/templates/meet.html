@@ -20,6 +20,7 @@
 {% block lnavitems %}
 <li class="active" id="meet_nav"><a  id="meet_toggle">Meet</a></li>
 <li id="talk_nav"><a id="talk_toggle">Talk</a></li>
+<li id="house_nav"><a id="house_toggle">Housing</a></li>
 {% endblock %}
 
 
@@ -30,6 +31,13 @@
 <div class="navbar navbar-inverse navbar-fixed-bottom" id="bottomnavbar" >
   <div class="container-fluid">
     <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+      <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a href="#" class='dropdown-toggle' data-toggle='dropdown'> <div id="rfilter">
@@ -84,6 +92,7 @@
 
 
       </ul>
+      </div>
     </div><!--/.nav-collapse -->
   </div><!--/.container-fluid -->
 </div>
@@ -157,6 +166,63 @@ background-color: rgba(135, 135, 235, 0.80);
 }
 
 
+.housebox {
+  color:#c2c2c2;
+  position:fixed;
+  right:-500px;
+  top:65px;
+  height: -o-calc(100%- 130px); /* opera */
+  height: -webkit-calc(100% - 130px); /* google, safari */
+  height: -moz-calc(100% - 130px); /* firefox */
+  overflow:auto;
+  margin: 0 auto;
+  width: 500px;
+  padding: 20px;
+  text-align: center;
+  /* border-radius */
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  /* box-shadow */
+  -webkit-box-shadow: rgba(0,0,0,0.2) 0px 1px 3px;
+  -moz-box-shadow: rgba(0,0,0,0.2) 0px 1px 3px;
+  box-shadow: rgba(0,0,0,0.2) 0px 1px 3px;
+  z-index:3;
+  background: url('{{STATIC_URL}}/datepicker/img/darkdenim3.png') repeat 0 0 #555;
+
+
+}
+
+
+.addhousebox {
+  color:#c2c2c2;
+  position:fixed;
+  right:-500px;
+  top:65px;
+  height: -o-calc(100%- 130px); /* opera */
+  height: -webkit-calc(100% - 130px); /* google, safari */
+  height: -moz-calc(100% - 130px); /* firefox */
+  overflow:auto;
+  margin: 0 auto;
+  width: 500px;
+  padding: 20px;
+  text-align: center;
+  /* border-radius */
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  /* box-shadow */
+  -webkit-box-shadow: rgba(0,0,0,0.2) 0px 1px 3px;
+  -moz-box-shadow: rgba(0,0,0,0.2) 0px 1px 3px;
+  box-shadow: rgba(0,0,0,0.2) 0px 1px 3px;
+  z-index:3;
+  background: url('{{STATIC_URL}}/datepicker/img/darkdenim3.png') repeat 0 0 #555;
+
+
+}
+
+
+
 .panel-title {
     font-size: 100%;
 }
@@ -204,6 +270,70 @@ background-color: rgba(135, 135, 235, 0.80);
 </table>
 
 </div>
+
+<div id="house-box" class="housebox">
+<table id="house-table" class="table">
+  <caption>When you want some roommates, but also want some HAUUUUS</caption>
+    <a id="add_house_toggle" class="btn btn-primary" style="margin: 2%; width:130px;">Add New House</a>
+	<a id="manage_house_toggle" class="btn btn-primary" style="margin: 2%; width:200px;">Manage My Houses</a>
+    <thead id='house-head'>
+        <tr>
+            <th>
+                HAUS
+            </th>
+            <th>
+                Year
+            </th>
+            <th>
+                Dates
+            </th>
+            <th>
+                Distance
+            </th>
+        </tr>
+    </thead>
+	<tbody id="manageHouseList">
+		{% include "managehousetablefill.html" %}
+    </tbody>
+
+</table>
+
+</div>
+
+<div id="manage-house-box" class="managehousebox">
+<table id="manage-house-table" class="table">
+  <caption>When you want some roommates, but also want some HAUUUUS</caption>
+    <a id="add_house_toggle" class="btn btn-primary" style="margin: 2%; width:130px;">Add New House</a>
+	<a id="manage_house_toggle" class="btn btn-primary" style="margin: 2%; width:200px;">Manage My Houses</a>
+    <thead id='manage-house-head'>
+        <tr>
+            <th>
+                HAUS
+            </th>
+            <th>
+                Year
+            </th>
+            <th>
+                Dates
+            </th>
+            <th>
+                Distance
+            </th>
+        </tr>
+    </thead>
+	<tbody id="manageHouseList">
+		{% include "managehousetablefill.html" %}
+    </tbody>
+
+</table>
+
+</div>
+
+<div id="add-house-box" class="addhousebox">
+{% include 'addhouse.html' %}
+</div>
+
+
 
 
 {% endblock %}

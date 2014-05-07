@@ -1,0 +1,47 @@
+{% for house in house_list %}
+<tr >
+    <td>
+        <p>{{ house.contact_email }}</p> 
+    </td>
+    <td>
+        <p>{{ house.start.month }}/{{house.start.day}}/{{house.start.year}} - {{ house.end.month }}/{{house.end.day}}/{{house.end.year}}</p>
+    </td>
+    <td>
+        <p id="talk_dist_{{ forloop.counter }}"><script language="JavaScript" type="text/javascript">
+            var rad = function(x) {
+                return x * Math.PI / 180;
+            };
+            
+            var calculateDistance = function(p1lat, p1lon, p2lat, p2lon) {
+                var theta = p1lon-p2lon
+                var dist = Math.sin(rad(p1lat)) * Math.sin(rad(p2lat)) + Math.cos(rad(p1lat)) * Math.cos(rad(p2lat)) * Math.cos(rad(theta));
+                dist = Math.acos(dist)
+                dist = dist * 180/Math.PI
+                dist = dist * 60 * 1.1515
+                return dist
+            };
+
+            var round = function(num) {
+                var rounded = Math.round(num * 10)/10;
+                return rounded;
+            }
+            $("#talk_dist_{{ forloop.counter }}").append(round(calculateDistance({{me.lat}},{{me.lon}},{{house.lat}},{{house.lon}})));
+
+            
+            </script></p>
+    </td>
+    </tr>
+    <tr  class="c" >
+    <td colspan="3" style="border-bottom: initial;"><p>
+        Contact: 
+        <a href="mailto:{{ house.contact_email }}?Subject=RoomMeet%20Hello"> {{ house.contact_email }} </a>
+        <br>
+        Description: {{ house.description }}</p>
+        </td>
+        <td style="border-bottom: initial;"><p><br>
+        <button type="submit" style:"right:10px; z-index:4;" class="btn btn-sm btn-danger" id="{{ house.id }}-remove" onclick="removeList('{{ house.id }}')"> remove </button> </p>
+    </td>
+</tr>
+{% endfor %}
+
+
