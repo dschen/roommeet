@@ -8,11 +8,15 @@
     </td>
 </tr>
     <tr  class="c" >
-    <td colspan="2" style="border-bottom: initial;"><p>
+    <td style="border-bottom: initial;"><p>
         Contact: 
         <a href="mailto:{{ house.contact_email }}?Subject=RoomMeet%20Hello"> {{ house.contact_email }} </a>
         <br>
         Description: {{ house.description }}
+        </p>
+        </td>
+        <td style="border-bottom: initial;">
+        <p>
         <button type="submit" class="btn btn-sm btn-danger" id="{{ house.id }}-remove" onclick="removeList('{{ house.id }}')"> remove </button>
 		<button type="submit" class="btn btn-sm btn-success" id="{{ house.id }}-edit" onclick="removeList('{{ house.id }}')"> edit </button> </p>
 		</td>

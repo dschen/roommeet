@@ -3,7 +3,6 @@
     <td>
         <p>{{ house.name }}</p> 
     </td>
-	<td></td>
     <td>
         <p>{{ house.start.month }}/{{house.start.day}}/{{house.start.year}} - {{ house.end.month }}/{{house.end.day}}/{{house.end.year}}</p>
     </td>
@@ -33,7 +32,7 @@
     </td>
     </tr>
     <tr  class="c" >
-    <td colspan="3" style="border-bottom: initial;"><p>
+    <td colspan="2" style="border-bottom: initial;"><p>
         Contact: 
         <a href="mailto:{{ house.contact_email }}?Subject=RoomMeet%20Hello"> {{ house.contact_email }} </a>
         <br>
