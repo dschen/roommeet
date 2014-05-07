@@ -83,7 +83,8 @@ def meet(request):
 		pf = ProfileForm(initial=model_to_dict(me))
 	friends = me.friends.all()
 	houses = me.houses.all()
-	return render(request, 'meet.html', {'form': pf, 'friend_list':friends, 'house_list':houses, 'firstTime':first, 'me': me})
+	myhouses = me.myhouses.all()
+	return render(request, 'meet.html', {'form': pf, 'friend_list':friends, 'house_list':houses,'my_houses':myhouses, 'firstTime':first, 'me': me})
 
 @login_required
 def get_marks(request):
