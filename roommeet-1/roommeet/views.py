@@ -270,4 +270,45 @@ def add_house(request):
 			data = {'success':'false', 'html':html}
 			return HttpResponse(json.dumps(data), content_type = "application/json")
 
+@login_required
+def manage_house(request):
+	currentNetid = request.user.username
+	me = Person.objects.get(netid=currentNetid)
+	if request.method == 'POST':
+		if 'type' in request.POST:
+			t = get_template('addhouse.html')
+			hf = HouseForm();
+			html = t.render(RequestContext(request, {'form': hf}))
+			data = {'html':html}
+			return HttpResponse(json.dumps(data), content_type = "application/json")
+		else:
+			hf = HouseForm(request.POST)
+
+			if hf.is_valid():
+				cd = hf.cleaned_data
+
+				h = House(lat = cd['lat_h'], lon = cd['lon_h'], start = cd['hstart'],
+					end=cd['hend'], contact_email = cd['contact_email'],
+					description = cd['description'])
+
+				h.save()
+				me.houses.add(h)
+
+				me.save()
+				
+				t = get_template('addhouse.html')
+				html = t.render(RequestContext(request, {'form': hf}))
+				data = {'success':'true', 'html':html}
+				return HttpResponse(json.dumps(data), content_type = "application/json")
+
+			else:
+				hf.errors['lat_h'] = hf.error_class()
+
+			t = get_template('addhouse.html')
+			html = t.render(RequestContext(request, {'form': hf}))
+			
+			data = {'success':'false', 'html':html}
+			return HttpResponse(json.dumps(data), content_type = "application/json")
+
+
 
