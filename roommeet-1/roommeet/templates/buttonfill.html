@@ -6,7 +6,7 @@
 <br>
 <div align='right'>
 
-{% if isSelf %}
+{% if not isSelf %}
     {% if add %}
         <button type='submit' id='person_add' onclick='meetPerson("{{ person.netid }}")'  class='btn btn-outlined btn-xs btn-block active btn-success'> Add </button>
     {% else %}

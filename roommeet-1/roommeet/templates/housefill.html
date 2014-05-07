@@ -8,8 +8,8 @@
 
 
     {% if add %}
-        <button type='submit' id='person_add' onclick='meetPerson("{{ person.netid }}")'  class='btn btn-outlined btn-xs btn-block active btn-success'> Add </button>
+        <button type='submit' id='house_add' onclick='meetHouse("{{ person.netid }}")'  class='btn btn-outlined btn-xs btn-block active btn-success'> Add </button>
     {% else %}
-        <button type='submit' id='person_remove' onclick='removePerson("{{ person.netid }}")' class='btn btn-outlined btn-xs btn-block active btn-danger'> Remove </button>
+        <button type='submit' id='house_remove' onclick='removeHouse("{{ person.netid }}")' class='btn btn-outlined btn-xs btn-block active btn-danger'> Remove </button>
 	{% endif %}
 
