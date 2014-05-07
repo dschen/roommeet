@@ -210,6 +210,21 @@ $(document).on("click","#house_toggle",function(e)
 	return false;
 }); 
 
+$(document).on("click","#manage_house_toggle",function(e)
+{
+	if ($("#manage-house-box").css('right') == '-500px')
+	{
+		hideProfile();
+		hideTalk();
+		showManageHouse();
+	}
+	else
+	{
+		hideManageHouse();
+	}
+	return false;
+}); 
+
 
 $(document).on("click","#add_house_toggle",function(e)
 {
@@ -317,6 +332,26 @@ function showAddHouse()
 	document.getElementById("house_nav").className = "active";
 }
 
+function hideManageHouse()
+{
+	
+	$("#house-box").animate({right:"-500px"});
+	document.getElementById("talk_nav").className = "";
+	document.getElementById("profile_nav").className = "";
+	document.getElementById("house_nav").className = "";
+	document.getElementById("meet_nav").className = "active";
+}
+
+function showManageHouse()
+{
+
+	$("#house-box").animate({right:"10px"});
+	document.getElementById("meet_nav").className = "";
+	document.getElementById("profile_nav").className = "";
+	document.getElementById("talk_nav").className = "";
+	document.getElementById("house_nav").className = "active";
+		
+}
 
 function showProfile()
 {
