@@ -265,6 +265,7 @@ function hideHouse()
 {
 	showMarkers();
 	hideAddHouse();
+	hideManageHouse();
 	
 	if (markerh != null)
 		markerh.setMap(null);
@@ -338,8 +339,8 @@ function hideManageHouse()
 	$("#manage-house-box").animate({right:"-500px"});
 	document.getElementById("talk_nav").className = "";
 	document.getElementById("profile_nav").className = "";
-	document.getElementById("house_nav").className = "";
-	document.getElementById("meet_nav").className = "active";
+	document.getElementById("house_nav").className = "active";
+	document.getElementById("meet_nav").className = "";
 }
 
 function showManageHouse()
