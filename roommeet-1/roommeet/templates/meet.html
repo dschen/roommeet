@@ -298,7 +298,7 @@ background-color: rgba(135, 135, 235, 0.80);
 </div>
 
 <div id="house-box" class="housebox">
-<table id="house-table" class="table">
+<table id="my-house-table" class="table">
   <caption>When you want some roommates, but also want some HAUUUUS</caption>
     <a id="add_house_toggle" class="btn btn-primary" style="margin: 2%; width:130px;">Add New House</a>
 	<a id="manage_house_toggle" class="btn btn-primary" style="margin: 2%; width:200px;">Manage My Houses</a>
@@ -318,8 +318,8 @@ background-color: rgba(135, 135, 235, 0.80);
             </th>
         </tr>
     </thead>
-	<tbody id="manageHouseList">
-		{% include "myhousetablefill.html" %}
+	<tbody id="myHouseList">
+		{% include "managehousetablefill.html" %}
     </tbody>
 
 </table>

@@ -250,7 +250,10 @@ def add_house(request):
 				
 				t = get_template('addhouse.html')
 				html = t.render(RequestContext(request, {'form': hf}))
-				data = {'success':'true', 'html':html}
+				t = get_template('managehousetablefill.html')
+				houses = me.houses.all()
+				mhtfhtml = t.render(RequestContext(request, {'house_list': houses}))
+				data = {'success':'true', 'html':html, 'mhtfhtml':mhtfhtml}
 				return HttpResponse(json.dumps(data), content_type = "application/json")
 
 			else:
@@ -259,6 +262,7 @@ def add_house(request):
 			t = get_template('addhouse.html')
 			html = t.render(RequestContext(request, {'form': hf}))
 			
+
 			data = {'success':'false', 'html':html}
 			return HttpResponse(json.dumps(data), content_type = "application/json")
 

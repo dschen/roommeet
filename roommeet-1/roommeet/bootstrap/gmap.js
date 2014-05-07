@@ -108,9 +108,13 @@ $(document).on("submit","#hform",function(event)
 			{
 
 				hideAddHouse();
+				//$("#manageHouseList").html(data.mhtfhtml);
+				$("#myHouseList").html(data.mhtfhtml);
+				$("tr[class='c']").find("p").hide();
 			}
 
 			$("#add-house-box").html(data.html);
+			//
 			$('.datepicker').datepicker();
 			return false;
 
@@ -169,6 +173,18 @@ $(document).on("click","#manage-house-table",function(event)
     }                    
 });
 
+$(document).on("click","#my-house-table",function(event)
+{
+    event.stopPropagation();
+    var $target = $(event.target);
+
+    if ( $target.closest("td").attr("colspan") > 1 ) 
+    {
+    } 
+    else {
+        $target.closest("tr").next().find("p").slideToggle();
+    }                    
+});
 
 $("tr[class='c']").find("p").hide();
 
