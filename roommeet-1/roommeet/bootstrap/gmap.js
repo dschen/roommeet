@@ -625,7 +625,7 @@ function removeList(nid)
 
 function removeHouseList(hid)
 {
-  dict = {'type':'manage', 'hoid':hid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+  dict = {'type':'manage', 'house_id':hid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
   $.post('/remove_managed_house/', dict, function(data)
   {
     $("#manageHouseList").html(data.table);
@@ -842,11 +842,33 @@ function removePerson(nid)
 	});
 }
 
+function removeHouse(hid) 
+{
+	dict = {'type':'meet', 'house_id':hid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	$.post('/remove_house/', dict, function(data)
+	{
+		var response = data
+		for (var i = 0; i < markers.length; i++)
+		{
+			if (markers[i].title == hid)
+			{
+				markers[i].html = response.html;
+				infowindow.setContent(markers[i].html);
+				break;
+			}
+		}
+		$("#friendList").html(response.table);
+		$("tr[class='c']").find("p").hide();
+
+	});
+}
+
 var infowindow = new google.maps.InfoWindow({
 	content: 'stuff',
      maxWidth: 200,
 
 });
+
 
 // Sets the map on all markers in the array.
 function setAllMap(map) {
