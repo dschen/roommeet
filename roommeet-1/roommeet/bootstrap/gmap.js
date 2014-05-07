@@ -73,7 +73,7 @@ function getMarks(dict)
 			if (item['type'] == 'person')
 			{
 				
-				addPersonMarker(loc, item.html, item.netid);
+				addPersonMarker(loc, item.html, item.netid, item.user);
 			}
 			else
 			{
@@ -108,9 +108,13 @@ $(document).on("submit","#hform",function(event)
 			{
 
 				hideAddHouse();
+				//$("#manageHouseList").html(data.mhtfhtml);
+				$("#myHouseList").html(data.mhtfhtml);
+				$("tr[class='c']").find("p").hide();
 			}
 
 			$("#add-house-box").html(data.html);
+			//
 			$('.datepicker').datepicker();
 			return false;
 
@@ -156,6 +160,31 @@ $(document).on("click","#talk-table",function(event)
     }                    
 });
 
+$(document).on("click","#manage-house-table",function(event)
+{
+    event.stopPropagation();
+    var $target = $(event.target);
+
+    if ( $target.closest("td").attr("colspan") > 1 ) 
+    {
+    } 
+    else {
+        $target.closest("tr").next().find("p").slideToggle();
+    }                    
+});
+
+$(document).on("click","#my-house-table",function(event)
+{
+    event.stopPropagation();
+    var $target = $(event.target);
+
+    if ( $target.closest("td").attr("colspan") > 1 ) 
+    {
+    } 
+    else {
+        $target.closest("tr").next().find("p").slideToggle();
+    }                    
+});
 
 $("tr[class='c']").find("p").hide();
 
@@ -532,6 +561,7 @@ function addMarkerPH(location)
 		{
 			markerp = new google.maps.Marker({
 				position: location,
+				icon: '../static/star-3.png',
 				map: map
 			});
 		}
@@ -671,12 +701,23 @@ var getDistance = function(p1, p2) {
 
 
 
-function addPersonMarker(location, html, netid) {
-	var marker = new google.maps.Marker({
-		position: location,
-		map: map,
-		title:netid
-	});
+function addPersonMarker(location, html, netid, user) {
+	if (user == netid) {
+		var marker = new google.maps.Marker({
+			position: location,
+			icon: '../static/star-3.png',
+			map: map,
+			title:netid
+		});
+
+	}
+	else {
+		var marker = new google.maps.Marker({
+			position: location,
+			map: map,
+			title:netid
+		});
+	}
 	marker.html = html;
 	markers.push(marker);
 

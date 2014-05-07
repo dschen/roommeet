@@ -154,7 +154,7 @@ def get_marks(request):
 				f = False
 			t = get_template('buttonfill.html')
 			html = t.render(Context({'person':p1, 'add':f, 'isSelf':isSelf}))
-			locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'netid':p1.netid, 'html':html, 'type':'person'})
+			locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'netid':p1.netid, 'html':html, 'type':'person', 'user':currentNetid})
 		else:
 			f = True
 			if (me.houses.filter(id=p1.id)):
@@ -239,7 +239,7 @@ def add_house(request):
 			if hf.is_valid():
 				cd = hf.cleaned_data
 
-				h = House(name=cd['name'], lat = cd['lat_h'], lon = cd['lon_h'], start = cd['hstart'],
+				h = House(name = cd['name'], lat = cd['lat_h'], lon = cd['lon_h'], start = cd['hstart'],
 					end=cd['hend'], contact_email = cd['contact_email'],
 					description = cd['description'])
 
@@ -250,7 +250,10 @@ def add_house(request):
 				
 				t = get_template('addhouse.html')
 				html = t.render(RequestContext(request, {'form': hf}))
-				data = {'success':'true', 'html':html}
+				t = get_template('managehousetablefill.html')
+				houses = me.houses.all()
+				mhtfhtml = t.render(RequestContext(request, {'house_list': houses}))
+				data = {'success':'true', 'html':html, 'mhtfhtml':mhtfhtml}
 				return HttpResponse(json.dumps(data), content_type = "application/json")
 
 			else:
@@ -259,6 +262,7 @@ def add_house(request):
 			t = get_template('addhouse.html')
 			html = t.render(RequestContext(request, {'form': hf}))
 			
+
 			data = {'success':'false', 'html':html}
 			return HttpResponse(json.dumps(data), content_type = "application/json")
 

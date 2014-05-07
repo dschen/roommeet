@@ -298,17 +298,15 @@ background-color: rgba(135, 135, 235, 0.80);
 </div>
 
 <div id="house-box" class="housebox">
-<table id="house-table" class="table">
-  <caption>When you want some roommates, but also want some HAUUUUS</caption>
+<table id="my-house-table" class="table">
+  <caption>Places to Live</caption>
+
     <a id="add_house_toggle" class="btn btn-primary" style="margin: 2%; width:130px;">Add New House</a>
 	<a id="manage_house_toggle" class="btn btn-primary" style="margin: 2%; width:200px;">Manage My Houses</a>
     <thead id='house-head'>
         <tr>
             <th>
-                HAUS
-            </th>
-            <th>
-                Year
+                Contact Name
             </th>
             <th>
                 Dates
@@ -318,8 +316,9 @@ background-color: rgba(135, 135, 235, 0.80);
             </th>
         </tr>
     </thead>
-	<tbody id="manageHouseList">
-		{% include "myhousetablefill.html" %}
+	<tbody id="myHouseList">
+		{% include "managehousetablefill.html" %}
+
     </tbody>
 
 </table>
@@ -328,22 +327,16 @@ background-color: rgba(135, 135, 235, 0.80);
 
 <div id="manage-house-box" class="managehousebox">
 <table id="manage-house-table" class="table">
-  <caption>When you want some roommates, but also want some HAUUUUS</caption>
+  <caption>Places to Live</caption>
     <a id="add_house_toggle" class="btn btn-primary" style="margin: 2%; width:130px;">Add New House</a>
 	<a id="manage_house_toggle" class="btn btn-danger" style="margin: 2%; width:130px;">Close</a>
     <thead id='manage-house-head'>
         <tr>
             <th>
-                HAUS
-            </th>
-            <th>
-                Year
+                Contact Name
             </th>
             <th>
                 Dates
-            </th>
-            <th>
-                Distance
             </th>
         </tr>
     </thead>
