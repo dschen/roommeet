@@ -560,6 +560,7 @@ function addMarkerPH(location)
 		{
 			markerp = new google.maps.Marker({
 				position: location,
+				icon: '../static/person_marker.png',
 				map: map
 			});
 		}
