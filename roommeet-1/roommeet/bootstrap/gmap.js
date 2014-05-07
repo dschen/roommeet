@@ -335,7 +335,7 @@ function showAddHouse()
 function hideManageHouse()
 {
 	
-	$("#house-box").animate({right:"-500px"});
+	$("#manage-house-box").animate({right:"-500px"});
 	document.getElementById("talk_nav").className = "";
 	document.getElementById("profile_nav").className = "";
 	document.getElementById("house_nav").className = "";
@@ -345,7 +345,7 @@ function hideManageHouse()
 function showManageHouse()
 {
 
-	$("#house-box").animate({right:"10px"});
+	$("#manage-house-box").animate({right:"10px"});
 	document.getElementById("meet_nav").className = "";
 	document.getElementById("profile_nav").className = "";
 	document.getElementById("talk_nav").className = "";
