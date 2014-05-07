@@ -142,7 +142,6 @@ def get_marks(request):
 			people.append(person)
 	if not people or me not in people:
 		people.append(me)
-	print len(people)
 	for p1 in people:
 
 		if (isinstance(p1, Person)):
@@ -161,7 +160,7 @@ def get_marks(request):
 				f = False
 			t = get_template('housefill.html')
 			html = t.render(Context({'house':p1, 'add':f}))
-			locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'html':html, 'type':'house'})
+			locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'html':html, 'type':'house', 'id':p1.id})
 
 	locs.append({'lat':str(me.lat), 'lon':str(me.lon),})
 	if not request.POST:
@@ -249,6 +248,28 @@ def remove_person(request):
 		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
+@login_required
+def remove_house(request):
+	currentNetid = request.user.username
+	remHid = ''
+	rtype = 'meet'
+	if request.POST:
+		if 'house_id' in request.POST:
+			remHid = request.POST['house_id']
+	me = Person.objects.get(netid=currentNetid)
+	h = House.objects.get(id=remHid)
+	me.myhouses.remove(h)
+	myhouses = me.myhouses.all()
+	t = get_template('myhousetablefill.html')
+	table = t.render(Context({'house_list':myhouses, 'me':me}))
+	r = {'table':table}
+	t = get_template('housefill.html')
+	html = t.render(Context({'house':h, 'add':True}))
+	r['html'] = html
+	if not request.POST:
+		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
+	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
+	
 @login_required
 def remove_managed_house(request):
 	currentNetid = request.user.username
