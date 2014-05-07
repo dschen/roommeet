@@ -10,4 +10,4 @@ class House(models.Model):
 	description = models.CharField(max_length=1000)
 
 	def __unicode__(self):
-		return u'%s %s' % (self.contact_email)
+		return u'%s' % (self.contact_email)

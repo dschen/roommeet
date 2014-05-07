@@ -22,6 +22,8 @@ from django.contrib.auth.decorators import login_required
 from django.forms.models import model_to_dict
 from decimal import Decimal
 
+from itertools import chain
+
 #function to generate html and return
 
 @login_required
@@ -127,6 +129,13 @@ def get_marks(request):
 	print radius
 	locs = []
 	people = []
+
+	h = House.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad)
+
+	p = list(p)
+	h = list(h)	
+	p = p + h
+
 	for person in p:
 		mylength = me.end - me.start
 		personlength = person.end - person.start
@@ -134,29 +143,34 @@ def get_marks(request):
 		if me.start < person.start:
 			startdiff = person.start - me.start
 			overlapTime = min(mylength-startdiff, personlength)
-			print "length days: ", overlapTime.days
 		else : 
 			startdiff = me.start - person.start
 			overlapTime = min(personlength-startdiff, mylength)
-			print "length days: ", overlapTime.days
 		if overlapTime.days > olap:
 			people.append(person)
 	if not people or me not in people:
 		people.append(me)
+	print len(people)
 	for p1 in people:
-		print p1.first_name,
-		print p1.gender
-		friend = "no"
-		f = True
-                isSelf = False
-                if (p1.netid == currentNetid):
-                        isSelf = True
-		if (me.friends.filter(netid=p1.netid)):
-			friend = "yes"
-			f = False
-		t = get_template('buttonfill.html')
-		html = t.render(Context({'person':p1, 'add':f, 'isSelf':isSelf}))
-		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'netid':p1.netid, 'html':html})
+
+		if (isinstance(p1, Person)):
+			f = True
+			isSelf = False
+			if (p1.netid == currentNetid):
+				isSelf = True
+			if (me.friends.filter(netid=p1.netid)):
+				f = False
+			t = get_template('buttonfill.html')
+			html = t.render(Context({'person':p1, 'add':f, 'isSelf':isSelf}))
+			locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'netid':p1.netid, 'html':html, 'type':'person'})
+		else:
+			f = True
+			if (me.houses.filter(id=p1.id)):
+				f = False
+			t = get_template('housefill.html')
+			html = t.render(Context({'house':p1, 'add':f}))
+			locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'html':html, 'type':'house'})
+
 	locs.append({'lat':str(me.lat), 'lon':str(me.lon),})
 	if not request.POST:
 		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
