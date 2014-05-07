@@ -324,7 +324,8 @@ def add_house(request):
 				houses = me.houses.all()
 				mhtfhtml = t.render(RequestContext(request, {'house_list': houses}))
 				t = get_template('myhousetablefill.html')
-				myhtfhtml = t.render(RequestContext(request, {'house_list': houses, 'me':me}))
+				myhouses = me.myhouses.all()
+				myhtfhtml = t.render(RequestContext(request, {'my_houses': myhouses, 'me':me}))
 				
 				data = {'success':'true', 'html':html, 'mhtfhtml':mhtfhtml, 'myhtfhtml':myhtfhtml}
 				return HttpResponse(json.dumps(data), content_type = "application/json")
