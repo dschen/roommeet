@@ -713,6 +713,7 @@ function addPersonMarker(location, html, netid, user) {
 	else {
 		var marker = new google.maps.Marker({
 			position: location,
+			icon: '../static/person_marker.png',
 			map: map,
 			title:netid
 		});
