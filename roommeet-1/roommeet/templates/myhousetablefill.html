@@ -1,16 +1,14 @@
-{% for person in friend_list %}
+{% for house in house_list %}
 <tr >
     <td>
-        <p>{{ person.first_name }}  {{ person.last_name }}</p> 
+        <p>{{ house.contact_email }}</p> 
+    </td>
+	<td></td>
+    <td>
+        <p>{{ house.start.month }}/{{house.start.day}}/{{house.start.year}} - {{ house.end.month }}/{{house.end.day}}/{{house.end.year}}</p>
     </td>
     <td>
-        <p>{{ person.year }}</p>      
-    </td>
-    <td>
-        <p>{{ person.start.month }}/{{person.start.day}}/{{person.start.year}} - {{ person.end.month }}/{{person.end.day}}/{{person.end.year}}</p>
-    </td>
-    <td>
-        <p id="talk_dist_{{ forloop.counter }}"><script language="JavaScript" type="text/javascript">
+        <p id="house_dist_{{ forloop.counter }}"><script language="JavaScript" type="text/javascript">
             var rad = function(x) {
                 return x * Math.PI / 180;
             };
@@ -28,7 +26,7 @@
                 var rounded = Math.round(num * 10)/10;
                 return rounded;
             }
-            $("#talk_dist_{{ forloop.counter }}").append(round(calculateDistance({{me.lat}},{{me.lon}},{{person.lat}},{{person.lon}})));
+            $("#house_dist_{{ forloop.counter }}").append(round(calculateDistance({{me.lat}},{{me.lon}},{{house.lat}},{{house.lon}})));
 
             
             </script></p>
@@ -36,14 +34,13 @@
     </tr>
     <tr  class="c" >
     <td colspan="3" style="border-bottom: initial;"><p>
-        Company: {{ person.company }} <br>
         Contact: 
-        <a href="mailto:{{ person.netid }}@princeton.edu?Subject=RoomMeet%20Hello"> {{ person.netid }}@princeton.edu </a>
+        <a href="mailto:{{ house.contact_email }}?Subject=RoomMeet%20Hello"> {{ house.contact_email }} </a>
         <br>
-        Desired: {{ person.desired }}</p>
+        Description: {{ house.description }}</p>
         </td>
         <td style="border-bottom: initial;"><p><br>
-        <button type="submit" style:"right:10px; z-index:4;" class="btn btn-sm btn-danger" id="{{ person.netid }}-remove" onclick="removeList('{{ person.netid }}')"> remove </button> </p>
+        <button type="submit" style:"right:10px; z-index:4;" class="btn btn-sm btn-danger" id="{{ house.id }}-remove" onclick="removeList('{{ house.id }}')"> remove </button> </p>
     </td>
 </tr>
 {% endfor %}

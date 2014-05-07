@@ -5,7 +5,7 @@ import json
 import math
 
 #responses, httpresponse not necessary with render shortcut
-from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, HttpResponseNotFound
 #templates and contexts, not necessary with render shortcut
 from django.template.loader import get_template
 from django.template import Context, RequestContext
@@ -20,19 +20,25 @@ from houses.models import House
 from django.contrib.auth.decorators import login_required
 
 from django.forms.models import model_to_dict
+from decimal import Decimal
 
+from itertools import chain
 
 #function to generate html and return
 
 @login_required
 def meet(request):
+	first = "False"
 	p = Person.objects.filter(netid=request.user.username)
 	if (not p):
 		p1 = Person(netid=request.user.username)
 		p1.save()
-
 	currentNetid = request.user.username
 	me = Person.objects.get(netid=currentNetid)
+	if request.method == 'GET':
+		if (not isinstance(me.lat, Decimal)):
+			first = "True"
+	print first
 	if request.method == 'POST':
 		pf = ProfileForm(request.POST)
 
@@ -76,25 +82,8 @@ def meet(request):
 	else:
 		pf = ProfileForm(initial=model_to_dict(me))
 	friends = me.friends.all()
-
-	return render(request, 'meet.html', {'form': pf, 'friend_list':friends})
-
-
-@login_required
-def talk(request):
-	currentNetid = request.user.username
-	me = Person.objects.get(netid=currentNetid)
-	friends = me.friends.all()
-	return render(request, 'talk.html', {'friend_list':friends})
-
-@login_required
-def house(request):
-	currentNetid = request.user.username
-	me = Person.objects.get(netid=currentNetid)
 	houses = me.houses.all()
-	print "i'm free abo de abo die"
-	return render(request, 'house.html', {'house_list':houses})
-
+	return render(request, 'meet.html', {'form': pf, 'friend_list':friends, 'house_list':houses, 'firstTime':first, 'me': me})
 
 @login_required
 def get_marks(request):
@@ -132,6 +121,13 @@ def get_marks(request):
 	print radius
 	locs = []
 	people = []
+
+	h = House.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad)
+
+	p = list(p)
+	h = list(h)	
+	p = p + h
+
 	for person in p:
 		mylength = me.end - me.start
 		personlength = person.end - person.start
@@ -139,30 +135,37 @@ def get_marks(request):
 		if me.start < person.start:
 			startdiff = person.start - me.start
 			overlapTime = min(mylength-startdiff, personlength)
-			print "length days: ", overlapTime.days
 		else : 
 			startdiff = me.start - person.start
 			overlapTime = min(personlength-startdiff, mylength)
-			print "length days: ", overlapTime.days
 		if overlapTime.days > olap:
 			people.append(person)
 	if not people or me not in people:
 		people.append(me)
+	print len(people)
 	for p1 in people:
-		print p1.first_name,
-		print p1.gender
-		friend = "no"
-		f = True
-                isSelf = False
-                if (p1.netid == currentNetid):
-                        isSelf = True
-		if (me.friends.filter(netid=p1.netid)):
-			friend = "yes"
-			f = False
-		t = get_template('buttonfill.html')
-		html = t.render(Context({'person':p1, 'add':f, 'isSelf':isSelf}))
-		locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'netid':p1.netid, 'html':html})
+
+		if (isinstance(p1, Person)):
+			f = True
+			isSelf = False
+			if (p1.netid == currentNetid):
+				isSelf = True
+			if (me.friends.filter(netid=p1.netid)):
+				f = False
+			t = get_template('buttonfill.html')
+			html = t.render(Context({'person':p1, 'add':f, 'isSelf':isSelf}))
+			locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'netid':p1.netid, 'html':html, 'type':'person'})
+		else:
+			f = True
+			if (me.houses.filter(id=p1.id)):
+				f = False
+			t = get_template('housefill.html')
+			html = t.render(Context({'house':p1, 'add':f}))
+			locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'html':html, 'type':'house'})
+
 	locs.append({'lat':str(me.lat), 'lon':str(me.lon),})
+	if not request.POST:
+		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(locs), mimetype='application/json; charset=UTF-8')
 
 @login_required
@@ -190,8 +193,10 @@ def meet_person(request):
 	r['html'] = html
 	t = get_template('tablefill.html')
 	friends = me.friends.all()
-	table = t.render(Context({'friend_list':friends}))
+	table = t.render(Context({'friend_list':friends, 'me':me}))
 	r['table'] = table
+	if not request.POST:
+		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
 @login_required
@@ -207,13 +212,13 @@ def remove_person(request):
 	me.friends.remove(p1)
 	friends = me.friends.all()
 	t = get_template('tablefill.html')
-	table = t.render(Context({'friend_list':friends}))
+	table = t.render(Context({'friend_list':friends, 'me':me}))
 	r = {'table':table}
-
 	t = get_template('buttonfill.html')
 	html = t.render(Context({'person':p1, 'add':True}))
 	r['html'] = html
-
+	if not request.POST:
+		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
 
@@ -256,5 +261,46 @@ def add_house(request):
 			
 			data = {'success':'false', 'html':html}
 			return HttpResponse(json.dumps(data), content_type = "application/json")
+
+@login_required
+def manage_house(request):
+	currentNetid = request.user.username
+	me = Person.objects.get(netid=currentNetid)
+	if request.method == 'POST':
+		if 'type' in request.POST:
+			t = get_template('addhouse.html')
+			hf = HouseForm();
+			html = t.render(RequestContext(request, {'form': hf}))
+			data = {'html':html}
+			return HttpResponse(json.dumps(data), content_type = "application/json")
+		else:
+			hf = HouseForm(request.POST)
+
+			if hf.is_valid():
+				cd = hf.cleaned_data
+
+				h = House(lat = cd['lat_h'], lon = cd['lon_h'], start = cd['hstart'],
+					end=cd['hend'], contact_email = cd['contact_email'],
+					description = cd['description'])
+
+				h.save()
+				me.houses.add(h)
+
+				me.save()
+				
+				t = get_template('addhouse.html')
+				html = t.render(RequestContext(request, {'form': hf}))
+				data = {'success':'true', 'html':html}
+				return HttpResponse(json.dumps(data), content_type = "application/json")
+
+			else:
+				hf.errors['lat_h'] = hf.error_class()
+
+			t = get_template('addhouse.html')
+			html = t.render(RequestContext(request, {'form': hf}))
+			
+			data = {'success':'false', 'html':html}
+			return HttpResponse(json.dumps(data), content_type = "application/json")
+
 
 

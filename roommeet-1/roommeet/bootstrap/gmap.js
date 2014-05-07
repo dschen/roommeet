@@ -16,7 +16,11 @@ $(document).ready(function() {
 	$("#profilebox").animate({left:"10px"});
 	$("#map_canvas").animate({left:"0px"});
 
-
+	if ($("#first_time").length) 
+	{ 
+		showProfile();
+		$("#close_profile").hide();
+	}
 });
 
 
@@ -34,6 +38,12 @@ $(document).on("submit","#pform",function(event)
 			if (data.success == "true")
 			{
 				hideProfile();
+				$("#close_profile").show();
+				myloc = markerp.getPosition();
+				deleteMarkers();
+				getMarks({'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
+				if ($("#first_time").length)
+					$("#first_time").remove();
 			}
 			$("#profilebox").html(data.html);
 			$('.datepicker').datepicker();
@@ -49,6 +59,39 @@ $(document).on("submit","#pform",function(event)
 });
 
 
+function getMarks(dict)
+{
+	$.post('/get_marks/',dict, function(data)
+	{
+		var response = data
+		var count = response.length;
+		var bounds = new google.maps.LatLngBounds();
+		for(var i = 0; i < count-1; i++) 
+		{
+			var item = response[i];
+			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+			if (item['type'] == 'person')
+			{
+				
+				addPersonMarker(loc, item.html, item.netid);
+			}
+			else
+			{
+				
+				addHouseMarker(loc, item.html);
+			}
+			bounds.extend(loc);
+
+		}
+		var item = response[i];
+		myloc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+		document.getElementById('id_lat_s').value = myloc.lat().toFixed(5);
+		document.getElementById('id_lon_s').value = myloc.lng().toFixed(5);
+		map.fitBounds(bounds);
+	});
+
+}
+
 $(document).on("submit","#hform",function(event)
 {
 	var frm = $('#hform');
@@ -60,7 +103,7 @@ $(document).on("submit","#hform",function(event)
 		data: frm.serialize(),
 		success: function (data) 
 		{
-			console.log(data.success);
+
 			if (data.success == "true")
 			{
 
@@ -92,6 +135,7 @@ $(document).on("click","#profile_toggle",function(e)
 	}
 	else 
 	{
+		if (!($("#first_time").length) )
 		hideProfile();
 	}
 
@@ -118,7 +162,7 @@ $("tr[class='c']").find("p").hide();
 
 $(document).on("click","#close_profile",function(e)
 {
-
+	markerp.setPosition(myloc);
 	hideProfile();
 	return false;
 }); 
@@ -136,9 +180,13 @@ $(document).on("click","#talk_toggle",function(e)
 {
 	if ($("#talk-box").css('right') == '-500px')
 	{
-		hideProfile();
-		hideHouse();
-		showTalk();
+		if (!($("#first_time").length) )
+		{
+			hideProfile();
+			hideHouse();
+			showTalk();
+		}
+
 	}
 	else
 	{
@@ -158,6 +206,21 @@ $(document).on("click","#house_toggle",function(e)
 	else
 	{
 		hideHouse();
+	}
+	return false;
+}); 
+
+$(document).on("click","#manage_house_toggle",function(e)
+{
+	if ($("#manage-house-box").css('right') == '-500px')
+	{
+		hideProfile();
+		hideTalk();
+		showManageHouse();
+	}
+	else
+	{
+		hideManageHouse();
 	}
 	return false;
 }); 
@@ -202,6 +265,7 @@ function hideHouse()
 {
 	showMarkers();
 	hideAddHouse();
+	hideManageHouse();
 	
 	if (markerh != null)
 		markerh.setMap(null);
@@ -269,21 +333,34 @@ function showAddHouse()
 	document.getElementById("house_nav").className = "active";
 }
 
+function hideManageHouse()
+{
+	
+	$("#manage-house-box").animate({right:"-500px"});
+	document.getElementById("talk_nav").className = "";
+	document.getElementById("profile_nav").className = "";
+	document.getElementById("house_nav").className = "active";
+	document.getElementById("meet_nav").className = "";
+}
+
+function showManageHouse()
+{
+
+	$("#manage-house-box").animate({right:"10px"});
+	document.getElementById("meet_nav").className = "";
+	document.getElementById("profile_nav").className = "";
+	document.getElementById("talk_nav").className = "";
+	document.getElementById("house_nav").className = "active";
+		
+}
 
 function showProfile()
 {
 	hideTalk();
 	clearMarkers();
 	profile = true;
-	if (markerp == null)
-	{
-		markerp = new google.maps.Marker(
-		{
-			position: myloc,
-			map: null
-		});
-	}
-	markerp.setMap(map);
+	if (markerp != null)
+		markerp.setMap(map);
 	$("#map_canvas").animate({left:"300px"});
 	$("#profilebox").animate({left:"10px"});
 	document.getElementById("meet_nav").className = "";
@@ -305,9 +382,14 @@ function hideProfile()
 
 $(document).on("click","#meet_toggle",function(e)
 {
-	hideTalk();
-	hideProfile();
-	hideHouse();
+	if (!($("#first_time").length) )
+	{
+		hideTalk();
+		hideProfile();
+		hideHouse();
+	}
+	
+
 	return false;
 }); 
 
@@ -321,26 +403,11 @@ function initialize()
 		backgroundColor:'#B3D3FF'};
 
 	map=new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
-
-	$.post('/get_marks/',{'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value}, function(data)
+	if (!($("#first_time").length))
 	{
-		var response = data
-		var count = response.length;
-		var bounds = new google.maps.LatLngBounds();
-		for(var i = 0; i < count-1; i++) 
-		{
-			var item = response[i];
-			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-			addMarker(loc, item.html, item.netid);
-			bounds.extend(loc);
 
-		}
-		var item = response[i];
-		myloc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-		document.getElementById('id_lat_s').value = myloc.lat().toFixed(5);
-		document.getElementById('id_lon_s').value = myloc.lng().toFixed(5);
-		map.fitBounds(bounds);
-	});
+		getMarks({'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
+	}
 
 	google.maps.event.addListener(map, 'click', function(event) {
 		addMarkerPH(event.latLng);
@@ -506,7 +573,7 @@ function removeList(nid)
   dict = {'type':'talk', 'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
   $.post('/remove_person/', dict, function(data)
   {
-    document.getElementById("friendList").innerHTML=data.table;
+    $("#friendList").html(data.table);
     for (var i = 0; i < markers.length; i++)
 	{
 		if (markers[i].title == nid)
@@ -535,23 +602,7 @@ function setRadius(evt)
 	else
 		dict = {'olap':olap, 'year':year, 'radius':radius, 'gender':gender,csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
-	$.post('/get_marks/', dict, function(data)
-	{
-		var response = data
-		var count = response.length;
-		var bounds = new google.maps.LatLngBounds();
-		for(var i = 0; i < count-1; i++) 
-		{
-			var item = response[i];
-			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-			addMarker(loc, item.html, item.netid);
-			bounds.extend(loc);
-
-		}
-		map.fitBounds(bounds);
-		if (count == 1)
-			map.setZoom(12);
-	});
+	getMarks(dict);
 	if (radius == '0' || radius == '1000000000')
 		document.getElementById("rfilter").innerHTML="Filter by Radius <b class='caret'></b></a>";
 	else
@@ -563,23 +614,7 @@ function genderFilter(evt)
 	gender = evt.target.gender;
 	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
-	$.post('/get_marks/', dict, function(data)
-	{
-		var response = data
-		var count = response.length;
-		var bounds = new google.maps.LatLngBounds();
-		for(var i = 0; i < count-1; i++) 
-		{
-			var item = response[i];
-			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-			addMarker(loc, item.html, item.netid);
-			bounds.extend(loc);
-
-		}
-		map.fitBounds(bounds);
-		if (count == 1)
-			map.setZoom(12);
-	});
+	getMarks(dict);
 	if (gender == 'either')
 		document.getElementById("gfilter").innerHTML="Filter by Gender <b class='caret'></b></a>";
 	else
@@ -592,23 +627,8 @@ function yearFilter(evt)
 	year = evt.target.year;
 	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
-	$.post('/get_marks/', dict, function(data)
-	{
-		var response = data
-		var count = response.length;
-		var bounds = new google.maps.LatLngBounds();
-		for(var i = 0; i < count-1; i++) 
-		{
-			var item = response[i];
-			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-			addMarker(loc, item.html, item.netid);
-			bounds.extend(loc);
+	getMarks(dict);
 
-		}
-		map.fitBounds(bounds);
-		if (count == 1)
-			map.setZoom(12);
-	});
 	if (year == '0')
 		document.getElementById("yfilter").innerHTML="Filter by Class Year <b class='caret'></b></a>";
 	else
@@ -621,23 +641,7 @@ function olapFilter(evt)
 	olap = evt.target.olap;
 	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
-	$.post('/get_marks/', dict, function(data)
-	{
-		var response = data
-		var count = response.length;
-		var bounds = new google.maps.LatLngBounds();
-		for(var i = 0; i < count-1; i++) 
-		{
-			var item = response[i];
-			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-			addMarker(loc, item.html, item.netid);
-			bounds.extend(loc);
-
-		}
-		map.fitBounds(bounds);
-		if (count == 1)
-			map.setZoom(12);
-	});
+	getMarks(dict);
 	if (olap == "-10000")
 		document.getElementById("dfilter").innerHTML="Filter by Date Overlap <b class='caret'></b></a>";
 	else if (olap == "0")
@@ -667,7 +671,7 @@ var getDistance = function(p1, p2) {
 
 
 
-function addMarker(location, html, netid) {
+function addPersonMarker(location, html, netid) {
 	var marker = new google.maps.Marker({
 		position: location,
 		map: map,
@@ -684,6 +688,24 @@ function addMarker(location, html, netid) {
 	});
 }
 
+function addHouseMarker(location, html) {
+	var marker = new google.maps.Marker({
+		position: location,
+		icon: '../static/house_marker.png',
+		map: map,
+		title:'house'
+		
+	});
+	marker.html = html;
+	markers.push(marker);
+
+
+	google.maps.event.addListener(marker, 'click', function() {
+		infowindow.close();
+		infowindow.setContent(marker.html);
+		infowindow.open(map,marker);
+	});
+}
 function meetPerson(nid) 
 {
 	dict = {'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
@@ -701,7 +723,7 @@ function meetPerson(nid)
 					break;
 				}
 			}
-			document.getElementById("friendList").innerHTML=response.table;
+			$("#friendList").html(response.table);
 			$("tr[class='c']").find("p").hide();
 		}
 	});
@@ -722,7 +744,7 @@ function removePerson(nid)
 				break;
 			}
 		}
-		document.getElementById("friendList").innerHTML=response.table;
+		$("#friendList").html(response.table);
 		$("tr[class='c']").find("p").hide();
 
 	});
