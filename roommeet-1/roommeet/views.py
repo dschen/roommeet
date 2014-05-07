@@ -82,16 +82,8 @@ def meet(request):
 	else:
 		pf = ProfileForm(initial=model_to_dict(me))
 	friends = me.friends.all()
-	return render(request, 'meet.html', {'form': pf, 'friend_list':friends, 'firstTime':first, 'me': me})
-
-@login_required
-def house(request):
-	currentNetid = request.user.username
-	me = Person.objects.get(netid=currentNetid)
 	houses = me.houses.all()
-	print "i'm free abo de abo die"
-	return render(request, 'house.html', {'house_list':houses})
-
+	return render(request, 'meet.html', {'form': pf, 'friend_list':friends, 'house_list':houses, 'firstTime':first, 'me': me})
 
 @login_required
 def get_marks(request):
