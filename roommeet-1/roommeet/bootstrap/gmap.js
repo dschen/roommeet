@@ -78,7 +78,7 @@ function getMarks(dict)
 			else
 			{
 				
-				addHouseMarker(loc, item.html);
+				addHouseMarker(loc, item.html, item.id);
 			}
 			bounds.extend(loc);
 
@@ -109,8 +109,11 @@ $(document).on("submit","#hform",function(event)
 
 				hideAddHouse();
 				$("#manageHouseList").html(data.mhtfhtml);
-				$("#myHouseList").html(data.mhtfhtml);
+				$("#myHouseList").html(data.myhtfhtml);
 				$("tr[class='c']").find("p").hide();
+				deleteMarkers();
+				dict = {'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+				getMarks(dict);
 			}
 
 			$("#add-house-box").html(data.html);
@@ -619,6 +622,31 @@ function removeList(nid)
   });
 
 }
+
+function removeHouseList(hid)
+{
+  dict = {'type':'manage', 'house_id':hid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+  $.post('/remove_managed_house/', dict, function(data)
+  {
+    $("#manageHouseList").html(data.table);
+    for (var i = 0; i < markers.length; i++)
+	{
+		if (markers[i].title == hid)
+		{
+			markers[i].setMap(null);
+			markers[i] = markers[markers.length-1];
+			markers = markers.slice(0,markers.length-2);
+			break;
+		}
+	}
+
+
+
+    $("tr[class='c']").find("p").hide();
+  });
+
+}
+
 function setRadius(evt) 
 {
 	if (!evt.target)
@@ -713,6 +741,7 @@ function addPersonMarker(location, html, netid, user) {
 	else {
 		var marker = new google.maps.Marker({
 			position: location,
+			icon: '../static/person_marker.png',
 			map: map,
 			title:netid
 		});
@@ -728,12 +757,13 @@ function addPersonMarker(location, html, netid, user) {
 	});
 }
 
-function addHouseMarker(location, html) {
+function addHouseMarker(location, html, hid) {
 	var marker = new google.maps.Marker({
 		position: location,
 		icon: '../static/house_marker.png',
 		map: map,
-		title:'house'
+		'hid': hid
+		title: 'house'
 		
 	});
 	marker.html = html;
@@ -769,6 +799,29 @@ function meetPerson(nid)
 	});
 }
 
+function meetHouse(hid) 
+{
+	dict = {'house_id':hid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	$.post('/meet_house/', dict, function(data)
+	{
+		var response = data
+		if (response.result == 'success')
+		{
+			for (var i = 0; i < markers.length; i++)
+			{
+				if (markers[i].title == hid)
+				{
+					markers[i].html = response.html;
+					infowindow.setContent(markers[i].html);
+					break;
+				}
+			}
+			$("#myHouseList").html(response.table);
+			$("tr[class='c']").find("p").hide();
+		}
+	});
+}
+
 function removePerson(nid) 
 {
 	dict = {'type':'meet', 'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
@@ -790,11 +843,33 @@ function removePerson(nid)
 	});
 }
 
+function removeHouse(hid) 
+{
+	dict = {'type':'meet', 'house_id':hid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	$.post('/remove_house/', dict, function(data)
+	{
+		var response = data
+		for (var i = 0; i < markers.length; i++)
+		{
+			if (markers[i].title == hid)
+			{
+				markers[i].html = response.html;
+				infowindow.setContent(markers[i].html);
+				break;
+			}
+		}
+		$("#friendList").html(response.table);
+		$("tr[class='c']").find("p").hide();
+
+	});
+}
+
 var infowindow = new google.maps.InfoWindow({
 	content: 'stuff',
      maxWidth: 200,
 
 });
+
 
 // Sets the map on all markers in the array.
 function setAllMap(map) {
