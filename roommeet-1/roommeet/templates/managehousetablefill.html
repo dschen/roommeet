@@ -12,9 +12,7 @@
         Contact: 
         <a href="mailto:{{ house.contact_email }}?Subject=RoomMeet%20Hello"> {{ house.contact_email }} </a>
         <br>
-        Description: {{ house.description }}</p>
-        </td>
-        <td style="border-bottom: initial;"><p><br>
+        Description: {{ house.description }}
         <button type="submit" style:"right:10px; z-index:4;" class="btn btn-sm btn-danger" id="{{ house.id }}-remove" onclick="removeList('{{ house.id }}')"> remove </button> </p>
     </td>
 </tr>
