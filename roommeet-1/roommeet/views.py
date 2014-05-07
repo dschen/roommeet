@@ -227,6 +227,7 @@ def add_house(request):
 	currentNetid = request.user.username
 	me = Person.objects.get(netid=currentNetid)
 	if request.method == 'POST':
+		print "hi!"
 		if 'type' in request.POST:
 			t = get_template('addhouse.html')
 			hf = HouseForm();

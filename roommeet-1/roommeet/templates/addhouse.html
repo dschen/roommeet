@@ -1,21 +1,6 @@
 
 <style> 
-#id_description{ 
-    padding: 1px 20px; 
-    border: 0; 
-    height:200px; 
-    width: 200px; 
-    border-radius: 10px; 
-    -moz-border-radius: 10px; 
-    -webkit-border-radius: 10px; 
-    box-shadow: 1px 1px 0 0 #FFF, 5px 5px 40px 2px #BBB inset; 
-    -moz-box-shadow: 1px 1px 0 0 #FFF, 5px 5px 40px 2px #BBB inset; 
-    -webkit-box-shadow: 1px 1px 0 0 #FFF, 5px 5px 40px 2px #BBB inset; 
-    -webkit-background-clip: padding-box; 
-    outline:0; 
-  }   
-
-  form input[type=email]{ 
+#id_name, #id_hstart, #id_hend, #id_description { 
     padding: 1px 20px; 
     border: 0; 
     height:25px; 
@@ -28,9 +13,13 @@
     -webkit-box-shadow: 1px 1px 0 0 #FFF, 5px 5px 40px 2px #BBB inset; 
     -webkit-background-clip: padding-box; 
     outline:0; 
-  }
+  }   
 
-  form input[type=text]{ 
+  #id_description { 
+	height: 200px;
+}
+  
+  form input[type=email]{ 
     padding: 1px 20px; 
     border: 0; 
     height:25px; 

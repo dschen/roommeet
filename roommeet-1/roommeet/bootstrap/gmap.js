@@ -108,13 +108,12 @@ $(document).on("submit","#hform",function(event)
 			{
 
 				hideAddHouse();
-				//$("#manageHouseList").html(data.mhtfhtml);
+				$("#manageHouseList").html(data.mhtfhtml);
 				$("#myHouseList").html(data.mhtfhtml);
 				$("tr[class='c']").find("p").hide();
 			}
 
 			$("#add-house-box").html(data.html);
-			//
 			$('.datepicker').datepicker();
 			return false;
 
