@@ -2,7 +2,6 @@ from django import forms
 from django.forms import ModelForm
 from django.contrib.admin import widgets
 from people.models import Person
-from houses.models import House
 
 from functools import partial
 DateInput = partial(forms.DateInput, {'class': 'datepicker'}, format='%m/%d/%Y')
@@ -20,11 +19,3 @@ class ProfileForm(forms.Form):
 	desired = forms.ChoiceField(choices=dchoices)
 	lat_s = forms.DecimalField(max_digits=13, decimal_places=10, widget=forms.HiddenInput)
 	lon_s = forms.DecimalField(max_digits=13, decimal_places=10, widget=forms.HiddenInput)
-
-class HouseForm(forms.Form):
-	lat_h = forms.DecimalField(max_digits=13, decimal_places=10, widget=forms.HiddenInput)
-	lon_h = forms.DecimalField(max_digits=13, decimal_places=10, widget=forms.HiddenInput)
-	hstart = forms.DateField(widget=DateInput(), input_formats=('%m/%d/%Y',), label='Start')
-	hend = forms.DateField(widget=DateInput(),  input_formats=('%m/%d/%Y',), label='End')
-	contact_email = forms.EmailField(max_length=50)
-	description = forms.CharField(max_length=1000, widget=forms.Textarea)	

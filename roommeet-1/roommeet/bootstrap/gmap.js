@@ -2,9 +2,7 @@ var map;
 myLatlng=new google.maps.LatLng(39.828127,-98.579404);
 var markers = [];
 var profile = false;
-var house = false;
 var markerp = null;
-var markerh = null;
 var radius = '1000000000';
 var gender = 'either';
 var myloc = null;
@@ -40,8 +38,25 @@ $(document).on("submit","#pform",function(event)
 				hideProfile();
 				$("#close_profile").show();
 				myloc = markerp.getPosition();
-				deleteMarkers();
-				getMarks({'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
+				$.post('/get_marks/',{'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value}, function(data)
+				{
+					var response = data
+					var count = response.length;
+					var bounds = new google.maps.LatLngBounds();
+					for(var i = 0; i < count-1; i++) 
+					{
+						var item = response[i];
+						loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+						addMarker(loc, item.html, item.netid);
+						bounds.extend(loc);
+
+					}
+					var item = response[i];
+					myloc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+					document.getElementById('id_lat_s').value = myloc.lat().toFixed(5);
+					document.getElementById('id_lon_s').value = myloc.lng().toFixed(5);
+					map.fitBounds(bounds);
+				});
 				if ($("#first_time").length)
 					$("#first_time").remove();
 			}
@@ -59,78 +74,12 @@ $(document).on("submit","#pform",function(event)
 });
 
 
-function getMarks(dict)
-{
-	$.post('/get_marks/',dict, function(data)
-	{
-		var response = data
-		var count = response.length;
-		var bounds = new google.maps.LatLngBounds();
-		for(var i = 0; i < count-1; i++) 
-		{
-			var item = response[i];
-			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-			if (item['type'] == 'person')
-			{
-				
-				addPersonMarker(loc, item.html, item.netid);
-			}
-			else
-			{
-				
-				addHouseMarker(loc, item.html);
-			}
-			bounds.extend(loc);
-
-		}
-		var item = response[i];
-		myloc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
-		document.getElementById('id_lat_s').value = myloc.lat().toFixed(5);
-		document.getElementById('id_lon_s').value = myloc.lng().toFixed(5);
-		map.fitBounds(bounds);
-	});
-
-}
-
-$(document).on("submit","#hform",function(event)
-{
-	var frm = $('#hform');
-	event.preventDefault();
-	$.ajax(
-	{
-		type: frm.attr('method'),
-		url: frm.attr('action'),
-		data: frm.serialize(),
-		success: function (data) 
-		{
-
-			if (data.success == "true")
-			{
-
-				hideAddHouse();
-			}
-
-			$("#add-house-box").html(data.html);
-			$('.datepicker').datepicker();
-			return false;
-
-		},
-		error: function(data) 
-		{
-			$("#addhousebox").html(data);
-		}
-	});
-	return false;
-});
-
-
-
 $(document).on("click","#profile_toggle",function(e)
 {
 	if ($("#map_canvas").css('left') == '0px' )
 	{
 		hideTalk();
-		hideHouse();
+
 		showProfile();
 	}
 	else 
@@ -156,7 +105,6 @@ $(document).on("click","#talk-table",function(event)
     }                    
 });
 
-
 $("tr[class='c']").find("p").hide();
 
 
@@ -167,15 +115,6 @@ $(document).on("click","#close_profile",function(e)
 	return false;
 }); 
 
-$(document).on("click","#close_addHouse",function(e)
-{
-
-	hideAddHouse();
-	document.getElementById("hform").reset()
-	return false;
-}); 
-
-
 $(document).on("click","#talk_toggle",function(e)
 {
 	if ($("#talk-box").css('right') == '-500px')
@@ -183,10 +122,9 @@ $(document).on("click","#talk_toggle",function(e)
 		if (!($("#first_time").length) )
 		{
 			hideProfile();
-			hideHouse();
 			showTalk();
 		}
-
+		
 	}
 	else
 	{
@@ -194,53 +132,6 @@ $(document).on("click","#talk_toggle",function(e)
 	}
 	return false;
 }); 
-
-$(document).on("click","#house_toggle",function(e)
-{
-	if ($("#house-box").css('right') == '-500px')
-	{
-		hideProfile();
-		hideTalk();
-		showHouse();
-	}
-	else
-	{
-		hideHouse();
-	}
-	return false;
-}); 
-
-$(document).on("click","#manage_house_toggle",function(e)
-{
-	if ($("#manage-house-box").css('right') == '-500px')
-	{
-		hideProfile();
-		hideTalk();
-		showManageHouse();
-	}
-	else
-	{
-		hideManageHouse();
-	}
-	return false;
-}); 
-
-
-$(document).on("click","#add_house_toggle",function(e)
-{
-	if ($("#add-house-box").css('right') == '-500px')
-	{
-		hideProfile();
-		hideTalk();
-		showAddHouse();
-	}
-	else
-	{
-		hideAddHouse();
-	}
-	return false;
-}); 
-
 
 function hideTalk()
 {
@@ -249,7 +140,6 @@ function hideTalk()
 	document.getElementById("talk_nav").className = "";
 	document.getElementById("profile_nav").className = "";
 	document.getElementById("meet_nav").className = "active";
-	document.getElementById("house_nav").className = "";
 }
 
 function showTalk()
@@ -258,100 +148,7 @@ function showTalk()
 	document.getElementById("meet_nav").className = "";
 	document.getElementById("profile_nav").className = "";
 	document.getElementById("talk_nav").className = "active";
-	document.getElementById("house_nav").className = "";	
-}
-
-function hideHouse()
-{
-	showMarkers();
-	hideAddHouse();
-	hideManageHouse();
 	
-	if (markerh != null)
-		markerh.setMap(null);
-	$("#house-box").animate({right:"-500px"});
-	
-	document.getElementById("talk_nav").className = "";
-	document.getElementById("profile_nav").className = "";
-	document.getElementById("house_nav").className = "";
-	document.getElementById("meet_nav").className = "active";
-}
-
-function showHouse()
-{
-	hideTalk();
-	hideProfile();
-
-	$("#house-box").animate({right:"10px"});
-	document.getElementById("meet_nav").className = "";
-	document.getElementById("profile_nav").className = "";
-	document.getElementById("talk_nav").className = "";
-	document.getElementById("house_nav").className = "active";
-		
-}
-
-function hideAddHouse()
-{
-	house = false;
-	showMarkers();
-	if (markerh != null)
-		markerh.setMap(null);
-	markerh = null;
-	$("#add-house-box").animate({right:"-500px"});
-	
-	document.getElementById("talk_nav").className = "";
-	document.getElementById("profile_nav").className = "";
-	document.getElementById("house_nav").className = "";
-	document.getElementById("meet_nav").className = "active";
-}
-
-function showAddHouse()
-{
-	house = true;
-	clearMarkers();
-	$.ajax(
-	{
-		type: "post",
-		url: "/add_house/",
-		data: {type:"new", csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
-		success: function (data) 
-		{
-			$("#add-house-box").html(data.html);
-			$('.datepicker').datepicker();
-			return false;
-
-		},
-		error: function(data) 
-		{
-			$("#add-house-box").html(data);
-		}
-	});
-	$("#add-house-box").animate({right:"10px"});
-	document.getElementById("meet_nav").className = "";
-	document.getElementById("profile_nav").className = "";
-	document.getElementById("talk_nav").className = "";
-	document.getElementById("house_nav").className = "active";
-}
-
-function hideManageHouse()
-{
-	
-	$("#manage-house-box").animate({right:"-500px"});
-	document.getElementById("talk_nav").className = "";
-	document.getElementById("profile_nav").className = "";
-	document.getElementById("house_nav").className = "active";
-	document.getElementById("meet_nav").className = "";
-}
-
-function showManageHouse()
-{
-
-	$("#manage-house-box").animate({right:"10px"});
-	document.getElementById("meet_nav").className = "";
-	document.getElementById("profile_nav").className = "";
-	document.getElementById("talk_nav").className = "";
-	document.getElementById("house_nav").className = "active";
-		
 }
 
 function showProfile()
@@ -366,7 +163,6 @@ function showProfile()
 	document.getElementById("meet_nav").className = "";
 	document.getElementById("talk_nav").className = "";
 	document.getElementById("profile_nav").className = "active";
-	document.getElementById("house_nav").className = "";
 }
 function hideProfile()
 {
@@ -386,10 +182,8 @@ $(document).on("click","#meet_toggle",function(e)
 	{
 		hideTalk();
 		hideProfile();
-		hideHouse();
 	}
 	
-
 	return false;
 }); 
 
@@ -403,16 +197,40 @@ function initialize()
 		backgroundColor:'#B3D3FF'};
 
 	map=new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
+
 	if (!($("#first_time").length))
 	{
+	$.post('/get_marks/',{'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value}, function(data)
+	{
+		var response = data
+		var count = response.length;
+		var bounds = new google.maps.LatLngBounds();
+		for(var i = 0; i < count-1; i++) 
+		{
+			var item = response[i];
+			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+			addMarker(loc, item.html, item.netid);
+			bounds.extend(loc);
 
-		getMarks({'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
+		}
+		var item = response[i];
+		myloc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+		if (markerp == null)
+		{
+			markerp = new google.maps.Marker({
+				position: myloc,
+				map: null
+			});
+		}
+		document.getElementById('id_lat_s').value = myloc.lat().toFixed(5);
+		document.getElementById('id_lon_s').value = myloc.lng().toFixed(5);
+		map.fitBounds(bounds);
+	});
 	}
 
 	google.maps.event.addListener(map, 'click', function(event) {
-		addMarkerPH(event.latLng);
+		addMarkerProfile(event.latLng);
 	});
-
 
 	var r5 = document.getElementById('5-radius');
 	r5.radius = '5';
@@ -524,7 +342,7 @@ function initialize()
 
 }
 
-function addMarkerPH(location) 
+function addMarkerProfile(location) 
 {
 	if (profile == true)
 	{
@@ -539,23 +357,6 @@ function addMarkerPH(location)
 
 		document.getElementById('id_lat_s').value = location.lat().toFixed(5);
 		document.getElementById('id_lon_s').value = location.lng().toFixed(5);
-	}
-	else if (house == true)
-	{
-		if (markerh == null)
-		{
-
-
-			markerh = new google.maps.Marker({
-				position: location,
-				icon: '../static/house_marker.png',
-				map: map
-			});
-		}
-		markerh.setPosition(location);
-
-		document.getElementById('id_lat_h').value = location.lat().toFixed(5);
-		document.getElementById('id_lon_h').value = location.lng().toFixed(5);
 	}
 }
 
@@ -602,7 +403,23 @@ function setRadius(evt)
 	else
 		dict = {'olap':olap, 'year':year, 'radius':radius, 'gender':gender,csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
-	getMarks(dict);
+	$.post('/get_marks/', dict, function(data)
+	{
+		var response = data
+		var count = response.length;
+		var bounds = new google.maps.LatLngBounds();
+		for(var i = 0; i < count-1; i++) 
+		{
+			var item = response[i];
+			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+			addMarker(loc, item.html, item.netid);
+			bounds.extend(loc);
+
+		}
+		map.fitBounds(bounds);
+		if (count == 1)
+			map.setZoom(12);
+	});
 	if (radius == '0' || radius == '1000000000')
 		document.getElementById("rfilter").innerHTML="Filter by Radius <b class='caret'></b></a>";
 	else
@@ -614,7 +431,23 @@ function genderFilter(evt)
 	gender = evt.target.gender;
 	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
-	getMarks(dict);
+	$.post('/get_marks/', dict, function(data)
+	{
+		var response = data
+		var count = response.length;
+		var bounds = new google.maps.LatLngBounds();
+		for(var i = 0; i < count-1; i++) 
+		{
+			var item = response[i];
+			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+			addMarker(loc, item.html, item.netid);
+			bounds.extend(loc);
+
+		}
+		map.fitBounds(bounds);
+		if (count == 1)
+			map.setZoom(12);
+	});
 	if (gender == 'either')
 		document.getElementById("gfilter").innerHTML="Filter by Gender <b class='caret'></b></a>";
 	else
@@ -627,8 +460,23 @@ function yearFilter(evt)
 	year = evt.target.year;
 	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
-	getMarks(dict);
+	$.post('/get_marks/', dict, function(data)
+	{
+		var response = data
+		var count = response.length;
+		var bounds = new google.maps.LatLngBounds();
+		for(var i = 0; i < count-1; i++) 
+		{
+			var item = response[i];
+			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+			addMarker(loc, item.html, item.netid);
+			bounds.extend(loc);
 
+		}
+		map.fitBounds(bounds);
+		if (count == 1)
+			map.setZoom(12);
+	});
 	if (year == '0')
 		document.getElementById("yfilter").innerHTML="Filter by Class Year <b class='caret'></b></a>";
 	else
@@ -641,7 +489,23 @@ function olapFilter(evt)
 	olap = evt.target.olap;
 	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
-	getMarks(dict);
+	$.post('/get_marks/', dict, function(data)
+	{
+		var response = data
+		var count = response.length;
+		var bounds = new google.maps.LatLngBounds();
+		for(var i = 0; i < count-1; i++) 
+		{
+			var item = response[i];
+			loc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+			addMarker(loc, item.html, item.netid);
+			bounds.extend(loc);
+
+		}
+		map.fitBounds(bounds);
+		if (count == 1)
+			map.setZoom(12);
+	});
 	if (olap == "-10000")
 		document.getElementById("dfilter").innerHTML="Filter by Date Overlap <b class='caret'></b></a>";
 	else if (olap == "0")
@@ -671,7 +535,7 @@ var getDistance = function(p1, p2) {
 
 
 
-function addPersonMarker(location, html, netid) {
+function addMarker(location, html, netid) {
 	var marker = new google.maps.Marker({
 		position: location,
 		map: map,
@@ -688,24 +552,6 @@ function addPersonMarker(location, html, netid) {
 	});
 }
 
-function addHouseMarker(location, html) {
-	var marker = new google.maps.Marker({
-		position: location,
-		icon: '../static/house_marker.png',
-		map: map,
-		title:'house'
-		
-	});
-	marker.html = html;
-	markers.push(marker);
-
-
-	google.maps.event.addListener(marker, 'click', function() {
-		infowindow.close();
-		infowindow.setContent(marker.html);
-		infowindow.open(map,marker);
-	});
-}
 function meetPerson(nid) 
 {
 	dict = {'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};

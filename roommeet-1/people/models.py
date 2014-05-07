@@ -1,5 +1,4 @@
 from django.db import models
-from houses.models import House
 
 class Person(models.Model):
 	first_name = models.CharField(max_length=50, blank=True)
@@ -8,7 +7,6 @@ class Person(models.Model):
 	lat = models.DecimalField(max_digits=13, decimal_places=10, null=True)
 	lon = models.DecimalField(max_digits=13, decimal_places=10, null=True)
 	friends = models.ManyToManyField("self", blank=True, symmetrical=False)
-	houses = models.ManyToManyField(House, blank=True, symmetrical=False)
 	company = models.CharField(max_length=50, blank=True)
 	year = models.IntegerField(blank=True, null=True)
 	start = models.DateField(blank=True, null=True)
