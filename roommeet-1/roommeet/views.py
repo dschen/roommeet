@@ -154,7 +154,7 @@ def get_marks(request):
 				f = False
 			t = get_template('buttonfill.html')
 			html = t.render(Context({'person':p1, 'add':f, 'isSelf':isSelf}))
-			locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'netid':p1.netid, 'html':html, 'type':'person'})
+			locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'netid':p1.netid, 'html':html, 'type':'person', 'user':currentNetid})
 		else:
 			f = True
 			if (me.houses.filter(id=p1.id)):

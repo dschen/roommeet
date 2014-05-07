@@ -73,7 +73,7 @@ function getMarks(dict)
 			if (item['type'] == 'person')
 			{
 				
-				addPersonMarker(loc, item.html, item.netid);
+				addPersonMarker(loc, item.html, item.netid, item.user);
 			}
 			else
 			{
@@ -560,6 +560,7 @@ function addMarkerPH(location)
 		{
 			markerp = new google.maps.Marker({
 				position: location,
+				icon: '../static/star-3.png',
 				map: map
 			});
 		}
@@ -699,12 +700,23 @@ var getDistance = function(p1, p2) {
 
 
 
-function addPersonMarker(location, html, netid) {
-	var marker = new google.maps.Marker({
-		position: location,
-		map: map,
-		title:netid
-	});
+function addPersonMarker(location, html, netid, user) {
+	if (user == netid) {
+		var marker = new google.maps.Marker({
+			position: location,
+			icon: '../static/star-3.png',
+			map: map,
+			title:netid
+		});
+
+	}
+	else {
+		var marker = new google.maps.Marker({
+			position: location,
+			map: map,
+			title:netid
+		});
+	}
 	marker.html = html;
 	markers.push(marker);
 
