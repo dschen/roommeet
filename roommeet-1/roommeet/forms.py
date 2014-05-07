@@ -22,6 +22,7 @@ class ProfileForm(forms.Form):
 	lon_s = forms.DecimalField(max_digits=13, decimal_places=10, widget=forms.HiddenInput)
 
 class HouseForm(forms.Form):
+
 	name = forms.CharField(max_length=50, label='Contact Name')
 	lat_h = forms.DecimalField(max_digits=13, decimal_places=10, widget=forms.HiddenInput)
 	lon_h = forms.DecimalField(max_digits=13, decimal_places=10, widget=forms.HiddenInput)
