@@ -78,7 +78,7 @@ function getMarks(dict)
 			else
 			{
 				
-				addHouseMarker(loc, item.html);
+				addHouseMarker(loc, item.html, item.id);
 			}
 			bounds.extend(loc);
 
@@ -622,6 +622,31 @@ function removeList(nid)
   });
 
 }
+
+function removeHouseList(hid)
+{
+  dict = {'type':'manage', 'hoid':hid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+  $.post('/remove_managed_house/', dict, function(data)
+  {
+    $("#manageHouseList").html(data.table);
+    for (var i = 0; i < markers.length; i++)
+	{
+		if (markers[i].title == hid)
+		{
+			markers[i].setMap(null);
+			markers[i] = markers[markers.length-1];
+			markers = markers.slice(0,markers.length-2);
+			break;
+		}
+	}
+
+
+
+    $("tr[class='c']").find("p").hide();
+  });
+
+}
+
 function setRadius(evt) 
 {
 	if (!evt.target)
@@ -732,12 +757,12 @@ function addPersonMarker(location, html, netid, user) {
 	});
 }
 
-function addHouseMarker(location, html) {
+function addHouseMarker(location, html, hid) {
 	var marker = new google.maps.Marker({
 		position: location,
 		icon: '../static/house_marker.png',
 		map: map,
-		title:'house'
+		title: hid
 		
 	});
 	marker.html = html;
@@ -768,6 +793,29 @@ function meetPerson(nid)
 				}
 			}
 			$("#friendList").html(response.table);
+			$("tr[class='c']").find("p").hide();
+		}
+	});
+}
+
+function meetHouse(hid) 
+{
+	dict = {'house_id':hid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	$.post('/meet_house/', dict, function(data)
+	{
+		var response = data
+		if (response.result == 'success')
+		{
+			for (var i = 0; i < markers.length; i++)
+			{
+				if (markers[i].title == hid)
+				{
+					markers[i].html = response.html;
+					infowindow.setContent(markers[i].html);
+					break;
+				}
+			}
+			$("#myHouseList").html(response.table);
 			$("tr[class='c']").find("p").hide();
 		}
 	});

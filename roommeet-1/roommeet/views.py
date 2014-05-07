@@ -199,6 +199,34 @@ def meet_person(request):
 		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
+	
+@login_required
+def meet_house(request):
+	currentNetid = request.user.username
+	addHid = ''
+	if request.POST:
+		if 'house_id' in request.POST:
+			addHid = request.POST['house_id']
+	me = Person.objects.get(netid=currentNetid)
+	r = {'result':'success'}
+	html = ''
+	if (me.myhouses.filter(id=addHid)):
+		r['result'] = 'already there'
+	else:
+		h = House.objects.get(id=addHid)
+		me.myhouses.add(h)
+		t = get_template('housefill.html')
+		html = t.render(Context({'house':h, 'add':False}))
+
+	r['html'] = html
+	t = get_template('myhousetablefill.html')
+	myhouses = me.myhouses.all()
+	table = t.render(Context({'house_list':myhouses, 'me':me}))
+	r['table'] = table
+	if not request.POST:
+		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
+	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
+	
 @login_required
 def remove_person(request):
 	currentNetid = request.user.username
@@ -221,13 +249,34 @@ def remove_person(request):
 		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
+@login_required
+def remove_managed_house(request):
+	currentNetid = request.user.username
+	remHid = ''
+	rtype = 'meet'
+	if request.POST:
+		if 'house_id' in request.POST:
+			remHid = request.POST['house_id']
+	me = Person.objects.get(netid=currentNetid)
+	h = House.objects.get(id=remHid)
+	me.houses.remove(h)
+	houses = me.houses.all()
+	t = get_template('managehousetablefill.html')
+	table = t.render(Context({'house_list':houses}))
+	r = {'table':table}
+	t = get_template('housefill.html')
+	html = t.render(Context({'person':p1, 'add':True}))
+	r['html'] = html
+	if not request.POST:
+		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
+	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
+	
 
 @login_required
 def add_house(request):
 	currentNetid = request.user.username
 	me = Person.objects.get(netid=currentNetid)
 	if request.method == 'POST':
-		print "hi!"
 		if 'type' in request.POST:
 			t = get_template('addhouse.html')
 			hf = HouseForm();
