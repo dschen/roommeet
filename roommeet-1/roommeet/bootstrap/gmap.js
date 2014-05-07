@@ -154,7 +154,7 @@ $(document).on("click","#talk-table",function(event)
     event.stopPropagation();
     var $target = $(event.target);
 
-    if ( $target.closest("td").attr("colspan") > 1 ) 
+    if ( $target.closest("tr").attr("atr") == 'atr') 
     {
     } 
     else {
@@ -167,7 +167,7 @@ $(document).on("click","#manage-house-table",function(event)
     event.stopPropagation();
     var $target = $(event.target);
 
-    if ( $target.closest("td").attr("colspan") > 1 ) 
+    if ( $target.closest("tr").attr("atr") == 'atr' ) 
     {
     } 
     else {
@@ -180,7 +180,7 @@ $(document).on("click","#my-house-table",function(event)
     event.stopPropagation();
     var $target = $(event.target);
 
-    if ( $target.closest("td").attr("colspan") > 1 ) 
+    if ( $target.closest("tr").attr("atr") == 'atr' ) 
     {
     } 
     else {
@@ -631,7 +631,7 @@ function removeHouseList(hid)
     $("#manageHouseList").html(data.table);
     for (var i = 0; i < markers.length; i++)
 	{
-		if (markers[i].title == hid)
+		if (markers[i].hid == hid)
 		{
 			markers[i].setMap(null);
 			markers[i] = markers[markers.length-1];
@@ -762,7 +762,7 @@ function addHouseMarker(location, html, hid) {
 		position: location,
 		icon: '../static/house_marker.png',
 		map: map,
-		'hid': hid
+		'hid': hid,
 		title: 'house'
 		
 	});
@@ -809,7 +809,7 @@ function meetHouse(hid)
 		{
 			for (var i = 0; i < markers.length; i++)
 			{
-				if (markers[i].title == hid)
+				if (markers[i].hid == hid)
 				{
 					markers[i].html = response.html;
 					infowindow.setContent(markers[i].html);
@@ -851,18 +851,20 @@ function removeHouse(hid)
 		var response = data
 		for (var i = 0; i < markers.length; i++)
 		{
-			if (markers[i].title == hid)
+			if (markers[i].hid == hid)
 			{
 				markers[i].html = response.html;
 				infowindow.setContent(markers[i].html);
 				break;
 			}
 		}
-		$("#friendList").html(response.table);
+		$("#myHouseList").html(response.table);
 		$("tr[class='c']").find("p").hide();
 
 	});
 }
+
+
 
 var infowindow = new google.maps.InfoWindow({
 	content: 'stuff',

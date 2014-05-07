@@ -31,7 +31,7 @@
             </script></p>
     </td>
     </tr>
-    <tr  class="c" >
+    <tr  class="c" atr="atr" >
     <td colspan="2" style="border-bottom: initial;"><p>
         Contact: 
         <a href="mailto:{{ house.contact_email }}?Subject=RoomMeet%20Hello"> {{ house.contact_email }} </a>
@@ -39,7 +39,7 @@
         Description: {{ house.description }}</p>
         </td>
         <td style="border-bottom: initial;"><p><br>
-        <button type="submit" style:"right:10px; z-index:4;" class="btn btn-sm btn-danger" id="{{ house.id }}-remove" onclick="removeList('{{ house.id }}')"> remove </button> </p>
+        <button type="submit" style:"right:10px; z-index:4;" class="btn btn-sm btn-danger" id="{{ house.id }}-remove" onclick="removeHouse('{{ house.id }}')"> remove </button> </p>
     </td>
 </tr>
 {% endfor %}
