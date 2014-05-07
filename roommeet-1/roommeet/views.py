@@ -239,7 +239,7 @@ def add_house(request):
 			if hf.is_valid():
 				cd = hf.cleaned_data
 
-				h = House(lat = cd['lat_h'], lon = cd['lon_h'], start = cd['hstart'],
+				h = House(name = cd['name'], lat = cd['lat_h'], lon = cd['lon_h'], start = cd['hstart'],
 					end=cd['hend'], contact_email = cd['contact_email'],
 					description = cd['description'])
 
