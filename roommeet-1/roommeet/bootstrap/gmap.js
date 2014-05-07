@@ -111,6 +111,9 @@ $(document).on("submit","#hform",function(event)
 				$("#manageHouseList").html(data.mhtfhtml);
 				$("#myHouseList").html(data.mhtfhtml);
 				$("tr[class='c']").find("p").hide();
+				deleteMarkers();
+				dict = {'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+				getMarks(dict);
 			}
 
 			$("#add-house-box").html(data.html);
