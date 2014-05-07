@@ -13,7 +13,7 @@ urlpatterns = patterns('roommeet.views',
     url(r'^meet_house/$', 'meet_house'),
     url(r'^remove_person/$', 'remove_person'),
     url(r'^remove_house/$', 'remove_house'),
-    url(r'^remove_managed_house', 'remove_managed_house')
+    url(r'^remove_managed_house', 'remove_managed_house'),
     url(r'^add_house/$', 'add_house'),
 	url(r'^remove_house/$', 'remove_house'),
 	url(r'^meet_house/$', 'meet_house'),
