@@ -1,73 +1,131 @@
-{% extends 'base.html' %}
 
-{% block lnavitems %}
-{# active is initial, href = url, >title</a = title #}
-<li><a href="/meet/">Meet</a></li>
-<li><a href="/talk/">Talk</a></li>
-{% endblock %}
+<style> 
+  form input[type=text]{ 
+    padding: 1px 20px; 
+    border: 0; 
+    height:25px; 
+    width: 150px; 
+    border-radius: 10px; 
+    -moz-border-radius: 10px; 
+    -webkit-border-radius: 10px; 
+    box-shadow: 1px 1px 0 0 #FFF, 5px 5px 40px 2px #BBB inset; 
+    -moz-box-shadow: 1px 1px 0 0 #FFF, 5px 5px 40px 2px #BBB inset; 
+    -webkit-box-shadow: 1px 1px 0 0 #FFF, 5px 5px 40px 2px #BBB inset; 
+    -webkit-background-clip: padding-box; 
+    outline:0; 
+  } 
+  #id_desired{
+    display: inline-block;
+      -webkit-appearance: none;        /*Removes default chrome and safari style*/
+      -moz-appearance: none;          /* Removes Default Firefox style*/
+
+
+      
+    padding: 1px 20px; 
+    border: 0; 
+    height:25px; 
+    width: 150px; 
+    border-radius: 10px; 
+    -moz-border-radius: 10px; 
+    -webkit-border-radius: 10px; 
+    box-shadow: 1px 1px 0 0 #FFF, 5px 5px 40px 2px #BBB inset; 
+    -moz-box-shadow: 1px 1px 0 0 #FFF, 5px 5px 40px 2px #BBB inset; 
+    -webkit-box-shadow: 1px 1px 0 0 #FFF, 5px 5px 40px 2px #BBB inset; 
+    -webkit-background-clip: padding-box; 
+    outline:0;
+
+      /*My custom style for fonts*/
+
+      color: #000000;
+    }
+
+#id_gender{
+    display: inline-block;
+      -webkit-appearance: none;        /*Removes default chrome and safari style*/
+      -moz-appearance: none;          /* Removes Default Firefox style*/
+
+
+      
+    padding: 1px 20px; 
+    border: 0; 
+    height:25px; 
+    width: 150px; 
+    border-radius: 10px; 
+    -moz-border-radius: 10px; 
+    -webkit-border-radius: 10px; 
+    box-shadow: 1px 1px 0 0 #FFF, 5px 5px 40px 2px #BBB inset; 
+    -moz-box-shadow: 1px 1px 0 0 #FFF, 5px 5px 40px 2px #BBB inset; 
+    -webkit-box-shadow: 1px 1px 0 0 #FFF, 5px 5px 40px 2px #BBB inset; 
+    -webkit-background-clip: padding-box; 
+    outline:0;
+
+      /*My custom style for fonts*/
+
+      color: #000000;
+    }
+  
+
+
+  form label{
+    height: 40px;
+    line-height: 45px;
+  } 
+  td
+  {
+    max-width: 100px;
+    overflow: visible;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+
+</style>
 
 
 
-{% block mainpage %}
-<div class="row-fluid">
-    <div class="col-md-4">
-        <div class="well sidebar-nav">
-            <ul class="nav nav-list">
-                <li class="nav-header" style="font-weight:bold;">Please click on the map where you will be working</li>
-                <br>
-                <br>
+<ul class="nav nav-list" style="color:#c2c2c2">
+  <li  style="font-weight:bold;">&nbsp;&nbsp;&nbsp;&nbsp;Please click on the map where <br>&nbsp;&nbsp;&nbsp;&nbsp;you will be working</li>
+  <br>
 
-		{% if form.errors %}
-		<p style="color: red;">
-		  Please correct the error{{ form.errors|pluralize }} below.
-		</p>
-		{% endif %}
 
-                {{ form.non_field_errors }}
+  {% if form.errors %}
+  <p style="color: red;">
+    <b>&nbsp;&nbsp;&nbsp;&nbsp;Please correct the error{{ form.errors|pluralize }} below.</b>
+  </p>
+  {% endif %}
 
-		<form action="" method="post">
-		  {% for field in form.visible_fields %}
-		  <div class="fieldWrapper">
-                    {{ field.errors }}
-		    {{ field.label_tag }}
-                    {{ field }}
-		  </div>
-		  <br>
-		  {% endfor %}
+  {{ form.non_field_errors }}
 
-		  {% for hidden in form.hidden_fields %}
-			{% if hidden.errors %}
-			  <br>
-			  Please click on the map.
-			  <br>
-			{% endif %}
-			{{ hidden }}
-		  {% endfor %}
+  <form id="pform" action="/meet/" method="post">
+    {% csrf_token %}
 
-		  {% csrf_token %}
-                  <br>
-		  <input type="submit" class="btn btn-primary" style="margin: 2%;" value="Save Changes">
-                  <a class="btn btn-danger" style="margin: 2%;" href="/">Cancel</a>
-		</form>
-
-            </ul>
+    <table border="1" style="width:300px">
+      <table>
+        {% for field in form.visible_fields %}
+        <div class="fieldWrapper">
+          {% if field.errors %}     
+          <tr><td>{{ field.errors }}</td></tr>
+          {% endif %}
+          <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;{{ field.label_tag }}</td><td> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td style="color: black;"> {{ field }}<br></td>
+          </tr>
         </div>
-    </div>
 
-    <div class="col-md-8">
-    	<input id="pac-input" class="controls" type="text" placeholder="Search Box">
-		<div id="map_canvas"></div>
-    </div>
-</div>
-{% endblock %}
+        {% endfor %}
+      </table>
+      {% for hidden in form.hidden_fields %}
+      {% if hidden.errors %}
+      <br>
+      <p style="color: red;">
+        Please click on the map.
+      </p>
+      <br>
+      {% endif %}
+      {{ hidden }}
+      {% endfor %}
 
+      <input type="submit" class="btn btn-primary" style="margin: 2%;  width:120px;" value="Save">
+      <a id="close_profile" class="btn btn-danger" style="margin: 2%; width:110px;">Cancel</a>
+    </form>
 
-
-{% block scriptext %}
-
-
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
-<script src="{{STATIC_URL}}/gmap_p.js"></script>
-
-
-{% endblock %}
+  </ul>

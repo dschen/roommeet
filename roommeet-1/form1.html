@@ -1,0 +1,46 @@
+<div class="row-fluid">
+        <div class="col-md-8">
+      <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+        <div id="map_canvas"></div>
+        </div>
+        <div class="col-md-8">
+        {% if form.errors %}
+    <p style="color: red;">
+      <b>Please correct the error{{ form.errors|pluralize }} below.</b>
+    </p>
+    {% endif %}
+
+                {{ form.non_field_errors }}
+
+    <form action="" method="post" id ="form1">
+            
+            <table border="1" style="width:300px">
+            <table>
+      {% for field in form.visible_fields %}
+      <div class="fieldWrapper">
+                    
+        <tr><td>{{ field.errors }}</td></tr>
+            <tr><td>{{ field.label_tag }}&nbsp</td>
+                    <td>{{ field }}<br><br></td>
+                    </tr>
+      </div>
+      
+      {% endfor %}
+          </table>
+      {% for hidden in form.hidden_fields %}
+      {% if hidden.errors %}
+        <br>
+        <p style="color: red;">
+                Please click on the map.
+                </p>
+        <br>
+      {% endif %}
+      {{ hidden }}
+      {% endfor %}
+
+      {% csrf_token %}
+                  <br>
+      <input type="submit" class="btn btn-primary" style="margin: 2%;" value="Save Profile">
+                  <a class="btn btn-danger" style="margin: 2%;" href="/">Cancel</a>
+    </form>
+    </div>

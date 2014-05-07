@@ -1,0 +1,34 @@
+
+{% comment %}
+
+	{% if today_is_weekend %}
+	    <p>Welcome to the weekend!</p>
+	{% else %}
+	    <p>Get back to work.</p>
+	{% endif %}
+
+
+	{% ifequal section 'sitenews' %}
+	    <h1>Site News</h1>
+	{% else %}
+	    <h1>No News Here</h1>
+	{% endifequal %}
+
+
+	{% for athlete in athlete_list %}
+	    <li>{{ athlete.name }}</li>
+	    {{ forloop.counter }} 
+	    {% if forloop.first %}
+
+	{% empty %}
+	    <p>There are no athletes. Only computer programmers.</p>
+	{% endfor %}
+
+	{% include 'nav.html' %}
+
+
+	{% includes 'x.html' %}
+
+	{% extends 'base.html' %o}
+
+{% endcomment %}
