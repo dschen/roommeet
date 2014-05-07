@@ -332,8 +332,8 @@ function hideAddHouse()
 	
 	document.getElementById("talk_nav").className = "";
 	document.getElementById("profile_nav").className = "";
-	document.getElementById("house_nav").className = "";
-	document.getElementById("meet_nav").className = "active";
+    document.getElementById("house_nav").className = "active";
+	document.getElementById("meet_nav").className = "";
 }
 
 function showAddHouse()
