@@ -1,13 +1,12 @@
 from django.contrib import admin
 
-from people.models import Person
+from houses.models import House
 
 
-class PersonAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'netid')
-    search_fields = ('first_name', 'last_name')
-    list_filter = ('netid',)
-    filter_horizontal = ('friends',)
+class HouseAdmin(admin.ModelAdmin):
+    list_display = ('contact_email', 'description',)
+    search_fields = ('contact_email',)
+    list_filter = ('contact_email',)
 
-admin.site.register(Person, PersonAdmin)
+admin.site.register(House, HouseAdmin)
 # Register your models here.

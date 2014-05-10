@@ -1,0 +1,15 @@
+<b>Start:</b>  {{ house.hstart }}
+<br>
+<b>End:</b> {{ house.hend }}
+<br>
+<b>Contact:</b> {{ house.contact_email }}
+<br>
+<div align='right'>
+
+
+    {% if add %}
+        <button type='submit' id='house_add' onclick='meetHouse("{{ person.netid }}")'  class='btn btn-outlined btn-xs btn-block active btn-success'> Add </button>
+    {% else %}
+        <button type='submit' id='house_remove' onclick='removeHouse("{{ person.netid }}")' class='btn btn-outlined btn-xs btn-block active btn-danger'> Remove </button>
+	{% endif %}
+
