@@ -19,6 +19,8 @@ urlpatterns = patterns('roommeet.views',
 	url(r'^meet_house/$', 'meet_house'),
 	url(r'^remove_managed_house/$', 'remove_managed_house'),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^product_page/', 'product_page'),
+    
 )
 
 #CAS

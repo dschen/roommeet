@@ -382,4 +382,6 @@ def manage_house(request):
 			return HttpResponse(json.dumps(data), content_type = "application/json")
 
 
+def product_page(request):
+	return render(request, 'product_page.html')
 
