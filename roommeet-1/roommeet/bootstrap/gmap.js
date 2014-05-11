@@ -811,7 +811,7 @@ function olapFilter(evt)
 		document.getElementById("dfilter").innerHTML="Date Overlap: 1 Month <b class='caret'></b></a>";
 }
 
-function genderFilter(evt)
+function typeFilter(evt)
 {
 	type = evt.target.type;
 	dict = {'type': type, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
