@@ -166,8 +166,8 @@ def get_marks(request):
 			t = get_template('housefill.html')
 			html = t.render(Context({'house':p1, 'add':f}))
 			locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'html':html, 'type':'house', 'id':p1.id})
-
-	locs.append({'lat':str(me.lat), 'lon':str(me.lon),})
+	if not (type == 'Housing Only'):
+		locs.append({'lat':str(me.lat), 'lon':str(me.lon),})
 	if not request.POST:
 		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(locs), mimetype='application/json; charset=UTF-8')
