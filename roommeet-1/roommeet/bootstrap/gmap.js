@@ -410,7 +410,6 @@ function showAddHouse()
 
 function showEditHouse(hid)
 {
-	house = true;
 	clearMarkers();
 	for (var i = 0; i < markers.length; i++) 
 	{
@@ -419,23 +418,23 @@ function showEditHouse(hid)
 	}
 	
 	
-	$.ajax(
-	{
-		type: "post",
-		url: "/edit_house/",
-		data: {type:"new", csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
-		success: function (data) 
-		{
-			$("#edit-house-box").html(data.html);
-			$('.datepicker').datepicker();
-			return false;
+	// $.ajax(
+	// {
+		// type: "post",
+		// url: "/edit_house/",
+		// data: {type:"new", csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+		// success: function (data) 
+		// {
+			// $("#edit-house-box").html(data.html);
+			// $('.datepicker').datepicker();
+			// return false;
 
-		},
-		error: function(data) 
-		{
-			$("#edit-house-box").html(data);
-		}
-	});
+		// },
+		// error: function(data) 
+		// {
+			// $("#edit-house-box").html(data);
+		// }
+	// });
 	
 	$("#edit-house-box").animate({right:"10px"});
 	document.getElementById("meet_nav").className = "";
@@ -446,7 +445,6 @@ function showEditHouse(hid)
 
 function hideEditHouse()
 {
-	house = false;
 	showMarkers();
 	$("#edit-house-box").animate({right:"-500px"});
 	
