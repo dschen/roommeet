@@ -762,7 +762,7 @@ function addHouseMarker(location, html, hid) {
 		position: location,
 		icon: '../static/house_marker.png',
 		map: map,
-		'hid': hid
+		'hid': hid,
 		title: 'house'
 		
 	});
