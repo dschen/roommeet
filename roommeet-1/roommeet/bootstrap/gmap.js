@@ -407,8 +407,8 @@ function showEditHouse(hid)
 	clearMarkers();
 	for (var i = 0; i < markers.length; i++) 
 	{
-		if (marker[i].hid != null && marker[i].hid == hid)
-			marker[i].setMap(map);
+		if (markers[i].hid != null && markers[i].hid == hid)
+			markers[i].setMap(map);
 	}
 	
 	$.ajax(
