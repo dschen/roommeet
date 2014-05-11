@@ -129,6 +129,42 @@ $(document).on("submit","#hform",function(event)
 	return false;
 });
 
+$(document).on("submit","#heform",function(event)
+{
+	var frm = $('#heform');
+	event.preventDefault();
+	$.ajax(
+	{
+		type: frm.attr('method'),
+		url: frm.attr('action'),
+		data: frm.serialize(),
+		success: function (data) 
+		{
+
+			if (data.success == "true")
+			{
+
+				hideEditHouse();
+				$("#manageHouseList").html(data.mhtfhtml);
+				$("#myHouseList").html(data.myhtfhtml);
+				$("tr[class='c']").find("p").hide();
+				deleteMarkers();
+				dict = {'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+				getMarks(dict);
+			}
+
+			$("#edit-house-box").html(data.html);
+			$('.datepicker').datepicker();
+			return false;
+
+		},
+		error: function(data) 
+		{
+			$("#edithousebox").html(data);
+		}
+	});
+	return false;
+});
 
 
 $(document).on("click","#profile_toggle",function(e)
@@ -297,6 +333,7 @@ function hideHouse()
 	showMarkers();
 	hideAddHouse();
 	hideManageHouse();
+	hideEditHouse();
 	
 	if (markerh != null)
 		markerh.setMap(null);
@@ -362,6 +399,52 @@ function showAddHouse()
 	document.getElementById("profile_nav").className = "";
 	document.getElementById("talk_nav").className = "";
 	document.getElementById("house_nav").className = "active";
+}
+
+function showEditHouse()
+{
+	house = true;
+	clearMarkers();
+	for (var i = 0; i < markers.length; i++) 
+	{
+		if (marker[i].hid != null && marker[i].hid == hid)
+			marker[i].setMap(map);
+	}
+	
+	$.ajax(
+	{
+		type: "post",
+		url: "/edit_house/",
+		data: {type:"edit", hid:hid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+		success: function (data) 
+		{
+			$("#edit-house-box").html(data.html);
+			$('.datepicker').datepicker();
+			return false;
+
+		},
+		error: function(data) 
+		{
+			$("#edit-house-box").html(data);
+		}
+	});
+	$("#edit-house-box").animate({right:"10px"});
+	document.getElementById("meet_nav").className = "";
+	document.getElementById("profile_nav").className = "";
+	document.getElementById("talk_nav").className = "";
+	document.getElementById("house_nav").className = "active";
+}
+
+function hideEditHouse()
+{
+	house = false;
+	showMarkers();
+	$("#edit-house-box").animate({right:"-500px"});
+	
+	document.getElementById("talk_nav").className = "";
+	document.getElementById("profile_nav").className = "";
+    document.getElementById("house_nav").className = "active";
+	document.getElementById("meet_nav").className = "";
 }
 
 function hideManageHouse()

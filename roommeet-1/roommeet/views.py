@@ -38,7 +38,6 @@ def meet(request):
 	if request.method == 'GET':
 		if (not isinstance(me.lat, Decimal)):
 			first = "True"
-	print first
 	if request.method == 'POST':
 		pf = ProfileForm(request.POST)
 
@@ -305,6 +304,7 @@ def add_house(request):
 			html = t.render(RequestContext(request, {'form': hf}))
 			data = {'html':html}
 			return HttpResponse(json.dumps(data), content_type = "application/json")
+			
 		else:
 			hf = HouseForm(request.POST)
 
@@ -341,46 +341,54 @@ def add_house(request):
 
 			data = {'success':'false', 'html':html}
 			return HttpResponse(json.dumps(data), content_type = "application/json")
-
+			
 @login_required
-def manage_house(request):
+def edit_house(request):
 	currentNetid = request.user.username
 	me = Person.objects.get(netid=currentNetid)
-	if request.method == 'POST':
+	if request.method == POST:
 		if 'type' in request.POST:
-			t = get_template('addhouse.html')
-			hf = HouseForm();
+			t = get_template('edithouse.html')
+			hid = request.POST['hid']
+			h = House.objects.get(id=hid)
+			inData = model_to_dict(h)
+			inData['hid'] = hid
+			hf = HouseForm(initial=inData)
 			html = t.render(RequestContext(request, {'form': hf}))
-			data = {'html':html}
+			data = {'html': html}
 			return HttpResponse(json.dumps(data), content_type = "application/json")
 		else:
 			hf = HouseForm(request.POST)
 
 			if hf.is_valid():
 				cd = hf.cleaned_data
+				h = House.objects.get(id=cd['hid'])
 
-				h = House(lat = cd['lat_h'], lon = cd['lon_h'], start = cd['hstart'],
+				h = House(name = cd['name'], lat = cd['lat_h'], lon = cd['lon_h'], start = cd['hstart'],
 					end=cd['hend'], contact_email = cd['contact_email'],
 					description = cd['description'])
 
 				h.save()
-				me.houses.add(h)
-
-				me.save()
 				
-				t = get_template('addhouse.html')
+				t = get_template('edithouse.html')
 				html = t.render(RequestContext(request, {'form': hf}))
-				data = {'success':'true', 'html':html}
+				t = get_template('managehousetablefill.html')
+				houses = me.houses.all()
+				mhtfhtml = t.render(RequestContext(request, {'house_list': houses}))
+				t = get_template('myhousetablefill.html')
+				myhouses = me.myhouses.all()
+				myhtfhtml = t.render(RequestContext(request, {'my_houses': myhouses, 'me':me}))
+				
+				data = {'success':'true', 'html':html, 'mhtfhtml':mhtfhtml, 'myhtfhtml':myhtfhtml}
 				return HttpResponse(json.dumps(data), content_type = "application/json")
 
 			else:
 				hf.errors['lat_h'] = hf.error_class()
 
-			t = get_template('addhouse.html')
+			t = get_template('edithouse.html')
 			html = t.render(RequestContext(request, {'form': hf}))
 			
+
 			data = {'success':'false', 'html':html}
 			return HttpResponse(json.dumps(data), content_type = "application/json")
-
-
-
+			
