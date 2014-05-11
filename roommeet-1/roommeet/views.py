@@ -91,6 +91,7 @@ def get_marks(request):
 	radius = 100000000000;
 	gender = 'either'
 	olap = -10000
+	type = 'both'
 
 	year = 0
 	if request.POST:
@@ -102,6 +103,8 @@ def get_marks(request):
 			year = int(request.POST['year'])
 		if 'olap' in request.POST:
 			olap = int(request.POST['olap'])
+		if 'type' in request.POST:
+			type = str(request.POST['type'])
 
 		if radius == 0:
 			radius = 100000000000;
@@ -118,7 +121,6 @@ def get_marks(request):
 		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad).filter(gender=gender)
 	else :
 		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad).filter(gender=gender).filter(year=year)
-	print radius
 	locs = []
 	people = []
 
@@ -126,7 +128,10 @@ def get_marks(request):
 
 	p = list(p)
 	h = list(h)	
-	p = p + h
+	if (type == 'both')
+		p = p + h
+	elif (type == 'house')
+		p = h
 
 	for person in p:
 		mylength = me.end - me.start

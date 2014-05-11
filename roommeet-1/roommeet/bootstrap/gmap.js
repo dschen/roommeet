@@ -10,6 +10,7 @@ var gender = 'either';
 var myloc = null;
 var year = '0'
 var olap = '-10000'
+var type = 'People and Housing'
 
 $(document).ready(function() {
 	$('.datepicker').datepicker();
@@ -41,7 +42,7 @@ $(document).on("submit","#pform",function(event)
 				$("#close_profile").show();
 				myloc = markerp.getPosition();
 				deleteMarkers();
-				getMarks({'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
+				getMarks({'type':type, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
 				if ($("#first_time").length)
 					$("#first_time").remove();
 			}
@@ -112,7 +113,7 @@ $(document).on("submit","#hform",function(event)
 				$("#myHouseList").html(data.myhtfhtml);
 				$("tr[class='c']").find("p").hide();
 				deleteMarkers();
-				dict = {'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+				dict = {'type':type, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 				getMarks(dict);
 			}
 
@@ -149,7 +150,7 @@ $(document).on("submit","#heform",function(event)
 				$("#myHouseList").html(data.myhtfhtml);
 				$("tr[class='c']").find("p").hide();
 				deleteMarkers();
-				dict = {'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+				dict = {'type':type, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 				getMarks(dict);
 			}
 
@@ -528,7 +529,7 @@ function initialize()
 	if (!($("#first_time").length))
 	{
 
-		getMarks({'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
+		getMarks({'type':type, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
 	}
 
 	google.maps.event.addListener(map, 'click', function(event) {
@@ -591,6 +592,16 @@ function initialize()
 	var do30 = document.getElementById('olap_month');
 	do30.olap = '30';
 	do30.addEventListener('click', olapFilter, false);
+	
+	var tPeople = document.getElementById('type_people');
+	tPeople.type = 'People Only';
+	tPeople.addEventListener('click', typeFilter, false);
+	var tHouse = document.getElementById('type_housing');
+	tHouse.type = 'Housing Only';
+	tHouse.addEventListener('click', typeFilter, false);
+	var tBoth = document.getElementById('type_both');
+	tBoth.type = 'People and Housing';
+	tBoth.addEventListener('click', typeFilter, false);
 	
 
 	// Create the search box and link it to the UI element.
@@ -746,9 +757,9 @@ function setRadius(evt)
 		cradius = evt.target.radius;
 	radius = cradius;
 	if (radius == '0')
-		dict = {'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		dict = {'type':type, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	else
-		dict = {'olap':olap, 'year':year, 'radius':radius, 'gender':gender,csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		dict = {'type':type, 'olap':olap, 'year':year, 'radius':radius, 'gender':gender,csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	getMarks(dict);
 	if (radius == '0' || radius == '1000000000')
@@ -760,7 +771,7 @@ function setRadius(evt)
 function genderFilter(evt)
 {
 	gender = evt.target.gender;
-	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	dict = {'type':type, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	getMarks(dict);
 	if (gender == 'either')
@@ -773,7 +784,7 @@ function genderFilter(evt)
 function yearFilter(evt)
 {
 	year = evt.target.year;
-	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	dict = {'type': type, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	getMarks(dict);
 
@@ -787,7 +798,7 @@ function yearFilter(evt)
 function olapFilter(evt)
 {
 	olap = evt.target.olap;
-	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	dict = {'type': type, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	getMarks(dict);
 	if (olap == "-10000")
@@ -800,6 +811,14 @@ function olapFilter(evt)
 		document.getElementById("dfilter").innerHTML="Date Overlap: 1 Month <b class='caret'></b></a>";
 }
 
+function genderFilter(evt)
+{
+	type = evt.target.type;
+	dict = {'type': type, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	deleteMarkers();
+	getMarks(dict);
+	document.getElementById("tfilter").innerHTML="Show: " + type + " <b class='caret'></b></a>";
+}
 
 var rad = function(x) {
   return x * Math.PI / 180;
