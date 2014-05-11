@@ -128,7 +128,7 @@ def get_marks(request):
 
 	p = list(p)
 	h = list(h)	
-	if (type == 'both'):
+	if (type == 'People and Housing'):
 		p = p + h
 	elif (type == 'Housing Only'):
 		p = h
