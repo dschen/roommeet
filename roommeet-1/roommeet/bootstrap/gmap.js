@@ -415,7 +415,7 @@ function showEditHouse(hid)
 	{
 		type: "post",
 		url: "/edit_house/",
-		data: {type:"edit", csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+		data: {type:"new", csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
 		success: function (data) 
 		{
 			$("#edit-house-box").html(data.html);
