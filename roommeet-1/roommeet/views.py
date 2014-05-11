@@ -391,4 +391,12 @@ def edit_house(request):
 
 			data = {'success':'false', 'html':html}
 			return HttpResponse(json.dumps(data), content_type = "application/json")
+<<<<<<< HEAD
 			
+=======
+
+
+def product_page(request):
+	return render(request, 'product_page.html')
+
+>>>>>>> ccweaver
