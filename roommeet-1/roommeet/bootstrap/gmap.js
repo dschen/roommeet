@@ -242,6 +242,14 @@ $(document).on("click","#close_addHouse",function(e)
 	return false;
 }); 
 
+$(document).on("click","#close_editHouse",function(e)
+{
+
+	hideEditHouse();
+	document.getElementById("heform").reset()
+	return false;
+}); 
+
 
 $(document).on("click","#talk_toggle",function(e)
 {
@@ -333,7 +341,6 @@ function hideHouse()
 	showMarkers();
 	hideAddHouse();
 	hideManageHouse();
-	hideEditHouse();
 	
 	if (markerh != null)
 		markerh.setMap(null);
@@ -411,6 +418,7 @@ function showEditHouse(hid)
 			markers[i].setMap(map);
 	}
 	
+	
 	$.ajax(
 	{
 		type: "post",
@@ -428,6 +436,7 @@ function showEditHouse(hid)
 			$("#edit-house-box").html(data);
 		}
 	});
+	
 	$("#edit-house-box").animate({right:"10px"});
 	document.getElementById("meet_nav").className = "";
 	document.getElementById("profile_nav").className = "";
