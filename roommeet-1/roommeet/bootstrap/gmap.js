@@ -401,7 +401,7 @@ function showAddHouse()
 	document.getElementById("house_nav").className = "active";
 }
 
-function showEditHouse()
+function showEditHouse(hid)
 {
 	house = true;
 	clearMarkers();
