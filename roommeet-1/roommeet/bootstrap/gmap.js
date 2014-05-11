@@ -411,6 +411,7 @@ function showAddHouse()
 function showEditHouse(hid)
 {
 	clearMarkers();
+	hideHouse();
 	// for (var i = 0; i < markers.length; i++) 
 	// {
 		// if (markers[i].hid != null && markers[i].hid == hid)
