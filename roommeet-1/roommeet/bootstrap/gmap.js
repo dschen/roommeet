@@ -10,6 +10,7 @@ var gender = 'either';
 var myloc = null;
 var year = '0'
 var olap = '-10000'
+var hp = 'People and Housing'
 
 $(document).ready(function() {
 	$('.datepicker').datepicker();
@@ -41,11 +42,13 @@ $(document).on("submit","#pform",function(event)
 				$("#close_profile").show();
 				myloc = markerp.getPosition();
 				deleteMarkers();
-				getMarks({'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
+				getMarks({'hp':hp, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
 				if ($("#first_time").length)
 					$("#first_time").remove();
 			}
 			$("#profilebox").html(data.html);
+			$("#talklist").html(data.tfhtml);
+			$("#myhouselist").html(data.myhtfhtml);
 			$('.datepicker').datepicker();
 			return false;
 
@@ -73,18 +76,29 @@ function getMarks(dict)
 			if (item['type'] == 'person')
 			{
 				
-				addPersonMarker(loc, item.html, item.netid);
+				addPersonMarker(loc, item.html, item.netid, item.user);
 			}
 			else
 			{
 				
-				addHouseMarker(loc, item.html);
+				addHouseMarker(loc, item.html, item.id);
 			}
 			bounds.extend(loc);
 
 		}
 		var item = response[i];
 		myloc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+		if (markerp == null)
+		{
+			markerp = new google.maps.Marker({
+				position: myloc,
+				icon: '../static/star-3.png',
+				map: null
+			});
+		}
+		else
+			markerp.setPosition(myloc);
+
 		document.getElementById('id_lat_s').value = myloc.lat().toFixed(5);
 		document.getElementById('id_lon_s').value = myloc.lng().toFixed(5);
 		map.fitBounds(bounds);
@@ -108,6 +122,12 @@ $(document).on("submit","#hform",function(event)
 			{
 
 				hideAddHouse();
+				$("#manageHouseList").html(data.mhtfhtml);
+				$("#myHouseList").html(data.myhtfhtml);
+				$("tr[class='c']").find("p").hide();
+				deleteMarkers();
+				dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+				getMarks(dict);
 			}
 
 			$("#add-house-box").html(data.html);
@@ -123,6 +143,42 @@ $(document).on("submit","#hform",function(event)
 	return false;
 });
 
+$(document).on("submit","#heform",function(event)
+{
+	var frm = $('#heform');
+	event.preventDefault();
+	$.ajax(
+	{
+		type: frm.attr('method'),
+		url: frm.attr('action'),
+		data: frm.serialize(),
+		success: function (data) 
+		{
+
+			if (data.success == "true")
+			{
+
+				hideEditHouse();
+				$("#manageHouseList").html(data.mhtfhtml);
+				$("#myHouseList").html(data.myhtfhtml);
+				$("tr[class='c']").find("p").hide();
+				deleteMarkers();
+				dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+				getMarks(dict);
+			}
+
+			$("#edit-house-box").html(data.html);
+			$('.datepicker').datepicker();
+			return false;
+
+		},
+		error: function(data) 
+		{
+			$("#edithousebox").html(data);
+		}
+	});
+	return false;
+});
 
 
 $(document).on("click","#profile_toggle",function(e)
@@ -148,7 +204,7 @@ $(document).on("click","#talk-table",function(event)
     event.stopPropagation();
     var $target = $(event.target);
 
-    if ( $target.closest("td").attr("colspan") > 1 ) 
+    if ( $target.closest("tr").attr("atr") == 'atr') 
     {
     } 
     else {
@@ -161,7 +217,7 @@ $(document).on("click","#manage-house-table",function(event)
     event.stopPropagation();
     var $target = $(event.target);
 
-    if ( $target.closest("td").attr("colspan") > 1 ) 
+    if ( $target.closest("tr").attr("atr") == 'atr' ) 
     {
     } 
     else {
@@ -169,6 +225,18 @@ $(document).on("click","#manage-house-table",function(event)
     }                    
 });
 
+$(document).on("click","#my-house-table",function(event)
+{
+    event.stopPropagation();
+    var $target = $(event.target);
+
+    if ( $target.closest("tr").attr("atr") == 'atr' ) 
+    {
+    } 
+    else {
+        $target.closest("tr").next().find("p").slideToggle();
+    }                    
+});
 
 $("tr[class='c']").find("p").hide();
 
@@ -185,6 +253,14 @@ $(document).on("click","#close_addHouse",function(e)
 
 	hideAddHouse();
 	document.getElementById("hform").reset()
+	return false;
+}); 
+
+$(document).on("click","#close_editHouse",function(e)
+{
+
+	hideEditHouse();
+	document.getElementById("heform").reset()
 	return false;
 }); 
 
@@ -212,9 +288,12 @@ $(document).on("click","#house_toggle",function(e)
 {
 	if ($("#house-box").css('right') == '-500px')
 	{
+	    if (!($("#first_time").length))
+	    {
 		hideProfile();
 		hideTalk();
 		showHouse();
+	    }
 	}
 	else
 	{
@@ -314,8 +393,8 @@ function hideAddHouse()
 	
 	document.getElementById("talk_nav").className = "";
 	document.getElementById("profile_nav").className = "";
-	document.getElementById("house_nav").className = "";
-	document.getElementById("meet_nav").className = "active";
+    document.getElementById("house_nav").className = "active";
+	document.getElementById("meet_nav").className = "";
 }
 
 function showAddHouse()
@@ -346,6 +425,52 @@ function showAddHouse()
 	document.getElementById("house_nav").className = "active";
 }
 
+function showEditHouse(hid)
+{
+	clearMarkers();
+	for (var i = 0; i < markers.length; i++) 
+	{
+		if (markers[i].hid != null && markers[i].hid == hid)
+			markers[i].setMap(map);
+	}
+	
+	
+	$.ajax(
+	{
+		type: "post",
+		url: "/edit_house/",
+		data: {type:"new", csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+		success: function (data) 
+		{
+			$("#edit-house-box").html(data.html);
+			$('.datepicker').datepicker();
+			return false;
+
+		},
+		error: function(data) 
+		{
+			$("#edit-house-box").html(data);
+		}
+	});
+	
+	$("#edit-house-box").animate({right:"10px"});
+	document.getElementById("meet_nav").className = "";
+	document.getElementById("profile_nav").className = "";
+	document.getElementById("talk_nav").className = "";
+	document.getElementById("house_nav").className = "active";
+}
+
+function hideEditHouse()
+{
+	showMarkers();
+	$("#edit-house-box").animate({right:"-500px"});
+	
+	document.getElementById("talk_nav").className = "";
+	document.getElementById("profile_nav").className = "";
+    document.getElementById("house_nav").className = "active";
+	document.getElementById("meet_nav").className = "";
+}
+
 function hideManageHouse()
 {
 	
@@ -374,6 +499,9 @@ function showProfile()
 	profile = true;
 	if (markerp != null)
 		markerp.setMap(map);
+	else 
+		console.log(myloc);
+	
 	$("#map_canvas").animate({left:"300px"});
 	$("#profilebox").animate({left:"10px"});
 	document.getElementById("meet_nav").className = "";
@@ -419,7 +547,7 @@ function initialize()
 	if (!($("#first_time").length))
 	{
 
-		getMarks({'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
+		getMarks({'hp':hp, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
 	}
 
 	google.maps.event.addListener(map, 'click', function(event) {
@@ -493,6 +621,16 @@ function initialize()
 	ei.desired = 'Either';
 	ei.addEventListener('click', desiredFilter, false);
 	
+	var hpPeople = document.getElementById('hp_people');
+	hpPeople.hp = 'People Only';
+	hpPeople.addEventListener('click', hpFilter, false);
+	var hpHouse = document.getElementById('hp_housing');
+	hpHouse.hp = 'Housing Only';
+	hpHouse.addEventListener('click', hpFilter, false);
+	var hpBoth = document.getElementById('hp_both');
+	hpBoth.hp = 'People and Housing';
+	hpBoth.addEventListener('click', hpFilter, false);
+	
 
 	// Create the search box and link it to the UI element.
 
@@ -555,6 +693,7 @@ function addMarkerPH(location)
 		{
 			markerp = new google.maps.Marker({
 				position: location,
+				icon: '../static/star-3.png',
 				map: map
 			});
 		}
@@ -613,6 +752,31 @@ function removeList(nid)
   });
 
 }
+
+function removeHouseList(hid)
+{
+  dict = {'type':'manage', 'house_id':hid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+  $.post('/remove_managed_house/', dict, function(data)
+  {
+    $("#manageHouseList").html(data.table);
+    for (var i = 0; i < markers.length; i++)
+	{
+		if (markers[i].hid == hid)
+		{
+			markers[i].setMap(null);
+			markers[i] = markers[markers.length-1];
+			markers = markers.slice(0,markers.length-2);
+			break;
+		}
+	}
+
+
+
+    $("tr[class='c']").find("p").hide();
+  });
+
+}
+
 function setRadius(evt) 
 {
 	if (!evt.target)
@@ -621,9 +785,15 @@ function setRadius(evt)
 		cradius = evt.target.radius;
 	radius = cradius;
 	if (radius == '0')
+<<<<<<< HEAD
 		dict = {'olap':olap, 'year':year, 'gender':gender, 'desired':desired, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	else
 		dict = {'olap':olap, 'year':year, 'radius':radius, 'gender':gender, 'desired':desired, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+=======
+		dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	else
+		dict = {'hp':hp, 'olap':olap, 'year':year, 'radius':radius, 'gender':gender,csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+>>>>>>> master
 	deleteMarkers();
 	getMarks(dict);
 	if (radius == '0' || radius == '1000000000')
@@ -635,7 +805,11 @@ function setRadius(evt)
 function genderFilter(evt)
 {
 	gender = evt.target.gender;
+<<<<<<< HEAD
 	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, 'desired':desired, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+=======
+	dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+>>>>>>> master
 	deleteMarkers();
 	getMarks(dict);
 	if (gender == 'either')
@@ -648,7 +822,11 @@ function genderFilter(evt)
 function yearFilter(evt)
 {
 	year = evt.target.year;
+<<<<<<< HEAD
 	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, 'desired':desired, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+=======
+	dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+>>>>>>> master
 	deleteMarkers();
 	getMarks(dict);
 
@@ -662,7 +840,11 @@ function yearFilter(evt)
 function olapFilter(evt)
 {
 	olap = evt.target.olap;
+<<<<<<< HEAD
 	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, 'desired':desired, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+=======
+	dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+>>>>>>> master
 	deleteMarkers();
 	getMarks(dict);
 	if (olap == "-10000")
@@ -675,6 +857,7 @@ function olapFilter(evt)
 		document.getElementById("dfilter").innerHTML="Date Overlap: 1 Month <b class='caret'></b></a>";
 }
 
+<<<<<<< HEAD
 function desiredFilter(evt)
 {
 	desired = evt.target.desired;
@@ -701,6 +884,15 @@ function desiredFilter(evt)
 		document.getElementById("desfilter").innerHTML="Looking For? <b class='caret'></b></a>";
 	else
 		document.getElementById("desfilter").innerHTML="Looking For: " + desired + " <b class='caret'></b></a>";
+=======
+function hpFilter(evt)
+{
+	hp = evt.target.hp;
+	dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	deleteMarkers();
+	getMarks(dict);
+	document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
+>>>>>>> master
 }
 
 var rad = function(x) {
@@ -721,12 +913,24 @@ var getDistance = function(p1, p2) {
 
 
 
-function addPersonMarker(location, html, netid) {
-	var marker = new google.maps.Marker({
-		position: location,
-		map: map,
-		title:netid
-	});
+function addPersonMarker(location, html, netid, user) {
+	if (user == netid) {
+		var marker = new google.maps.Marker({
+			position: location,
+			icon: '../static/star-3.png',
+			map: map,
+			title:netid
+		});
+
+	}
+	else {
+		var marker = new google.maps.Marker({
+			position: location,
+			icon: '../static/person_marker.png',
+			map: map,
+			title:netid
+		});
+	}
 	marker.html = html;
 	markers.push(marker);
 
@@ -738,12 +942,13 @@ function addPersonMarker(location, html, netid) {
 	});
 }
 
-function addHouseMarker(location, html) {
+function addHouseMarker(location, html, hid) {
 	var marker = new google.maps.Marker({
 		position: location,
 		icon: '../static/house_marker.png',
 		map: map,
-		title:'house'
+		'hid': hid,
+		title: 'house'
 		
 	});
 	marker.html = html;
@@ -779,6 +984,29 @@ function meetPerson(nid)
 	});
 }
 
+function meetHouse(hid) 
+{
+	dict = {'house_id':hid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	$.post('/meet_house/', dict, function(data)
+	{
+		var response = data
+		if (response.result == 'success')
+		{
+			for (var i = 0; i < markers.length; i++)
+			{
+				if (markers[i].hid == hid)
+				{
+					markers[i].html = response.html;
+					infowindow.setContent(markers[i].html);
+					break;
+				}
+			}
+			$("#myHouseList").html(response.table);
+			$("tr[class='c']").find("p").hide();
+		}
+	});
+}
+
 function removePerson(nid) 
 {
 	dict = {'type':'meet', 'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
@@ -800,11 +1028,35 @@ function removePerson(nid)
 	});
 }
 
+function removeHouse(hid) 
+{
+	dict = {'type':'meet', 'house_id':hid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	$.post('/remove_house/', dict, function(data)
+	{
+		var response = data
+		for (var i = 0; i < markers.length; i++)
+		{
+			if (markers[i].hid == hid)
+			{
+				markers[i].html = response.html;
+				infowindow.setContent(markers[i].html);
+				break;
+			}
+		}
+		$("#myHouseList").html(response.table);
+		$("tr[class='c']").find("p").hide();
+
+	});
+}
+
+
+
 var infowindow = new google.maps.InfoWindow({
 	content: 'stuff',
      maxWidth: 200,
 
 });
+
 
 // Sets the map on all markers in the array.
 function setAllMap(map) {

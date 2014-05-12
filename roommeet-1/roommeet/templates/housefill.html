@@ -1,15 +1,15 @@
-<b>Start:</b>  {{ house.hstart }}
+<b>Start:</b>  {{ house.start }}
 <br>
-<b>End:</b> {{ house.hend }}
+<b>End:</b> {{ house.end }}
 <br>
-<b>Contact:</b> {{ house.contact_email }}
+<b>Contact:</b> {{ house.name }}
 <br>
 <div align='right'>
 
 
     {% if add %}
-        <button type='submit' id='house_add' onclick='meetHouse("{{ person.netid }}")'  class='btn btn-outlined btn-xs btn-block active btn-success'> Add </button>
+        <button type='submit' id='house_add' onclick='meetHouse("{{ house.id }}")'  class='btn btn-outlined btn-xs btn-block active btn-success'> Add </button>
     {% else %}
-        <button type='submit' id='house_remove' onclick='removeHouse("{{ person.netid }}")' class='btn btn-outlined btn-xs btn-block active btn-danger'> Remove </button>
+        <button type='submit' id='house_remove' onclick='removeHouse("{{ house.id }}")' class='btn btn-outlined btn-xs btn-block active btn-danger'> Remove </button>
 	{% endif %}
 
