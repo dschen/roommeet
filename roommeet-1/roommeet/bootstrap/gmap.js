@@ -88,6 +88,7 @@ function getMarks(dict)
 		}
 		var item = response[i];
 		myloc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+
 		document.getElementById('id_lat_s').value = myloc.lat().toFixed(5);
 		document.getElementById('id_lon_s').value = myloc.lng().toFixed(5);
 		map.fitBounds(bounds);
@@ -489,6 +490,7 @@ function showProfile()
 	profile = true;
 	if (markerp != null)
 		markerp.setMap(map);
+	
 	$("#map_canvas").animate({left:"300px"});
 	$("#profilebox").animate({left:"10px"});
 	document.getElementById("meet_nav").className = "";
