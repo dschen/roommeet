@@ -428,31 +428,30 @@ function showAddHouse()
 function showEditHouse(hid)
 {
 	clearMarkers();
-	hideHouse();
-	// for (var i = 0; i < markers.length; i++) 
-	// {
-		// if (markers[i].hid != null && markers[i].hid == hid)
-			// markers[i].setMap(map);
-	// }
+	for (var i = 0; i < markers.length; i++) 
+	{
+		if (markers[i].hid != null && markers[i].hid == hid)
+			markers[i].setMap(map);
+	}
 	
 	
-	// $.ajax(
-	// {
-		// type: "post",
-		// url: "/edit_house/",
-		// data: {type:"new", csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
-		// success: function (data) 
-		// {
-			// $("#edit-house-box").html(data.html);
-			// $('.datepicker').datepicker();
-			// return false;
+	$.ajax(
+	{
+		type: "post",
+		url: "/edit_house/",
+		data: {type:"new", csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+		success: function (data) 
+		{
+			$("#edit-house-box").html(data.html);
+			$('.datepicker').datepicker();
+			return false;
 
-		// },
-		// error: function(data) 
-		// {
-			// $("#edit-house-box").html(data);
-		// }
-	// });
+		},
+		error: function(data) 
+		{
+			$("#edit-house-box").html(data);
+		}
+	});
 	
 	$("#edit-house-box").animate({right:"10px"});
 	document.getElementById("meet_nav").className = "";
