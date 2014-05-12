@@ -101,18 +101,12 @@
           </ul>
         </li>
 		
-		<li><span style="vertical-align:middle; width:400px;">
-			<form id="qform" action="" method="get">
+		<li>
+			<form id="qform" action="" method="post">
 				<input type="text" name="q">
-				<input class="btn btn-primary" style="margin: 2%;" type="submit" onClick="searchResults(this.form)" value="Search">
-			</form></span>
+				<input class="btn btn-primary" style="margin: 2%;" type="submit" value="Search">
+			</form>
 		</li>
-		<script language="JavaScript">
-			function searchResults (form) {
-				var TestVar = form.inputbox.value;
-				alert ("You typed: " + TestVar);
-			}
-		</script>
 
       </ul>
       </div>
