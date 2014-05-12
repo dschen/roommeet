@@ -520,11 +520,6 @@ function hideProfile()
 	document.getElementById("meet_nav").className = "active";
 }
 
-function searchResults (form) {
-    var TestVar = form.inputbox.value;
-    alert ("You typed: " + TestVar);
-}
-
 $(document).on("click","#meet_toggle",function(e)
 {
 	if (!($("#first_time").length) )
