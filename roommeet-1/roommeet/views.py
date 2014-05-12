@@ -352,6 +352,8 @@ def add_house(request):
 
 			data = {'success':'false', 'html':html}
 			return HttpResponse(json.dumps(data), content_type = "application/json")
+	if not request.POST:
+		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 			
 @login_required
 def edit_house(request):
@@ -402,6 +404,9 @@ def edit_house(request):
 
 			data = {'success':'false', 'html':html}
 			return HttpResponse(json.dumps(data), content_type = "application/json")
+			
+	if not request.POST:
+		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 
 
 def product_page(request):
