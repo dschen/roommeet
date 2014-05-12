@@ -97,7 +97,7 @@ def get_marks(request):
 	radius = 100000000000;
 	gender = 'either'
 	olap = -10000
-	type = 'both'
+	hp = 'People and Housing'
 
 	year = 0
 	if request.POST:
@@ -109,8 +109,8 @@ def get_marks(request):
 			year = int(request.POST['year'])
 		if 'olap' in request.POST:
 			olap = int(request.POST['olap'])
-		if 'type' in request.POST:
-			type = str(request.POST['type'])
+		if 'hp' in request.POST:
+			hp = str(request.POST['type'])
 
 		if radius == 0:
 			radius = 100000000000;
@@ -134,9 +134,9 @@ def get_marks(request):
 
 	p = list(p)
 	h = list(h)	
-	if (type == 'People and Housing'):
+	if (hp == 'People and Housing'):
 		p = p + h
-	elif (type == 'Housing Only'):
+	elif (hp == 'Housing Only'):
 		p = h
 
 	for person in p:
