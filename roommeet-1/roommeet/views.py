@@ -110,7 +110,7 @@ def get_marks(request):
 		if 'olap' in request.POST:
 			olap = int(request.POST['olap'])
 		if 'hp' in request.POST:
-			hp = str(request.POST['type'])
+			hp = str(request.POST['hp'])
 
 		if radius == 0:
 			radius = 100000000000;
@@ -172,7 +172,7 @@ def get_marks(request):
 			t = get_template('housefill.html')
 			html = t.render(Context({'house':p1, 'add':f}))
 			locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'html':html, 'type':'house', 'id':p1.id})
-	if not (type == 'Housing Only'):
+	if not (hp == 'Housing Only'):
 		locs.append({'lat':str(me.lat), 'lon':str(me.lon),})
 	if not request.POST:
 		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
