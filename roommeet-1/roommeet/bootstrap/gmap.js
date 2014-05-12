@@ -282,7 +282,7 @@ $(document).on("click","#house_toggle",function(e)
 		hideProfile();
 		hideTalk();
 		showHouse();
-	    {
+	    }
 	}
 	else
 	{
