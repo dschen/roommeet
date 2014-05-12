@@ -47,6 +47,8 @@ $(document).on("submit","#pform",function(event)
 					$("#first_time").remove();
 			}
 			$("#profilebox").html(data.html);
+			$("#talklist").html(data.tfhtml);
+			$("#myhouselist").html(data.myhtfhtml);
 			$('.datepicker').datepicker();
 			return false;
 

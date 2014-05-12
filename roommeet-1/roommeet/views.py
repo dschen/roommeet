@@ -64,15 +64,15 @@ def meet(request):
 				lon=cd['lon_s'], company=cd['company'], year=cd['year'])
 				p1.save()
 
-			t = get_template('managehousetablefill.html')
-			houses = me.houses.all()
-			mhtfhtml = t.render(RequestContext(request, {'house_list': houses}))
+			t = get_template('tablefill.html')
+			friends = me.friends.all()
+			tfhtml = t.render(RequestContext(request, {'friend_list': friends}))
 			t = get_template('myhousetablefill.html')
 			myhouses = me.myhouses.all()
 			myhtfhtml = t.render(RequestContext(request, {'my_houses': myhouses, 'me':me}))
 			t = get_template('profile.html')
 			html = t.render(RequestContext(request, {'form': pf}))
-			data = {'success':'true', 'html':html, 'mhtfhtml':mhtfhtml, 'myhtfhtml':myhtfhtml}	
+			data = {'success':'true', 'html':html, 'tfhtml':tfhtml, 'myhtfhtml':myhtfhtml}	
 			return HttpResponse(json.dumps(data), content_type = "application/json")
 
 		else:
