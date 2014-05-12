@@ -42,7 +42,7 @@ $(document).on("submit","#pform",function(event)
 				$("#close_profile").show();
 				myloc = markerp.getPosition();
 				deleteMarkers();
-				getMarks({'type':type, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
+				getMarks({'hp':hp, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
 				if ($("#first_time").length)
 					$("#first_time").remove();
 			}
@@ -88,6 +88,16 @@ function getMarks(dict)
 		}
 		var item = response[i];
 		myloc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+		if (markerp == null)
+		{
+			markerp = new google.maps.Marker({
+				position: myloc,
+				icon: '../static/star-3.png',
+				map: null
+			});
+		}
+		else
+			markerp.setPosition(myloc);
 
 		document.getElementById('id_lat_s').value = myloc.lat().toFixed(5);
 		document.getElementById('id_lon_s').value = myloc.lng().toFixed(5);
@@ -490,6 +500,8 @@ function showProfile()
 	profile = true;
 	if (markerp != null)
 		markerp.setMap(map);
+	else 
+		console.log(myloc);
 	
 	$("#map_canvas").animate({left:"300px"});
 	$("#profilebox").animate({left:"10px"});
