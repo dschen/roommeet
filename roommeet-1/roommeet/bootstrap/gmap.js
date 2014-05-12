@@ -275,9 +275,12 @@ $(document).on("click","#house_toggle",function(e)
 {
 	if ($("#house-box").css('right') == '-500px')
 	{
+	    if (!($("#first_time").length))
+	    {
 		hideProfile();
 		hideTalk();
 		showHouse();
+	    {
 	}
 	else
 	{
