@@ -10,6 +10,7 @@ var gender = 'either';
 var myloc = null;
 var year = '0'
 var olap = '-10000'
+var hp = 'People and Housing'
 
 $(document).ready(function() {
 	$('.datepicker').datepicker();
@@ -41,11 +42,13 @@ $(document).on("submit","#pform",function(event)
 				$("#close_profile").show();
 				myloc = markerp.getPosition();
 				deleteMarkers();
-				getMarks({'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
+				getMarks({'hp':hp, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
 				if ($("#first_time").length)
 					$("#first_time").remove();
 			}
 			$("#profilebox").html(data.html);
+			$("#talklist").html(data.tfhtml);
+			$("#myhouselist").html(data.myhtfhtml);
 			$('.datepicker').datepicker();
 			return false;
 
@@ -85,6 +88,17 @@ function getMarks(dict)
 		}
 		var item = response[i];
 		myloc = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lon));
+		if (markerp == null)
+		{
+			markerp = new google.maps.Marker({
+				position: myloc,
+				icon: '../static/star-3.png',
+				map: null
+			});
+		}
+		else
+			markerp.setPosition(myloc);
+
 		document.getElementById('id_lat_s').value = myloc.lat().toFixed(5);
 		document.getElementById('id_lon_s').value = myloc.lng().toFixed(5);
 		map.fitBounds(bounds);
@@ -112,7 +126,7 @@ $(document).on("submit","#hform",function(event)
 				$("#myHouseList").html(data.myhtfhtml);
 				$("tr[class='c']").find("p").hide();
 				deleteMarkers();
-				dict = {'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+				dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 				getMarks(dict);
 			}
 
@@ -149,7 +163,7 @@ $(document).on("submit","#heform",function(event)
 				$("#myHouseList").html(data.myhtfhtml);
 				$("tr[class='c']").find("p").hide();
 				deleteMarkers();
-				dict = {'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+				dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 				getMarks(dict);
 			}
 
@@ -165,7 +179,6 @@ $(document).on("submit","#heform",function(event)
 	});
 	return false;
 });
-
 
 $(document).on("click","#profile_toggle",function(e)
 {
@@ -274,9 +287,12 @@ $(document).on("click","#house_toggle",function(e)
 {
 	if ($("#house-box").css('right') == '-500px')
 	{
+	    if (!($("#first_time").length))
+	    {
 		hideProfile();
 		hideTalk();
 		showHouse();
+	    }
 	}
 	else
 	{
@@ -319,6 +335,13 @@ $(document).on("click","#add_house_toggle",function(e)
 
 function hideTalk()
 {
+
+	// hp = "People and Housing";
+	// dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	// deleteMarkers();
+	// getMarks(dict);
+	// document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
+	
 	$("#talk-box").animate({right:"-500px"});
 	
 	document.getElementById("talk_nav").className = "";
@@ -329,6 +352,13 @@ function hideTalk()
 
 function showTalk()
 {
+	
+	// hp = "People Only";
+	// dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	// deleteMarkers();
+	// getMarks(dict);
+	// document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
+	
 	$("#talk-box").animate({right:"10px"});
 	document.getElementById("meet_nav").className = "";
 	document.getElementById("profile_nav").className = "";
@@ -338,9 +368,15 @@ function showTalk()
 
 function hideHouse()
 {
-	showMarkers();
+
 	hideAddHouse();
 	hideManageHouse();
+	hideEditHouse();
+	hp = "People and Housing";
+	dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	deleteMarkers();
+	getMarks(dict);
+	document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
 	
 	if (markerh != null)
 		markerh.setMap(null);
@@ -356,6 +392,11 @@ function showHouse()
 {
 	hideTalk();
 	hideProfile();
+	hp = "Housing Only";
+	dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	deleteMarkers();
+	getMarks(dict);
+	document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
 
 	$("#house-box").animate({right:"10px"});
 	document.getElementById("meet_nav").className = "";
@@ -411,30 +452,30 @@ function showAddHouse()
 function showEditHouse(hid)
 {
 	clearMarkers();
-	// for (var i = 0; i < markers.length; i++) 
-	// {
-		// if (markers[i].hid != null && markers[i].hid == hid)
-			// markers[i].setMap(map);
-	// }
+	for (var i = 0; i < markers.length; i++) 
+	{
+		if (markers[i].hid != null && markers[i].hid == hid)
+			markers[i].setMap(map);
+	}
 	
 	
-	// $.ajax(
-	// {
-		// type: "post",
-		// url: "/edit_house/",
-		// data: {type:"new", csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
-		// success: function (data) 
-		// {
-			// $("#edit-house-box").html(data.html);
-			// $('.datepicker').datepicker();
-			// return false;
+	$.ajax(
+	{
+		type: "post",
+		url: "/edit_house/",
+		data: {type:"new", csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value},
+		success: function (data) 
+		{
+			$("#edit-house-box").html(data.html);
+			$('.datepicker').datepicker();
+			return false;
 
-		// },
-		// error: function(data) 
-		// {
-			// $("#edit-house-box").html(data);
-		// }
-	// });
+		},
+		error: function(data) 
+		{
+			$("#edit-house-box").html(data);
+		}
+	});
 	
 	$("#edit-house-box").animate({right:"10px"});
 	document.getElementById("meet_nav").className = "";
@@ -482,6 +523,9 @@ function showProfile()
 	profile = true;
 	if (markerp != null)
 		markerp.setMap(map);
+	else 
+		console.log(myloc);
+	
 	$("#map_canvas").animate({left:"300px"});
 	$("#profilebox").animate({left:"10px"});
 	document.getElementById("meet_nav").className = "";
@@ -527,7 +571,7 @@ function initialize()
 	if (!($("#first_time").length))
 	{
 
-		getMarks({'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
+		getMarks({'hp':hp, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
 	}
 
 	google.maps.event.addListener(map, 'click', function(event) {
@@ -590,6 +634,16 @@ function initialize()
 	var do30 = document.getElementById('olap_month');
 	do30.olap = '30';
 	do30.addEventListener('click', olapFilter, false);
+	
+	var hpPeople = document.getElementById('hp_people');
+	hpPeople.hp = 'People Only';
+	hpPeople.addEventListener('click', hpFilter, false);
+	var hpHouse = document.getElementById('hp_housing');
+	hpHouse.hp = 'Housing Only';
+	hpHouse.addEventListener('click', hpFilter, false);
+	var hpBoth = document.getElementById('hp_both');
+	hpBoth.hp = 'People and Housing';
+	hpBoth.addEventListener('click', hpFilter, false);
 	
 
 	// Create the search box and link it to the UI element.
@@ -745,9 +799,9 @@ function setRadius(evt)
 		cradius = evt.target.radius;
 	radius = cradius;
 	if (radius == '0')
-		dict = {'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	else
-		dict = {'olap':olap, 'year':year, 'radius':radius, 'gender':gender,csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		dict = {'hp':hp, 'olap':olap, 'year':year, 'radius':radius, 'gender':gender,csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	getMarks(dict);
 	if (radius == '0' || radius == '1000000000')
@@ -759,7 +813,7 @@ function setRadius(evt)
 function genderFilter(evt)
 {
 	gender = evt.target.gender;
-	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	getMarks(dict);
 	if (gender == 'either')
@@ -772,7 +826,7 @@ function genderFilter(evt)
 function yearFilter(evt)
 {
 	year = evt.target.year;
-	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	getMarks(dict);
 
@@ -786,7 +840,7 @@ function yearFilter(evt)
 function olapFilter(evt)
 {
 	olap = evt.target.olap;
-	dict = {'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	getMarks(dict);
 	if (olap == "-10000")
@@ -799,6 +853,14 @@ function olapFilter(evt)
 		document.getElementById("dfilter").innerHTML="Date Overlap: 1 Month <b class='caret'></b></a>";
 }
 
+function hpFilter(evt)
+{
+	hp = evt.target.hp;
+	dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	deleteMarkers();
+	getMarks(dict);
+	document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
+}
 
 var rad = function(x) {
   return x * Math.PI / 180;

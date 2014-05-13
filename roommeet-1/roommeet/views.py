@@ -64,9 +64,15 @@ def meet(request):
 				lon=cd['lon_s'], company=cd['company'], year=cd['year'])
 				p1.save()
 
+			t = get_template('tablefill.html')
+			friends = me.friends.all()
+			tfhtml = t.render(RequestContext(request, {'friend_list': friends}))
+			t = get_template('myhousetablefill.html')
+			myhouses = me.myhouses.all()
+			myhtfhtml = t.render(RequestContext(request, {'my_houses': myhouses, 'me':me}))
 			t = get_template('profile.html')
 			html = t.render(RequestContext(request, {'form': pf}))
-			data = {'success':'true', 'html':html}
+			data = {'success':'true', 'html':html, 'tfhtml':tfhtml, 'myhtfhtml':myhtfhtml}	
 			return HttpResponse(json.dumps(data), content_type = "application/json")
 
 		else:
@@ -91,6 +97,7 @@ def get_marks(request):
 	radius = 100000000000;
 	gender = 'either'
 	olap = -10000
+	hp = 'People and Housing'
 
 	year = 0
 	if request.POST:
@@ -102,6 +109,8 @@ def get_marks(request):
 			year = int(request.POST['year'])
 		if 'olap' in request.POST:
 			olap = int(request.POST['olap'])
+		if 'hp' in request.POST:
+			hp = str(request.POST['hp'])
 
 		if radius == 0:
 			radius = 100000000000;
@@ -118,7 +127,6 @@ def get_marks(request):
 		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad).filter(gender=gender)
 	else :
 		p = Person.objects.filter(lat__gt=float(me.lat)-radius).filter(lat__lt=float(me.lat)+radius).filter(lon__gt=float(me.lon)-lonrad).filter(lon__lt=float(me.lon)+lonrad).filter(gender=gender).filter(year=year)
-	print radius
 	locs = []
 	people = []
 
@@ -126,7 +134,10 @@ def get_marks(request):
 
 	p = list(p)
 	h = list(h)	
-	p = p + h
+	if (hp == 'People and Housing'):
+		p = p + h
+	elif (hp == 'Housing Only'):
+		p = h
 
 	for person in p:
 		mylength = me.end - me.start
@@ -161,8 +172,8 @@ def get_marks(request):
 			t = get_template('housefill.html')
 			html = t.render(Context({'house':p1, 'add':f}))
 			locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'html':html, 'type':'house', 'id':p1.id})
-
-	locs.append({'lat':str(me.lat), 'lon':str(me.lon),})
+	if not (hp == 'Housing Only'):
+		locs.append({'lat':str(me.lat), 'lon':str(me.lon),})
 	if not request.POST:
 		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(locs), mimetype='application/json; charset=UTF-8')
@@ -341,6 +352,8 @@ def add_house(request):
 
 			data = {'success':'false', 'html':html}
 			return HttpResponse(json.dumps(data), content_type = "application/json")
+	if not request.POST:
+		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 			
 @login_required
 def edit_house(request):
@@ -391,6 +404,9 @@ def edit_house(request):
 
 			data = {'success':'false', 'html':html}
 			return HttpResponse(json.dumps(data), content_type = "application/json")
+			
+	if not request.POST:
+		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 
 
 def product_page(request):

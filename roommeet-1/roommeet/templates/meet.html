@@ -89,8 +89,17 @@
 
           </ul>
         </li>
-
-
+		
+		<li class='dropdown'>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <div id="hpfilter">
+          Show: People and Housing <b class="caret"></b></div>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a id="hp_people"> People Only </a></li>
+            <li><a id="hp_housing"> Housing Only </a></li>
+            <li><a id="hp_both"> People and Housing </a></li>
+          </ul>
+        </li>
       </ul>
       </div>
     </div><!--/.nav-collapse -->
@@ -194,7 +203,7 @@ background-color: rgba(135, 135, 235, 0.80);
 }
 
 
-.addhousebox {
+.addhousebox, .edithousebox {
   color:#c2c2c2;
   position:fixed;
   right:-500px;
