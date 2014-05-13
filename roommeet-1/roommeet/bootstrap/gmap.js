@@ -117,13 +117,12 @@ function getMarks(dict)
 
 	       document.getElementById('id_lat_s').value = myloc.lat().toFixed(5);
 	       document.getElementById('id_lon_s').value = myloc.lng().toFixed(5);
-		   bounds.extend(myloc);
 		   if (radius == '0' || radius == '1000000000')
 				map.fitBounds(bounds);
 		   else {
-			loc = new google.maps.LatLng(myloc.lat()+(radius/2*69.11), myloc.lon);
+			loc = new google.maps.LatLng(myloc.lat()+(parseFloat(radius)/2*69.11), myloc.lon);
 			bounds.extend(loc);
-			loc = new google.maps.LatLng(myloc.lat()-(radius/2*69.11), myloc.lon);
+			loc = new google.maps.LatLng(myloc.lat()-(parseFloat(radius)/2*69.11), myloc.lon);
 			bounds.extend(loc);
 			map.fitBounds(bounds);
 		   }
