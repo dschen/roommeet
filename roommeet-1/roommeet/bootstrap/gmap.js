@@ -454,14 +454,8 @@ function showAddHouse()
 
 function showEditHouse(hid)
 {
-	clearMarkers();
-	for (var i = 0; i < markers.length; i++) 
-	{
-		if (markers[i].hid != null && markers[i].hid == hid)
-			markers[i].setMap(map);
-	}
-	
-	
+	house = true;
+	clearMarkers();	
 	$.ajax(
 	{
 		type: "post",
@@ -470,6 +464,7 @@ function showEditHouse(hid)
 		success: function (data) 
 		{
 			$("#edit-house-box").html(data.html);
+			
 			$('.datepicker').datepicker();
 			return false;
 
@@ -526,8 +521,6 @@ function showProfile()
 	profile = true;
 	if (markerp != null)
 		markerp.setMap(map);
-	else 
-		console.log(myloc);
 	
 	$("#map_canvas").animate({left:"300px"});
 	$("#profilebox").animate({left:"10px"});
