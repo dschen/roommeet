@@ -521,7 +521,10 @@ function showEditHouse(hid)
 	    {
 		$("#edit-house-box").html(data.html);
 		$('.datepicker').datepicker();
-		location = new google.maps.LatLng(document.getElementById('id_lat_h').value, document.getElementById('id_lon_h').value);
+		var lat_rangers = (document.getElementById('id_lat_h').value);
+		var lon_rangers = (document.getElementById('id_lon_h').value);
+		var location = new google.maps.LatLng(lat_rangers, lon_rangers);
+		
 		markerh = new google.maps.Marker({
 		position: location,
 		icon: '../static/house_marker.png',
