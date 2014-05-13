@@ -365,13 +365,18 @@ def edit_house(request):
 			t = get_template('edithouse.html')
 			if 'hid' in request.POST:
 				hid = request.POST['hid']
-			h = House.objects.get(id=hid)
-			inData = model_to_dict(h)
-			inData['hid'] = hid
-			hf = HouseForm(initial=inData)
-			html = t.render(RequestContext(request, {'form': hf}))
-			data = {'html': html}
-			return HttpResponse(json.dumps(data), content_type = "application/json")
+				h = House.objects.get(id=hid)
+				inData = model_to_dict(h)
+				inData['hid'] = hid
+				hf = HouseForm(initial=inData)
+				html = t.render(RequestContext(request, {'form': hf}))
+				data = {'html': html}
+				return HttpResponse(json.dumps(data), content_type = "application/json")
+			else:
+				hf = HouseForm()
+				html = t.render(RequestContext(request, {'form': hf}))
+				data = {'html': html}
+				return HttpResponse(json.dumps(data), content_type = "application/json")
 		else:
 			hf = HouseForm(request.POST)
 
