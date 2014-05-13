@@ -49,6 +49,7 @@ $(document).on("submit","#pform",function(event)
 				   deleteMarkers();
 				   getMarks({'hp':hp, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
 
+					document.getElementById("rfilter").innerHTML="Filter by Radius <b class='caret'></b></a>";
 				   //  no longer a first time user
 				   if ($("#first_time").length)
 				       $("#first_time").remove();
