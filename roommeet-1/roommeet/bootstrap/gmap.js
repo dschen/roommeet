@@ -75,12 +75,12 @@ function getMarks(dict)
     //  filter by sending a request
     $.post('/get_marks/',dict, function(data)
 	   {
-	       //  process the data that's returned from the request
-	       var response = data
-	       var count = response.length;
-	       var bounds = new google.maps.LatLngBounds();
+		   //  process the data that's returned from the request
+		   var response = data
+		   var count = response.length;
+		   var bounds = new google.maps.LatLngBounds();
 
-	       //  add persona and house markers to map
+	       //  add person and house markers to map
 	       for(var i = 0; i < count-1; i++)
 	       {
 		   var item = response[i];
@@ -113,11 +113,20 @@ function getMarks(dict)
 		   });
 	       }
 	       else
-		   markerp.setPosition(myloc);
+			markerp.setPosition(myloc);
 
 	       document.getElementById('id_lat_s').value = myloc.lat().toFixed(5);
 	       document.getElementById('id_lon_s').value = myloc.lng().toFixed(5);
-	       map.fitBounds(bounds);
+		   bounds.extend(myloc);
+		   if (radius == '0' || radius == '1000000000')
+				map.fitBounds(bounds);
+		   else {
+			loc = new google.maps.LatLng(myloc.lat()+(radius/2*69.11), myloc.lon);
+			bounds.extend(loc);
+			loc = new google.maps.LatLng(myloc.lat()-(radius/2*69.11), myloc.lon);
+			bounds.extend(loc);
+		   }
+	       
 	   });
 
 }
