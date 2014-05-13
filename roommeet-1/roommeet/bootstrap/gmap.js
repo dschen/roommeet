@@ -264,7 +264,6 @@ $(document).on("click","#close_editHouse",function(e)
 {
 
 	hideEditHouse();
-	document.getElementById("heform").reset()
 	return false;
 }); 
 
