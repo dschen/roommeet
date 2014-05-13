@@ -520,7 +520,6 @@ function showEditHouse(hid)
 	    {
 		$("#edit-house-box").html(data.html);
 		$('.datepicker').datepicker();
-		location = new google.maps.LatLng(document.getElementById('id_lat_h').value, document.getElementById('id_lon_h').value);
 		markerh = new google.maps.Marker({
 		position: location,
 		icon: '../static/house_marker.png',
