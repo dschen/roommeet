@@ -357,6 +357,10 @@ function hideHouse()
 	showMarkers();
 	hideAddHouse();
 	hideManageHouse();
+	hp = "People and Housing";
+	dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	deleteMarkers();
+	getMarks(dict);
 	
 	if (markerh != null)
 		markerh.setMap(null);
@@ -372,6 +376,10 @@ function showHouse()
 {
 	hideTalk();
 	hideProfile();
+	hp = "Housing Only";
+	dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+	deleteMarkers();
+	getMarks(dict);
 
 	$("#house-box").animate({right:"10px"});
 	document.getElementById("meet_nav").className = "";
