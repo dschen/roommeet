@@ -357,10 +357,12 @@ function hideHouse()
 	showMarkers();
 	hideAddHouse();
 	hideManageHouse();
+	hideEditHouse();
 	hp = "People and Housing";
 	dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	getMarks(dict);
+	document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
 	
 	if (markerh != null)
 		markerh.setMap(null);
@@ -380,6 +382,7 @@ function showHouse()
 	dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
 	deleteMarkers();
 	getMarks(dict);
+	document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
 
 	$("#house-box").animate({right:"10px"});
 	document.getElementById("meet_nav").className = "";
