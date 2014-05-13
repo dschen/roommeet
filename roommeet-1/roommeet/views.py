@@ -26,8 +26,9 @@ from itertools import chain
 
 #function to generate html and return
 
-@login_required
 def meet(request):
+	if (not request.user.is_authenticated()):
+		return render(request, 'product_page.html')
 	first = "False"
 	p = Person.objects.filter(netid=request.user.username)
 	if (not p):
