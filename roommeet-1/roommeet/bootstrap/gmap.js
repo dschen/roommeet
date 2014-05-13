@@ -75,10 +75,10 @@ function getMarks(dict)
     //  filter by sending a request
     $.post('/get_marks/',dict, function(data)
 	   {
-		   //  process the data that's returned from the request
-		   var response = data
-		   var count = response.length;
-		   var bounds = new google.maps.LatLngBounds();
+	       //  process the data that's returned from the request
+	       var response = data
+	       var count = response.length;
+	       var bounds = new google.maps.LatLngBounds();
 
 	       //  add person and house markers to map
 	       for(var i = 0; i < count-1; i++)
@@ -113,21 +113,20 @@ function getMarks(dict)
 		   });
 	       }
 	       else
-			markerp.setPosition(myloc);
+		   markerp.setPosition(myloc);
 
 	       document.getElementById('id_lat_s').value = myloc.lat().toFixed(5);
 	       document.getElementById('id_lon_s').value = myloc.lng().toFixed(5);
-		   bounds.extend(myloc);
-		   if (radius == '0' || radius == '1000000000')
-				map.fitBounds(bounds);
-		   else {
-			loc = new google.maps.LatLng(myloc.lat()+(radius/2*69.11), myloc.lon);
-			bounds.extend(loc);
-			loc = new google.maps.LatLng(myloc.lat()-(radius/2*69.11), myloc.lon);
-			bounds.extend(loc);
-			map.fitBounds(bounds);
-		   }
-	       
+	       if (radius == '0' || radius == '1000000000')
+		   map.fitBounds(bounds);
+	       else {
+		   loc = new google.maps.LatLng(myloc.lat()+(parseFloat(radius)/2*69.11), myloc.lon);
+		   bounds.extend(loc);
+		   loc = new google.maps.LatLng(myloc.lat()-(parseFloat(radius)/2*69.11), myloc.lon);
+		   bounds.extend(loc);
+		   map.fitBounds(bounds);
+	       }
+
 	   });
 
 }
@@ -966,7 +965,7 @@ var rad = function(x) {
 
 //  get distance between two points
 var getDistance = function(p1, p2) {
-    var R = 6378137; // Earth’s mean radius in meter
+    var R = 6378137; // Earth's mean radius in meter
     var dLat = rad(p2.lat() - p1.lat());
     var dLong = rad(p2.lng() - p1.lng());
     var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
