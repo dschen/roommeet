@@ -408,6 +408,7 @@ function hideTalk()
     document.getElementById("house_nav").className = "";
 }
 
+//  slides the talk panel onto the screen
 function showTalk()
 {
 
@@ -418,9 +419,10 @@ function showTalk()
     document.getElementById("house_nav").className = "";
 }
 
+//  slides the house panel off the screen
 function hideHouse()
 {
-
+    //  be sure to hide the other house panels, too
     hideAddHouse();
     hideManageHouse();
     hideEditHouse();
@@ -435,6 +437,7 @@ function hideHouse()
     document.getElementById("meet_nav").className = "active";
 }
 
+//  slides the house panel onto the screen
 function showHouse()
 {
     hideTalk();
@@ -448,6 +451,7 @@ function showHouse()
 
 }
 
+//  hide the "add house" panel/form
 function hideAddHouse()
 {
     house = false;
@@ -463,6 +467,7 @@ function hideAddHouse()
     document.getElementById("meet_nav").className = "";
 }
 
+//  slide the "add house" panel/form onto the screen
 function showAddHouse()
 {
     house = true;
@@ -491,6 +496,7 @@ function showAddHouse()
     document.getElementById("house_nav").className = "active";
 }
 
+//  slide the "edit house" panel/form in
 function showEditHouse(hid)
 {
     house = true;
@@ -521,6 +527,7 @@ function showEditHouse(hid)
     document.getElementById("house_nav").className = "active";
 }
 
+//  slides the "edit house" panel/form out
 function hideEditHouse()
 {
     house = false;
@@ -533,6 +540,7 @@ function hideEditHouse()
     document.getElementById("meet_nav").className = "";
 }
 
+//  hides the "manage house" panel
 function hideManageHouse()
 {
 
@@ -543,6 +551,7 @@ function hideManageHouse()
     document.getElementById("meet_nav").className = "";
 }
 
+//  shows the "manage house" panel
 function showManageHouse()
 {
 
@@ -554,9 +563,12 @@ function showManageHouse()
 
 }
 
+//  slides the profile panel in
 function showProfile()
 {
     hideTalk();
+
+    //  show only the user's marker
     clearMarkers();
     profile = true;
     if (markerp != null)
@@ -569,6 +581,8 @@ function showProfile()
     document.getElementById("profile_nav").className = "active";
     document.getElementById("house_nav").className = "";
 }
+
+//  slides the profile panel out
 function hideProfile()
 {
     showMarkers();
@@ -581,6 +595,7 @@ function hideProfile()
     document.getElementById("meet_nav").className = "active";
 }
 
+//  nothing's open--only the map is showing
 $(document).on("click","#meet_toggle",function(e)
 	       {
 		   if (!($("#first_time").length) )
@@ -595,19 +610,20 @@ $(document).on("click","#meet_toggle",function(e)
 		       hideHouse();
 		   }
 
-
 		   return false;
 	       });
 
-
-
+//  initialize the map
 function initialize()
 {
     var markers = [];
+
+    //  set map options
     var mapOptions={center:myLatlng,zoom:4,mapTypeControl:true,center:myLatlng,panControl:false,rotateControl:false,
 		    streetViewControl:false,mapTypeId:google.maps.MapTypeId.ROADMAP,scrollwheel:true,
 		    backgroundColor:'#B3D3FF'};
 
+    //  create the new map and populate it with markers
     map=new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
     if (!($("#first_time").length))
     {
@@ -619,7 +635,7 @@ function initialize()
 	addMarkerPH(event.latLng);
     });
 
-
+    //  filter for the radius
     var r5 = document.getElementById('5-radius');
     r5.radius = '5';
     r5.addEventListener('click', setRadius, false);
@@ -636,6 +652,7 @@ function initialize()
     rno.radius = '0';
     rno.addEventListener('click', setRadius, false);
 
+    //  filter for gender
     var m = document.getElementById('gen_male');
     m.gender = 'Male';
     m.addEventListener('click', genderFilter, false);
@@ -646,6 +663,7 @@ function initialize()
     e.gender = 'either';
     e.addEventListener('click', genderFilter, false);
 
+    //  filter for class year
     var cy0 = document.getElementById('cyear_none');
     cy0.year = '0';
     cy0.addEventListener('click', yearFilter, false);
@@ -662,7 +680,7 @@ function initialize()
     cy17.year = '2017';
     cy17.addEventListener('click', yearFilter, false);
 
-
+    //  filter for overlap
     var do0 = document.getElementById('olap_off');
     do0.olap = '-10000';
     do0.addEventListener('click', olapFilter, false);
@@ -676,6 +694,7 @@ function initialize()
     do30.olap = '30';
     do30.addEventListener('click', olapFilter, false);
 
+    //  filter for people vs. houses
     var hpPeople = document.getElementById('hp_people');
     hpPeople.hp = 'People Only';
     hpPeople.addEventListener('click', hpFilter, false);
@@ -688,7 +707,6 @@ function initialize()
 
 
     // Create the search box and link it to the UI element.
-
     var input = (document.getElementById('pac-input'));
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
