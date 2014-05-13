@@ -32,11 +32,11 @@
     </td>
     </tr>
     <tr  class="c" atr="atr">
-    <td colspan="2" style="border-bottom: initial; word-wrap:break-word;"><p>
+    <td colspan="2" style="border-bottom: initial; text-align: left; word-wrap:break-word;"><p>
         Contact: 
         <a href="mailto:{{ house.contact_email }}?Subject=RoomMeet%20Hello"> {{ house.contact_email }} </a>
         <br>
-         Description: {{ house.description }}</p>
+         Description: <br><textarea readonly style="height:50px;width:250px;background:transparent;resize:none;border:none;">{{ house.description }}</textarea></p>
         </td>
         <td style="border-bottom: initial;"><p><br>
         <button type="submit" style:"right:10px; z-index:4;" class="btn btn-sm btn-danger" id="{{ house.id }}-remove" onclick="removeHouse('{{ house.id }}')"> remove </button> </p>
