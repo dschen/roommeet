@@ -360,7 +360,7 @@ def add_house(request):
 def edit_house(request):
 	currentNetid = request.user.username
 	me = Person.objects.get(netid=currentNetid)
-	if request.method == POST:
+	if request.method == 'POST':
 		if 'type' in request.POST:
 			t = get_template('edithouse.html')
 			if 'hid' in request.POST:
