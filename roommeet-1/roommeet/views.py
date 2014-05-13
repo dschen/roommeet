@@ -168,6 +168,7 @@ def get_marks(request):
 	elif (hp == 'Housing Only'):
 		p = h
 
+        # find overlaps
 	for person in p:
 		mylength = me.end - me.start
 		personlength = person.end - person.start
@@ -180,10 +181,13 @@ def get_marks(request):
 			overlapTime = min(personlength-startdiff, mylength)
 		if overlapTime.days > olap:
 			people.append(person)
+
+        # add self to list
 	if not people or me not in people:
 		people.append(me)
-	for p1 in people:
 
+	for p1 in people:
+                # if it's a person, then display accordingly
 		if (isinstance(p1, Person)):
 			f = True
 			isSelf = False
@@ -194,6 +198,7 @@ def get_marks(request):
 			t = get_template('buttonfill.html')
 			html = t.render(Context({'person':p1, 'add':f, 'isSelf':isSelf}))
 			locs.append({'lat':str(p1.lat), 'lon':str(p1.lon), 'netid':p1.netid, 'html':html, 'type':'person', 'user':currentNetid})
+                # not a person--actually a house. Display accordingly
 		else:
 			f = True
 			if (me.myhouses.filter(id=p1.id)):
@@ -207,28 +212,39 @@ def get_marks(request):
 		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(locs), mimetype='application/json; charset=UTF-8')
 
+# add a person to your talk list
 @login_required
 def meet_person(request):
 	currentNetid = request.user.username
+
+        # who to add?
 	addNetid = ''
 	if request.POST:
 		if 'netid' in request.POST:
 			addNetid = request.POST['netid']
+
 	me = Person.objects.get(netid=currentNetid)
 	r = {'result':'success'}
 	html = ''
+
+        # you've already added this person!
 	if (me.friends.filter(netid=addNetid)):
 		r['result'] = 'already there'
+
+        # you can't add yourself
         elif (currentNetid == addNetid):
                 p1 = Person.objects.get(netid=addNetid)
                 t = get_template('buttonfill.html')
                 html = t.render(Context({'person':p1, 'add':True, 'isSelf':True}))
+
+        # add the person
 	else:
 		p1 = Person.objects.get(netid=addNetid)
 		me.friends.add(p1)
 		t = get_template('buttonfill.html')
 		html = t.render(Context({'person':p1, 'add':False, 'isSelf':False}))
 
+        # render everything and return
 	r['html'] = html
 	t = get_template('tablefill.html')
 	friends = me.friends.all()
@@ -238,25 +254,33 @@ def meet_person(request):
 		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
-
+# add a house you're interested in to your housing list
 @login_required
 def meet_house(request):
 	currentNetid = request.user.username
+
+        # which house to add?
 	addHid = ''
 	if request.POST:
 		if 'house_id' in request.POST:
 			addHid = request.POST['house_id']
+
 	me = Person.objects.get(netid=currentNetid)
 	r = {'result':'success'}
 	html = ''
+
+        # you've already added this house
 	if (me.myhouses.filter(id=addHid)):
 		r['result'] = 'already there'
+
+        # add the house
 	else:
 		h = House.objects.get(id=addHid)
 		me.myhouses.add(h)
 		t = get_template('housefill.html')
 		html = t.render(Context({'house':h, 'add':False}))
 
+        # render everything and return, throwing errors if necessary
 	r['html'] = html
 	t = get_template('myhousetablefill.html')
 	myhouses = me.myhouses.all()
@@ -266,6 +290,7 @@ def meet_house(request):
 		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
+# remove a person from your talk list
 @login_required
 def remove_person(request):
 	currentNetid = request.user.username
