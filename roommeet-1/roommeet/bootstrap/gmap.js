@@ -49,6 +49,7 @@ $(document).on("submit","#pform",function(event)
 				   deleteMarkers();
 				   getMarks({'hp':hp, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value});
 
+					document.getElementById("rfilter").innerHTML="Filter by Radius <b class='caret'></b></a>";
 				   //  no longer a first time user
 				   if ($("#first_time").length)
 				       $("#first_time").remove();
@@ -520,6 +521,9 @@ function showEditHouse(hid)
 	    {
 		$("#edit-house-box").html(data.html);
 		$('.datepicker').datepicker();
+		var lat_rangers = (document.getElementById('id_lat_h').value);
+		var lon_rangers = (document.getElementById('id_lon_h').value);
+		var location = new google.maps.LatLng(lat_rangers, lon_rangers);
 		markerh = new google.maps.Marker({
 		position: location,
 		icon: '../static/house_marker.png',
