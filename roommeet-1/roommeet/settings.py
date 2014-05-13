@@ -83,6 +83,16 @@ ROOT_URLCONF = 'roommeet.urls'
 
 WSGI_APPLICATION = 'roommeet.wsgi.application'
 
+# Static asset configuration
+import os
+PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = 'staticfiles'
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_PATH, 'static'),
+)
+
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
