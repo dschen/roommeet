@@ -521,15 +521,11 @@ function showEditHouse(hid)
 		$("#edit-house-box").html(data.html);
 		$('.datepicker').datepicker();
 		location = new google.maps.LatLng(document.getElementById('id_lat_h').value, document.getElementById('id_lon_h').value);
-		if (markerh == null)
-		{
-		    markerh = new google.maps.Marker({
-			position: location,
-			icon: '../static/house_marker.png',
-			map: map
-		    });
-		}
-		markerh.setPosition(location);
+		markerh = new google.maps.Marker({
+		position: location,
+		icon: '../static/house_marker.png',
+		map: map
+		});
 		return false;
 	    },
 	    error: function(data)
@@ -548,6 +544,8 @@ function showEditHouse(hid)
 function hideEditHouse()
 {
     house = false;
+	if (markerh != null)
+		markerh.setMap(null);
     showMarkers();
     $("#edit-house-box").animate({right:"-500px"});
 
