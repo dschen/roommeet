@@ -29,11 +29,11 @@ STATICFILES_DIRS = (
 SECRET_KEY = 'wl+an%sxug10(ude=vcg4y*$(2l_c+^6_q@64rhe7hpe5-fx(('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['.theroommeet.com.']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -82,16 +82,6 @@ CAS_SERVER_URL = 'https://fed.princeton.edu/cas/'
 ROOT_URLCONF = 'roommeet.urls'
 
 WSGI_APPLICATION = 'roommeet.wsgi.application'
-
-# Static asset configuration
-import os
-PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = 'staticfiles'
-STATIC_URL = '/static/'
-
-STATICFILES_DIRS = (
-    os.path.join(PROJECT_PATH, 'static'),
-)
 
 
 # Database
