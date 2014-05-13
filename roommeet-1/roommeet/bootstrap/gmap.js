@@ -273,12 +273,22 @@ $(document).on("click","#talk_toggle",function(e)
 			hideProfile();
 			hideHouse();
 			showTalk();
+			hp = 'People Only';
+			dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+			deleteMarkers();
+			getMarks(dict);
+			document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
 		}
 
 	}
 	else
 	{
 		hideTalk();
+		hp = 'People and Housing';
+		dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		deleteMarkers();
+		getMarks(dict);
+		document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
 	}
 	return false;
 }); 
@@ -292,11 +302,21 @@ $(document).on("click","#house_toggle",function(e)
 		hideProfile();
 		hideTalk();
 		showHouse();
+		hp = 'Housing Only';
+		dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		deleteMarkers();
+		getMarks(dict);
+		document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
 	    }
 	}
 	else
 	{
 		hideHouse();
+		hp = 'People and Housing';
+		dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		deleteMarkers();
+		getMarks(dict);
+		document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
 	}
 	return false;
 }); 
@@ -335,12 +355,6 @@ $(document).on("click","#add_house_toggle",function(e)
 
 function hideTalk()
 {
-
-	// hp = 'People and Housing';
-	// dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
-	// deleteMarkers();
-	// getMarks(dict);
-	// document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
 	
 	$("#talk-box").animate({right:"-500px"});
 	
@@ -352,12 +366,6 @@ function hideTalk()
 
 function showTalk()
 {
-	
-	hp = 'People Only';
-	dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
-	deleteMarkers();
-	getMarks(dict);
-	document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
 	
 	$("#talk-box").animate({right:"10px"});
 	document.getElementById("meet_nav").className = "";
@@ -372,11 +380,6 @@ function hideHouse()
 	hideAddHouse();
 	hideManageHouse();
 	hideEditHouse();
-	// hp = "People and Housing";
-	// dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
-	// deleteMarkers();
-	// getMarks(dict);
-	// document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
 	
 	if (markerh != null)
 		markerh.setMap(null);
@@ -392,11 +395,6 @@ function showHouse()
 {
 	hideTalk();
 	hideProfile();
-	hp = "Housing Only";
-	dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
-	deleteMarkers();
-	getMarks(dict);
-	document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
 
 	$("#house-box").animate({right:"10px"});
 	document.getElementById("meet_nav").className = "";
