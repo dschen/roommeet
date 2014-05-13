@@ -464,6 +464,9 @@ function showEditHouse(hid)
 		success: function (data) 
 		{
 			$("#edit-house-box").html(data.html);
+			markerh.setPosition(new google.maps.LatLng(data.lat,data.lon));
+			$('.datepicker').datepicker();
+			
 			return false;
 
 		},

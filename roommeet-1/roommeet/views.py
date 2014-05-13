@@ -370,7 +370,7 @@ def edit_house(request):
 				inData['hid'] = hid
 				hf = HouseForm(initial=inData)
 				html = t.render(RequestContext(request, {'form': hf}))
-				data = {'html': html}
+				data = {'html': html, 'lat':inData['lat'], 'lon':inData['lon']}
 				return HttpResponse(json.dumps(data), content_type = "application/json")
 			else:
 				hf = HouseForm()
