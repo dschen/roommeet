@@ -367,10 +367,10 @@ def edit_house(request):
 				hid = request.POST['hid']
 				h = House.objects.get(id=hid)
 				inData = model_to_dict(h)
-				inData['hid'] = hid
+				inData['hid'] = h.id
 				hf = HouseForm(initial=inData)
 				html = t.render(RequestContext(request, {'form': hf}))
-				data = {'html': html, 'lat':inData['lat'], 'lon':inData['lon']}
+				data = {'html': html}
 				return HttpResponse(json.dumps(data), content_type = "application/json")
 			else:
 				hf = HouseForm()
@@ -384,9 +384,13 @@ def edit_house(request):
 				cd = hf.cleaned_data
 				h = House.objects.get(id=cd['hid'])
 
-				h = House(name = cd['name'], lat = cd['lat_h'], lon = cd['lon_h'], start = cd['hstart'],
-					end=cd['hend'], contact_email = cd['contact_email'],
-					description = cd['description'])
+				h.name = cd['name']
+				h.lat = cd['lat_h']
+				h.lon = cd['lon_h']
+				h.start = cd['hstart']
+				h.end=cd['hend']
+				h.contact_email = cd['contact_email']
+				h.description = cd['description']
 
 				h.save()
 				
