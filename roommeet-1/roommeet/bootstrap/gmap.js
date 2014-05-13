@@ -120,9 +120,9 @@ function getMarks(dict)
 		   if (radius == '0' || radius == '1000000000')
 				map.fitBounds(bounds);
 		   else {
-			loc = new google.maps.LatLng(myloc.lat()+(parseFloat(radius)/2*69.11), myloc.lon);
+			loc = new google.maps.LatLng(myloc.lat()+(parseFloat(radius)/2*69.11), myloc.lon());
 			bounds.extend(loc);
-			loc = new google.maps.LatLng(myloc.lat()-(parseFloat(radius)/2*69.11), myloc.lon);
+			loc = new google.maps.LatLng(myloc.lat()-(parseFloat(radius)/2*69.11), myloc.lon());
 			bounds.extend(loc);
 			map.fitBounds(bounds);
 		   }
