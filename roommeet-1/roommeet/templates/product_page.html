@@ -32,6 +32,12 @@
 		margin: auto;
 		width: 0%;
 	}
+
+	.login_button {
+		position:fixed;
+		top:20px;
+		right:50px;
+	}
 	</style>
 
 </head>
@@ -42,11 +48,42 @@
 <body>
 <div class="container">
 	<title>RoomMeet</title>
+	
+
+    <div class="navbar navbar-inverse navbar-fixed-top" id="topnavbar">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">{% block navtitle %} <span style="color:#436CBD;">Room</span><span style="color:#FF4D4D;">Meet</span>{% endblock %}</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+          
+                <li><a href="http://www.theroommeet.com/accounts/login">Login</a></li>
+                
+
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div><!--/.container-fluid -->
+    </div>
+
+<br><br><br><br>
 	<h1 class="cover-heading">RoomMeet</h1>
+<<<<<<< HEAD
 	<br>
 	<div class="center">
 		<a href="http://www.theroommeet.com/accounts/login/" class="btn btn-primary" style="margin: 2%; width:110px;">Login</a>
 	</div>
+=======
+	
+>>>>>>> ccweaver
 	<h3 class="lead">
 	The second greatest obstacle in determining summer plans is finding an affordable place to stay and people to stay with. RoomMeet is a networking platform for Princeton students looking for summer housing to connect with one another.  Users can find other students staying near to them over the summer, potentially to join as roommates and cut housing costs or just to see who is going to be in the area.  It also connects housing to students by allowing users with temporary housing availabilities to post their accomadations on a network-wide map.
 	</h3>
@@ -101,7 +138,7 @@
 	<br><br>
 	
 	<div class="center">
-	<a href="http://www.theroommeet.com/" class="btn btn-primary" style="margin: 2%; width:110px;">RoomMeet</a>
+	<a href="http://www.theroommeet.com/accounts/login" class="btn btn-primary" style="margin: 2%; width:160px;">Enter RoomMeet</a>
 	</div>
 	<br><br><br><br>
 

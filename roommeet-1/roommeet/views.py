@@ -363,7 +363,8 @@ def edit_house(request):
 	if request.method == POST:
 		if 'type' in request.POST:
 			t = get_template('edithouse.html')
-			hid = request.POST['hid']
+			if 'hid' in request.POST:
+				hid = request.POST['hid']
 			h = House.objects.get(id=hid)
 			inData = model_to_dict(h)
 			inData['hid'] = hid
