@@ -294,14 +294,22 @@ def meet_house(request):
 @login_required
 def remove_person(request):
 	currentNetid = request.user.username
+
+        # who is being removed?
 	remNetid = ''
 	rtype = 'meet'
 	if request.POST:
 		if 'netid' in request.POST:
 			remNetid = request.POST['netid']
+
+        # get info about user and removee
 	me = Person.objects.get(netid=currentNetid)
 	p1 = Person.objects.get(netid=remNetid)
+
+        # remove from friends list
 	me.friends.remove(p1)
+
+        # render everything and return, throwing errors if necessary
 	friends = me.friends.all()
 	t = get_template('tablefill.html')
 	table = t.render(Context({'friend_list':friends, 'me':me}))
@@ -313,18 +321,27 @@ def remove_person(request):
 		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
+# remove a house from your interested housing list
 @login_required
 def remove_house(request):
 	currentNetid = request.user.username
+
+        # which house to remove?
 	remHid = ''
 	rtype = 'meet'
 	if request.POST:
 		if 'house_id' in request.POST:
 			remHid = request.POST['house_id']
+
+        # get info baout user and the house
 	me = Person.objects.get(netid=currentNetid)
 	h = House.objects.get(id=remHid)
+
+        # remove the house
 	me.myhouses.remove(h)
 	me.save()
+
+        # render, throw errors if needed, and return
 	myhouses = me.myhouses.all()
 	t = get_template('myhousetablefill.html')
 	table = t.render(Context({'my_houses':myhouses, 'me':me}))
@@ -336,19 +353,28 @@ def remove_house(request):
 		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
+# remove a house that you're managing
 @login_required
 def remove_managed_house(request):
 	currentNetid = request.user.username
+
+        # which house?
 	remHid = ''
 	rtype = 'meet'
 	if request.POST:
 		if 'house_id' in request.POST:
 			remHid = request.POST['house_id']
+
+        # get info about user and house
 	me = Person.objects.get(netid=currentNetid)
 	h = House.objects.get(id=remHid)
+
+        # delete the house
 	me.houses.remove(h)
 	me.save();
 	h.delete();
+
+        # render, throw errors if needed, and return
 	houses = me.houses.all()
 	t = get_template('managehousetablefill.html')
 	table = t.render(Context({'house_list':houses}))
@@ -357,34 +383,41 @@ def remove_managed_house(request):
 		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 	return HttpResponse(json.dumps(r), mimetype='application/json; charset=UTF-8')
 
-
+# add a new house that you're managing
 @login_required
 def add_house(request):
+        # get info about current user
 	currentNetid = request.user.username
 	me = Person.objects.get(netid=currentNetid)
+
+        # handle the request
 	if request.method == 'POST':
+                # the form
 		if 'type' in request.POST:
 			t = get_template('addhouse.html')
 			hf = HouseForm();
 			html = t.render(RequestContext(request, {'form': hf}))
 			data = {'html':html}
 			return HttpResponse(json.dumps(data), content_type = "application/json")
-
+                # process the form
 		else:
 			hf = HouseForm(request.POST)
 
+                        # is the form valid?
 			if hf.is_valid():
 				cd = hf.cleaned_data
 
+                                # create new House object
 				h = House(name = cd['name'], lat = cd['lat_h'], lon = cd['lon_h'], start = cd['hstart'],
 					end=cd['hend'], contact_email = cd['contact_email'],
 					description = cd['description'])
 
+                                # save the object and add it to user's list of houses
 				h.save()
 				me.houses.add(h)
-
 				me.save()
 
+                                # render and return
 				t = get_template('addhouse.html')
 				html = t.render(RequestContext(request, {'form': hf}))
 				t = get_template('managehousetablefill.html')
@@ -403,17 +436,21 @@ def add_house(request):
 			t = get_template('addhouse.html')
 			html = t.render(RequestContext(request, {'form': hf}))
 
-
 			data = {'success':'false', 'html':html}
 			return HttpResponse(json.dumps(data), content_type = "application/json")
 	if not request.POST:
 		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 
+# edit a house that the user manages
 @login_required
 def edit_house(request):
+        # get user
 	currentNetid = request.user.username
 	me = Person.objects.get(netid=currentNetid)
+
+        # handle the request
 	if request.method == 'POST':
+                # the edit form
 		if 'type' in request.POST:
 			t = get_template('edithouse.html')
 			if 'hid' in request.POST:
@@ -430,13 +467,19 @@ def edit_house(request):
 				html = t.render(RequestContext(request, {'form': hf}))
 				data = {'html': html}
 				return HttpResponse(json.dumps(data), content_type = "application/json")
+                # process the form
 		else:
 			hf = HouseForm(request.POST)
 
+                        # is the form valid?
 			if hf.is_valid():
+                                # clean the data
 				cd = hf.cleaned_data
+
+                                # get the house that's being edited
 				h = House.objects.get(id=cd['hid'])
 
+                                # set the new vaues
 				h.name = cd['name']
 				h.lat = cd['lat_h']
 				h.lon = cd['lon_h']
@@ -447,6 +490,7 @@ def edit_house(request):
 
 				h.save()
 
+                                # render and return
 				t = get_template('edithouse.html')
 				html = t.render(RequestContext(request, {'form': hf}))
 				t = get_template('managehousetablefill.html')
@@ -459,6 +503,7 @@ def edit_house(request):
 				data = {'success':'true', 'html':html, 'mhtfhtml':mhtfhtml, 'myhtfhtml':myhtfhtml}
 				return HttpResponse(json.dumps(data), content_type = "application/json")
 
+                        # the form is not valid
 			else:
 				hf.errors['lat_h'] = hf.error_class()
 
@@ -472,6 +517,6 @@ def edit_house(request):
 	if not request.POST:
 		return HttpResponseNotFound("<h1>404 Error: Not Found</h1>")
 
-
+# displays the product page
 def product_page(request):
 	return render(request, 'product_page.html')
