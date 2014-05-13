@@ -125,6 +125,7 @@ function getMarks(dict)
 			bounds.extend(loc);
 			loc = new google.maps.LatLng(myloc.lat()-(radius/2*69.11), myloc.lon);
 			bounds.extend(loc);
+			map.fitBounds(bounds);
 		   }
 	       
 	   });
