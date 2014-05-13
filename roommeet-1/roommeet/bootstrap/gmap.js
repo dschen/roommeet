@@ -192,6 +192,11 @@ $(document).on("click","#profile_toggle",function(e)
 	{
 		if (!($("#first_time").length) )
 		hideProfile();
+		hp = 'People and Housing';
+		dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+		deleteMarkers();
+		getMarks(dict);
+		document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
 	}
 
 
