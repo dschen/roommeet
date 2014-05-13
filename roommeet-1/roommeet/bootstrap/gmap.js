@@ -180,7 +180,6 @@ $(document).on("submit","#heform",function(event)
 	return false;
 });
 
-
 $(document).on("click","#profile_toggle",function(e)
 {
 	if ($("#map_canvas").css('left') == '0px' )
@@ -519,6 +518,11 @@ function hideProfile()
 	document.getElementById("profile_nav").className = "";
 	document.getElementById("talk_nav").className = "";
 	document.getElementById("meet_nav").className = "active";
+}
+
+function searchResults (form) {
+    var TestVar = form.inputbox.value;
+    alert ("You typed: " + TestVar);
 }
 
 $(document).on("click","#meet_toggle",function(e)
