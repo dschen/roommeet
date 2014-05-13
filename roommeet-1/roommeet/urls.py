@@ -28,4 +28,3 @@ urlpatterns += patterns('',
     #url(r'^facebook/', include('django_facebook.urls')),
     #url(r'^fbaccounts/', include('django_facebook.auth_urls')),
 )
-
