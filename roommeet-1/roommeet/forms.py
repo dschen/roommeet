@@ -30,3 +30,4 @@ class HouseForm(forms.Form):
 	hend = forms.DateField(widget=DateInput(),  input_formats=('%m/%d/%Y',), label='End')
 	contact_email = forms.EmailField(max_length=50)
 	description = forms.CharField(max_length=1000, widget=forms.Textarea)	
+	hid = forms.DecimalField(widget=forms.HiddenInput, required=False)
