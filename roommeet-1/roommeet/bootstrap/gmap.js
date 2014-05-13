@@ -644,7 +644,7 @@ function initialize()
 	addMarkerPH(event.latLng);
     });
 
-    //  filter for the radius
+    //  used for the filter for the radius
     var r5 = document.getElementById('5-radius');
     r5.radius = '5';
     r5.addEventListener('click', setRadius, false);
@@ -661,7 +661,7 @@ function initialize()
     rno.radius = '0';
     rno.addEventListener('click', setRadius, false);
 
-    //  filter for gender
+    //  used for the filter for gender
     var m = document.getElementById('gen_male');
     m.gender = 'Male';
     m.addEventListener('click', genderFilter, false);
@@ -672,7 +672,7 @@ function initialize()
     e.gender = 'either';
     e.addEventListener('click', genderFilter, false);
 
-    //  filter for class year
+    //  used for the filter for class year
     var cy0 = document.getElementById('cyear_none');
     cy0.year = '0';
     cy0.addEventListener('click', yearFilter, false);
@@ -689,7 +689,7 @@ function initialize()
     cy17.year = '2017';
     cy17.addEventListener('click', yearFilter, false);
 
-    //  filter for overlap
+    //  used for the filter for overlap
     var do0 = document.getElementById('olap_off');
     do0.olap = '-10000';
     do0.addEventListener('click', olapFilter, false);
@@ -703,7 +703,7 @@ function initialize()
     do30.olap = '30';
     do30.addEventListener('click', olapFilter, false);
 
-    //  filter for people vs. houses
+    //  used for the filter for people vs. houses
     var hpPeople = document.getElementById('hp_people');
     hpPeople.hp = 'People Only';
     hpPeople.addEventListener('click', hpFilter, false);
@@ -811,7 +811,7 @@ function addEventHandler(elem,eventType,handler) {
 	elem.attachEvent ('on'+eventType,handler);
 }
 
-
+//  remove a person from user's talk list
 function removeList(nid)
 {
     dict = {'type':'talk', 'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
@@ -828,13 +828,12 @@ function removeList(nid)
 		   }
 	       }
 
-
-
 	       $("tr[class='c']").find("p").hide();
 	   });
 
 }
 
+//  remove a house that the user manages
 function removeHouseList(hid)
 {
     dict = {'type':'manage', 'house_id':hid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
@@ -852,13 +851,12 @@ function removeHouseList(hid)
 		   }
 	       }
 
-
-
 	       $("tr[class='c']").find("p").hide();
 	   });
 
 }
 
+//  filters by distance from the user
 function setRadius(evt)
 {
     if (!evt.target)
@@ -866,74 +864,106 @@ function setRadius(evt)
     else
 	cradius = evt.target.radius;
     radius = cradius;
+
+    //  no radius filter
     if (radius == '0')
 	dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+    //  filter using the radius
     else
 	dict = {'hp':hp, 'olap':olap, 'year':year, 'radius':radius, 'gender':gender,csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+
+    //  get the new markers
     deleteMarkers();
     getMarks(dict);
+
+    //  #nofilter
     if (radius == '0' || radius == '1000000000')
 	document.getElementById("rfilter").innerHTML="Filter by Radius <b class='caret'></b></a>";
+    //  display what radius the user is filtering by
     else
 	document.getElementById("rfilter").innerHTML="Radius: " + radius + " miles <b class='caret'></b></a>";
 }
 
+//  filters by gender
 function genderFilter(evt)
 {
     gender = evt.target.gender;
     dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+
+    //  get the new markers
     deleteMarkers();
     getMarks(dict);
+
+    //  no gender filter
     if (gender == 'either')
 	document.getElementById("gfilter").innerHTML="Filter by Gender <b class='caret'></b></a>";
+    //  display what gneder the using is filtering by
     else
 	document.getElementById("gfilter").innerHTML="Gender: " + gender + " <b class='caret'></b></a>";
 }
 
-
+//  filters by class year
 function yearFilter(evt)
 {
     year = evt.target.year;
     dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+
+    //  get new markers
     deleteMarkers();
     getMarks(dict);
 
+    //  no year filter
     if (year == '0')
 	document.getElementById("yfilter").innerHTML="Filter by Class Year <b class='caret'></b></a>";
+    //  show which filter is being used
     else
 	document.getElementById("yfilter").innerHTML="Year: " + year + " <b class='caret'></b></a>";
 }
 
-
+//  filter by date overlap with the user
 function olapFilter(evt)
 {
     olap = evt.target.olap;
     dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+
+    //  get new markers
     deleteMarkers();
     getMarks(dict);
+
+    //  no overlap filter
     if (olap == "-10000")
 	document.getElementById("dfilter").innerHTML="Filter by Date Overlap <b class='caret'></b></a>";
+    //  any overlap
     else if (olap == "0")
 	document.getElementById("dfilter").innerHTML="Date Overlap: Any <b class='caret'></b></a>";
+    //  1 week overlap
     else if (olap == "7")
 	document.getElementById("dfilter").innerHTML="Date Overlap: 1 Week <b class='caret'></b></a>";
+    //  1 month overlap
     else if (olap == "30")
 	document.getElementById("dfilter").innerHTML="Date Overlap: 1 Month <b class='caret'></b></a>";
 }
 
+//  filter by whether the object is a person or a house
 function hpFilter(evt)
 {
     hp = evt.target.hp;
     dict = {'hp':hp, 'olap':olap, 'year':year, 'gender':gender, 'radius':radius, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
+
+    //  get new markers
     deleteMarkers();
     getMarks(dict);
+
+    //  update the filter label
     document.getElementById("hpfilter").innerHTML="Show: " + hp + " <b class='caret'></b></a>";
 }
 
+//  converts degrees to radians
 var rad = function(x) {
     return x * Math.PI / 180;
 };
 
+//  get distance between two points
 var getDistance = function(p1, p2) {
     var R = 6378137; // Earth’s mean radius in meter
     var dLat = rad(p2.lat() - p1.lat());
@@ -946,10 +976,12 @@ var getDistance = function(p1, p2) {
     return d; // returns the distance in meter
 };
 
-
-
-function addPersonMarker(location, html, netid, user) {
-    if (user == netid) {
+//  adds a person marker to the map
+function addPersonMarker(location, html, netid, user)
+{
+    //  the user is shown using a star
+    if (user == netid)
+    {
 	var marker = new google.maps.Marker({
 	    position: location,
 	    icon: '../static/star-3.png',
@@ -958,7 +990,9 @@ function addPersonMarker(location, html, netid, user) {
 	});
 
     }
-    else {
+    //  other users are shown by a generic person marker
+    else
+    {
 	var marker = new google.maps.Marker({
 	    position: location,
 	    icon: '../static/person_marker.png',
@@ -969,7 +1003,7 @@ function addPersonMarker(location, html, netid, user) {
     marker.html = html;
     markers.push(marker);
 
-
+    //  when clicked, show a box above the marker with info about the person
     google.maps.event.addListener(marker, 'click', function() {
 	infowindow.close();
 	infowindow.setContent(marker.html);
@@ -977,7 +1011,9 @@ function addPersonMarker(location, html, netid, user) {
     });
 }
 
+//  adds a house marker to the map
 function addHouseMarker(location, html, hid) {
+    //  create the marker
     var marker = new google.maps.Marker({
 	position: location,
 	icon: '../static/house_marker.png',
@@ -989,13 +1025,15 @@ function addHouseMarker(location, html, hid) {
     marker.html = html;
     markers.push(marker);
 
-
+    //  when clicked, show a box above the marker with info about the house
     google.maps.event.addListener(marker, 'click', function() {
 	infowindow.close();
 	infowindow.setContent(marker.html);
 	infowindow.open(map,marker);
     });
 }
+
+//  add a person to the user's friends list
 function meetPerson(nid)
 {
     dict = {'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
@@ -1006,6 +1044,7 @@ function meetPerson(nid)
 	       {
 		   for (var i = 0; i < markers.length; i++)
 		   {
+		       //  set the content of the popup box of the added person
 		       if (markers[i].title == nid)
 		       {
 			   markers[i].html = response.html;
@@ -1019,6 +1058,7 @@ function meetPerson(nid)
 	   });
 }
 
+//  add a house to the user's interest list
 function meetHouse(hid)
 {
     dict = {'house_id':hid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
@@ -1031,6 +1071,7 @@ function meetHouse(hid)
 		   {
 		       if (markers[i].hid == hid)
 		       {
+			   //  set the content of the popup box of the added house
 			   markers[i].html = response.html;
 			   infowindow.setContent(markers[i].html);
 			   break;
@@ -1042,6 +1083,7 @@ function meetHouse(hid)
 	   });
 }
 
+//  remove a person from the user's friends list
 function removePerson(nid)
 {
     dict = {'type':'meet', 'netid':nid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
@@ -1050,6 +1092,7 @@ function removePerson(nid)
 	       var response = data
 	       for (var i = 0; i < markers.length; i++)
 	       {
+		   //  set the content of the popup box of the removed person
 		   if (markers[i].title == nid)
 		   {
 		       markers[i].html = response.html;
@@ -1063,6 +1106,7 @@ function removePerson(nid)
 	   });
 }
 
+//  remove a houe from the user's interest list
 function removeHouse(hid)
 {
     dict = {'type':'meet', 'house_id':hid, csrfmiddlewaretoken:document.getElementsByName('csrfmiddlewaretoken')[0].value};
@@ -1071,6 +1115,7 @@ function removeHouse(hid)
 	       var response = data
 	       for (var i = 0; i < markers.length; i++)
 	       {
+		   //  set the content of the popup box of the house
 		   if (markers[i].hid == hid)
 		   {
 		       markers[i].html = response.html;
@@ -1083,8 +1128,6 @@ function removeHouse(hid)
 
 	   });
 }
-
-
 
 var infowindow = new google.maps.InfoWindow({
     content: 'stuff',
@@ -1116,11 +1159,10 @@ function deleteMarkers() {
     markers = [];
 }
 
-
 google.maps.event.addDomListener(window,'load',initialize);
 $('#mapmodals').on('shown.bs.modal',function(){google.maps.event.trigger(map,"resize");map.setCenter(myLatlng);});
 
-
+//  makes the map work better with window resizing
 $(window).resize(function () {
     var h = $(window).height();
     var offsetTop = 0; // Calculate the top offset
