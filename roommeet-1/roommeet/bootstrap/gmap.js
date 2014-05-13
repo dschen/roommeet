@@ -464,7 +464,6 @@ function showEditHouse(hid)
 		success: function (data) 
 		{
 			$("#edit-house-box").html(data.html);
-			$('.datepicker').datepicker();
 			return false;
 
 		},
