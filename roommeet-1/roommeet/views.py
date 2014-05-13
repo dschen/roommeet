@@ -457,7 +457,11 @@ def edit_house(request):
 				hid = request.POST['hid']
 				h = House.objects.get(id=hid)
 				inData = model_to_dict(h)
-				inData['hid'] = h.id
+				inData['hstart'] = inData['start']
+				inData['hend'] = inData['end']
+				inData['lat_h'] = inData['lat']
+				inData['lon_h'] = inData['lon']
+				inData['hid'] = hid
 				hf = HouseForm(initial=inData)
 				html = t.render(RequestContext(request, {'form': hf}))
 				data = {'html': html}

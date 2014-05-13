@@ -292,7 +292,7 @@ $(document).on("click","#close_addHouse",function(e)
 	       {
 
 		   hideAddHouse();
-		   document.getElementById("hform").reset()
+		   document.getElementById("hform").reset();
 		   return false;
 	       });
 
@@ -301,6 +301,7 @@ $(document).on("click","#close_editHouse",function(e)
 	       {
 
 		   hideEditHouse();
+		   document.getElementById("heform").reset();
 		   return false;
 	       });
 
@@ -519,16 +520,23 @@ function showEditHouse(hid)
 	    {
 		$("#edit-house-box").html(data.html);
 		$('.datepicker').datepicker();
-
+		location = new google.maps.LatLng(document.getElementById('id_lat_h').value, document.getElementById('id_lon_h').value);
+		if (markerh == null)
+		{
+		    markerh = new google.maps.Marker({
+			position: location,
+			icon: '../static/house_marker.png',
+			map: map
+		    });
+		}
+		markerh.setPosition(location);
 		return false;
-
 	    },
 	    error: function(data)
 	    {
 		$("#edit-house-box").html(data);
 	    }
 	});
-
     $("#edit-house-box").animate({right:"10px"});
     document.getElementById("meet_nav").className = "";
     document.getElementById("profile_nav").className = "";
